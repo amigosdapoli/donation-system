@@ -14,8 +14,16 @@ TODO using docker? Vagrant?
 Payment gateways will follow a pattern so we can add different services if needed.
 ## Available gateways
 * MaxiPago
+TODO List different payment methods
 ## Creating new gateways
 
 # Contributing
+
+To contribute:
+1. Fork it
+2. Create your feature branch ('git checkout -b <feature name>')
+3. Commit your changes ('git commit -am 'Add some feature')
+4. Push to the branch ('git push origin my-new-feature')
+5. Create a new Pull request
 
 # License
