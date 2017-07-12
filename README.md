@@ -8,6 +8,31 @@ The goal of this project is to help other endowment funds and non profits in gen
 
 # Installation
 
+```bash
+# Clone repo
+git clone https://github.com/amigosdapoli/donation-system.git
+cd donation-system/
+
+# Install requirements 
+virtualenv -p python3 venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# Install Postgres
+sudo apt-get update
+sudo apt-get install postgresql postgresql-contrib 
+
+# Set up database
+bash setup_database.sh
+
+# Run start database
+python manage.py makemigration
+python manage.py migrate
+
+#Run application
+python manage.py runserver
+
+```
 TODO using docker? Vagrant?
 
 # Payment Gateways
