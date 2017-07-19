@@ -11,3 +11,6 @@ class DonorViewSet(viewsets.ModelViewSet):
 class DonationViewSet(viewsets.ModelViewSet):
     queryset = Donation.objects.all().order_by('value')
     serializer_class = DonationSerializer
+
+def donation_form(request):
+	return render(request, 'dbwrapper/donation_form.html', {})
