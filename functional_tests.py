@@ -15,7 +15,7 @@ class NewDonorTest(unittest.TestCase):
 
         # She notices the page title and header mention to-do lists
         self.assertIn('Doação', self.browser.title)
-        header_text = self.browser.find_element_by_tag_name('h1').text  
+        header_text = self.browser.find_element_by_id('nav_bar_title').text  
         self.assertIn('Doação', header_text) 
 
         # Donor types donation info

@@ -26,7 +26,7 @@ sudo apt-get install postgresql postgresql-contrib
 bash setup_database.sh
 
 # Run start database
-python manage.py makemigration
+python manage.py makemigrations
 python manage.py migrate
 
 #Run application
