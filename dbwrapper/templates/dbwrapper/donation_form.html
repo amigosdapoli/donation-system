@@ -112,10 +112,17 @@
             <h3 class="panel-title">Detalhes da doação</h3>
           </div>
           <div class="panel-body">
-	    <select id="donation_type">
-	      <option value="one-off">Pontual</option>
-	      <option value="recurring">Recorrente</option>
-	    </select>
+			<p>
+			  <label for="donation_type">Tipo de doação</label>
+			  <select id="donation_type">
+			    <option value="one-off">Pontual</option>
+				<option value="recurring">Recorrente</option>
+			  </select>
+			</p>
+			</p>
+			  <label for="donation_value">Valor da doação</label>
+			  <input type="text" id="donation_value">
+			</p>
             Panel content
           </div>
         </div>
@@ -125,6 +132,14 @@
             <h3 class="panel-title">Informações pessoais</h3>
           </div>
           <div class="panel-body">
+			<p>
+			  <label for="donor_name">Nome</label>
+			  <input type="text" id="donor_name">
+			</p>
+			<p>
+			  <label for="donor_surname">Sobrenome</label>
+			  <input type="text" id="donor_surname">
+			</p>
             Panel content
           </div>
         </div>

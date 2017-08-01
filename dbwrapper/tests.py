@@ -8,7 +8,7 @@ from dbwrapper.views import donation_form
 class DonationPageTest(TestCase):
 
     def test_root_resolves_to_donation_form_view(self):
-        found = resolve('/doar/donation_form')
+        found = resolve('/')
         self.assertEqual(found.func, donation_form)
 
     def test_donation_page_returns_correct_html(self):
@@ -18,4 +18,6 @@ class DonationPageTest(TestCase):
         self.assertTrue(html.startswith('<!DOCTYPE html>'))  
         self.assertIn('<title>Doação Amigos da Poli</title>', html)  
         self.assertTrue(html.endswith('</html>'))          
+
+
 
