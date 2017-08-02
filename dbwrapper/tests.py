@@ -17,7 +17,7 @@ class DonationPageTest(TestCase):
         html = response.content.decode('utf8')  
         self.assertTrue(html.startswith('<!DOCTYPE html>'))  
         self.assertIn('<title>Doação Amigos da Poli</title>', html)  
-        self.assertTrue(html.endswith('</html>'))          
+        self.assertTemplateUsed(response, 'donation_form.html')         
 
 
 
