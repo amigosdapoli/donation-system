@@ -21,24 +21,24 @@ class DonationPageTest(TestCase):
     def test_POST_request_has_response(self):
         data = {'donation': { 
                     'value': 10,
-                    'type': 'recurrent'},
-                'donor':{
-                    'wants_anonimity': True,
-                    'first_name': 'João',
-                    'last_name': 'Batista Santos',
-                    'tax_id':    66625911143,
-                    'email': 'joaobatista@gmail.com',
-                    'phone': 119957252267,
-                    'course': 'Engenharia de Produção',
-                    'graduation_year': 1970,
-                    'source': 'friends',},
-                'card':{
-                    'name': 'Joao batista santos',
-                    'number': '1111222233334444',
-                    'expiration': '2017-08-01',
-                    'cvv': 123}
-                }
-        response = self.client.post('/donation', data=data)
+                    'type': 'recurrent',
+		            'donor':{
+		                'wants_anonimity': True,
+		                'first_name': 'João',
+		                'last_name': 'Batista Santos',
+		                'tax_id':    66625911143,
+		                'email': 'joaobatista@gmail.com',
+		                'phone': 119957252267,
+		                'course': 'Engenharia de Produção',
+		                'graduation_year': 1970,
+		                'source': 'friends',},
+		            'card':{
+		                'name': 'Joao batista santos',
+		                'number': '1111222233334444',
+		                'expiration': '2017-08-01',
+		                'cvv': 123}
+		            }}
+        response = self.client.post('/', data=data)
         self.assertIn('status', response.content.decode())         
 
 
