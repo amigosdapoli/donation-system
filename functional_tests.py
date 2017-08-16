@@ -78,6 +78,16 @@ class NewDonorTest(unittest.TestCase):
 		# ...and inputs hers
 		address_input_box = self.browser.find_element_by_xpath("//input[@type='text'][@id='donor_address']")
 		address_input_box.send_keys("Avenia Faria Lima")
+
+		# Identifies dropdown box to select payment method
+		payment_method_label = self.browser.find_element_by_xpath("//label[@for='payment_method'][contains(text(),'Forma de pagamento')]")
+		payment_method_box = self.browser.find_element_by_xpath("//select[@id='payment_method']")
+		
+		# ...evaluates her options...
+		payment_method_CC_option = self.browser.find_element_by_xpath("//option[@value='CC']")
+		self.assertIn("Cartão de crédito", payment_method_CC_option.text)
+		payment_method_BB_option = self.browser.find_element_by_xpath("//option[@value='BB']")
+		self.assertIn("Boleto bancário", payment_method_BB_option.text)
  
 if __name__ == '__main__':
     unittest.main(warnings='ignore')

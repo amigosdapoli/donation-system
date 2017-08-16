@@ -103,7 +103,7 @@
 
 <div class="container-fluid bg-1 text-center">
   <h3 class="first-h3">Doações</h3>
-    <form class="form-inline">
+    <form method="POST" class="form-inline">
 
     <div class="row">
       <div class="col-md-6 col-md-offset-3">
@@ -163,7 +163,11 @@
             <h3 class="panel-title">Pagamento</h3>
           </div>
           <div class="panel-body">
-            Panel content
+          	<label for="payment_method">Forma de pagamento</label> 
+			<select id="payment_method">
+			  <option value="CC">Cartão de crédito</option>
+			  <option value="BB">Boleto bancário</option>
+			</select>
           </div>
         </div>
 
@@ -181,7 +185,7 @@
       </div>
     </div>
 
-    
+    {% csrf_token %}
     </form>
 </div>
 
