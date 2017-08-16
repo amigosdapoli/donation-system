@@ -87,10 +87,10 @@
         <span class="icon-bar"></span> 
       </button>
      -->
-      <a class="navbar-brand" href="#" id="nav_bar_title">Doação Amigos da Poli</a>
+      <a class="navbar-brand" href="#" name="nav_bar_title">Doação Amigos da Poli</a>
     </div>
     <!--
-    <div class="collapse navbar-collapse" id="myNavbar">
+    <div class="collapse navbar-collapse" name="myNavbar">
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#">WHO</a></li>
         <li><a href="#">WHAT</a></li>
@@ -114,14 +114,14 @@
           <div class="panel-body">
 			<p>
 			  <label for="donation_type">Tipo de doação</label>
-			  <select id="donation_type">
+			  <select name="donation_type">
 			    <option value="one-off">Pontual</option>
 				<option value="recurring">Recorrente</option>
 			  </select>
 			</p>
 			</p>
 			  <label for="donation_value">Valor da doação</label>
-			  <input type="text" id="donation_value">
+			  <input type="text" name="donation_value">
 			</p>
           </div>
         </div>
@@ -133,27 +133,27 @@
           <div class="panel-body">
 			<p>
 			  <label for="donor_name">Nome</label>
-			  <input type="text" id="donor_name">
+			  <input type="text" name="donor_name" >
 			</p>
 			<p>
 			  <label for="donor_surname">Sobrenome</label>
-			  <input type="text" id="donor_surname">
+			  <input type="text" name="donor_surname" >
 			</p>
 			<p>
-			  <label for="donor_CNPJ">CNPJ</label>
-			  <input type="text" id="donor_CNPJ">
+			  <label for="donor_tax_id">CNPJ</label>
+			  <input type="text" name="donor_tax_id" >
 			</p>
 			<p>
 			  <label for="donor_phone">Telefone</label>
-			  <input type="text" id="donor_phone">
+			  <input type="text" name="donor_phone">
 			</p>
 			<p>
 			  <label for="donor_email">E-mail</label>
-			  <input type="text" id="donor_email">
+			  <input type="text" name="donor_email">
 			</p>
 			<p>
 			  <label for="donor_address">Endereço</label>
-			  <input type="text" id="donor_address">
+			  <input type="text" name="donor_address">
 			</p>
           </div>
         </div>
@@ -164,20 +164,20 @@
           </div>
           <div class="panel-body">
           	<label for="payment_method">Forma de pagamento</label> 
-			<select id="payment_method">
+			<select name="payment_method">
 			  <option value="CC">Cartão de crédito</option>
 			  <option value="BB">Boleto bancário</option>
 			</select>
           </div>
         </div>
 
-        <div id="credit_cards" style="text-align:left;">
-          <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/visa.png" id="visa">
-          <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/master.png" id="mastercard">
+        <div name="credit_cards" style="text-align:left;">
+          <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/visa.png" name="visa">
+          <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/master.png" name="mastercard">
         </div>
 
         <div class="btn-form">
-          <button id="subbtn" style="display:block" onclick="ga('send', {hitType: 'event',eventCategory: 'doacao',eventAction: 'submit_donation',eventLabel: 'website'});" type="submit" class="button big round color">
+          <button name="subbtn" style="display:block" onclick="ga('send', {hitType: 'event',eventCategory: 'doacao',eventAction: 'submit_donation',eventLabel: 'website'});" type="submit" class="button big round color">
             Enviar
           </button>
         </div>
