@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Donor(models.Model):
     name = models.CharField(max_length=30)
     surname = models.CharField(max_length=30)
@@ -8,9 +9,11 @@ class Donor(models.Model):
     email = models.CharField(max_length=30)
     address = models.CharField(max_length=50)
 
+
 class Donation(models.Model):
+    donation_id = models.AutoField(primary_key=True)
     value = models.IntegerField()
-    donor_tax_id = models.CharField(max_length=11, primary_key=True)
+    donor_tax_id = models.CharField(max_length=11)
     recurring = models.BooleanField()
     
 
