@@ -8,6 +8,7 @@ The goal of this project is to help other endowment funds and non profits in gen
 
 # Installation
 
+## Start
 ```bash
 # Clone repo
 git clone https://github.com/amigosdapoli/donation-system.git
@@ -17,14 +18,38 @@ cd donation-system/
 virtualenv -p python3 venv
 source venv/bin/activate
 pip install -r requirements.txt
-
+```
+## If in Debian/Ubuntu
+```
 # Install Postgres
 sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib 
 
 # Set up database
-bash setup_database.sh
+bash setup_database_linux.sh
+```
 
+## If in Mac
+```
+# Install Postgres
+brew update
+brew install postgresql
+
+# Start the postgres service
+pg_ctl -D /usr/local/var/postgres start && brew services start postgresql
+
+# Set up database
+psql postgres
+=>CREATE DATABASE poscad;
+=>CREATE USER admin WITH PASSWORD 'admin' ;
+=>ALTER ROLE admin SET client_encoding TO 'utf8';
+=>ALTER ROLE admin SET default_transaction_isolation TO 'read committed';
+=>ALTER ROLE admin SET timezone TO 'UTC-3';
+=>GRANT ALL PRIVILEGES ON DATABASE poscad TO admin;
+```
+
+## Continue
+```
 # Run start database
 python manage.py makemigrations
 python manage.py migrate
