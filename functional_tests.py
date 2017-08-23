@@ -17,7 +17,7 @@ class NewDonorTest(unittest.TestCase):
 
         # She notices the page title and header mention to-do lists
 		self.assertIn('Doação', self.browser.title)
-		header_text = self.browser.find_element_by_id('nav_bar_title').text  
+		header_text = self.browser.find_element_by_name('nav_bar_title').text  
 		self.assertIn('Doação', header_text) 
 
         # Donor types donation info
@@ -25,17 +25,17 @@ class NewDonorTest(unittest.TestCase):
 		donation_type_dropdown_box = self.browser.find_element_by_xpath("//label[@for='donation_type'][contains(text(),'Tipo de doação')]")
         
 		# She is invited to select the type of donation in a select box
-		selectbox = self.browser.find_element_by_xpath("//select[@id='donation_type']")
+		selectbox = self.browser.find_element_by_xpath("//select[@name='donation_type']")
 
 		# She chooses the "Recorrente" type donation
-		select = Select(self.browser.find_element_by_xpath("//select[@id='donation_type']"))
+		select = Select(self.browser.find_element_by_xpath("//select[@name='donation_type']"))
 		select.select_by_visible_text("Recorrente")
 
 		# She identifies the text box to input donation value
 		donation_value_text_box_label = self.browser.find_element_by_xpath("//label[@for='donation_value'][contains(text(),'Valor da doação')]")
 		
 		# She sees a text box to input the donation value
-		donation_input_box = self.browser.find_element_by_id('donation_value')
+		donation_input_box = self.browser.find_element_by_name('donation_value')
 		donation_input_box.send_keys('50')
 
 		# She starts filling in personal information
@@ -44,44 +44,44 @@ class NewDonorTest(unittest.TestCase):
 		surname_input_box_label = self.browser.find_element_by_xpath("//label[@for='donor_surname'][contains(text(),'Sobrenome')]")
 
 		# ...then, writes her name...		
-		name_input_box = self.browser.find_element_by_id('donor_name')
+		name_input_box = self.browser.find_element_by_name('donor_name')
 		name_input_box.send_keys("Maria")
 		
 		# ...and surname.
-		surname_input_box = self.browser.find_element_by_id('donor_surname')
+		surname_input_box = self.browser.find_element_by_name('donor_surname')
 		surname_input_box.send_keys("Silva")
 
 		# Identifies the text box for her CNPJ...
-		CPNJ_input_box_label = self.browser.find_element_by_xpath("//label[@for='donor_CNPJ'][contains(text(),'CNPJ')]")
+		CPNJ_input_box_label = self.browser.find_element_by_xpath("//label[@for='donor_tax_id'][contains(text(),'CPF')]")
 		
 		# ... and inputs her own 
-		CPNJ_input_box = self.browser.find_element_by_xpath("//input[@type='text'][@id='donor_CNPJ']")
+		CPNJ_input_box = self.browser.find_element_by_xpath("//input[@type='text'][@name='donor_tax_id']")
 		CPNJ_input_box.send_keys("370.021.138-44") 
 
 		# Identifies the text box for her phone number...
 		phone_input_box_label = self.browser.find_element_by_xpath("//label[@for='donor_phone'][contains(text(),'Telefone')]")
 
 		# ... and inputs hers
-		phone_input_box = self.browser.find_element_by_xpath("//input[@type='text'][@id='donor_phone']")
+		phone_input_box = self.browser.find_element_by_xpath("//input[@type='text'][@name='donor_phone']")
 		phone_input_box.send_keys("998765432")
 
 		# Identifies email text box
 		email_input_box_label = self.browser.find_element_by_xpath("//label[@for='donor_email'][contains(text(),'E-mail')]")
 		
 		# ...And inputs hers
-		email_input_box = self.browser.find_element_by_xpath("//input[@type='text'][@id='donor_email']")
+		email_input_box = self.browser.find_element_by_xpath("//input[@type='text'][@name='donor_email']")
 		email_input_box.send_keys("maria.silva@gmail.com")
 
 		# Identifies Address text box
 		address_input_box_label = self.browser.find_element_by_xpath("//label[@for='donor_address'][contains(text(),'Endereço')]")
 	
 		# ...and inputs hers
-		address_input_box = self.browser.find_element_by_xpath("//input[@type='text'][@id='donor_address']")
+		address_input_box = self.browser.find_element_by_xpath("//input[@type='text'][@name='donor_address']")
 		address_input_box.send_keys("Avenia Faria Lima")
 
 		# Identifies dropdown box to select payment method
 		payment_method_label = self.browser.find_element_by_xpath("//label[@for='payment_method'][contains(text(),'Forma de pagamento')]")
-		payment_method_box = self.browser.find_element_by_xpath("//select[@id='payment_method']")
+		payment_method_box = self.browser.find_element_by_xpath("//select[@name='payment_method']")
 		
 		# ...evaluates her options...
 		payment_method_CC_option = self.browser.find_element_by_xpath("//option[@value='CC']")
