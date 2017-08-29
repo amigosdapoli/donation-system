@@ -114,14 +114,15 @@
           <div class="panel-body">
 			<p>
 			  <label for="donation_type">Tipo de doação</label>
-			  <select name="donation_type">
+			  <select name="donation_type" id="donation_type">
+				<option>Selecione o tipo de recorrência</option>
 			    <option value="one-off">Pontual</option>
 				<option value="recurring">Recorrente</option>
 			  </select>
 			</p>
 			</p>
 			  <label for="donation_value">Valor da doação</label>
-			  <input type="text" name="donation_value">
+			  <input type="text" name="donation_value" id="donation_value">
 			</p>
           </div>
         </div>
@@ -133,14 +134,14 @@
           <div class="panel-body">
 			<p>
 			  <label for="donor_name">Nome</label>
-			  <input type="text" name="donor_name" >
+			  <input type="text" name="donor_name">
 			</p>
 			<p>
 			  <label for="donor_surname">Sobrenome</label>
 			  <input type="text" name="donor_surname" >
 			</p>
 			<p>
-			  <label for="donor_tax_id">CNPJ</label>
+			  <label for="donor_tax_id">CPF</label>
 			  <input type="text" name="donor_tax_id" >
 			</p>
 			<p>
@@ -165,6 +166,7 @@
           <div class="panel-body">
           	<label for="payment_method">Forma de pagamento</label> 
 			<select name="payment_method">
+			  <option>Selecione a forma de pagamento</option>
 			  <option value="CC">Cartão de crédito</option>
 			  <option value="BB">Boleto bancário</option>
 			</select>
