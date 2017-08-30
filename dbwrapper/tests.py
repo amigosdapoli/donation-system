@@ -25,3 +25,11 @@ class DonationPageTest(TestCase):
 				'donor_surname': 'de Tal'}
         response = self.client.post('/', data=data)
         self.assertTemplateUsed(response, 'dbwrapper/donation_form.html')
+
+    def test_payment(self):
+        data = {'donation_value': 30,
+				'donor_tax_id': 1,
+				'donor_name': 'Fulano',
+				'donor_surname': 'de Tal'}
+        response = self.client.post('/', data=data)
+        self.assertTemplateUsed(response, 'dbwrapper/donation_form.html')
