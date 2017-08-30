@@ -19,7 +19,7 @@ def donation_form(request):
         
         # tax id is required
         if not tax_id:
-            raise Exception('tax_id need to be provided')
+            raise Exception('donor_tax_id need to be provided')
         donor = Donor.objects.filter(tax_id=tax_id).first()
 
         # creates  a new donor

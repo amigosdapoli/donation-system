@@ -19,27 +19,9 @@ class DonationPageTest(TestCase):
         self.assertTemplateUsed(response, 'dbwrapper/donation_form.html')
 
     def test_POST_request_has_response(self):
-        data = {'donation': { 
-                    'value': 10,
-                    'type': 'recurrent',
-		            'donor':{
-		                'wants_anonimity': True,
-		                'first_name': 'João',
-		                'last_name': 'Batista Santos',
-		                'tax_id':    66625911143,
-		                'email': 'joaobatista@gmail.com',
-		                'phone': 119957252267,
-		                'course': 'Engenharia de Produção',
-		                'graduation_year': 1970,
-		                'source': 'friends',},
-		            'card':{
-		                'name': 'Joao batista santos',
-		                'number': '1111222233334444',
-		                'expiration': '2017-08-01',
-		                'cvv': 123}
-		            }}
+        data = {'donation_value': 30,
+				'donor_tax_id': 1,
+				'donor_name': 'Fulano',
+				'donor_surname': 'de Tal'}
         response = self.client.post('/', data=data)
-        self.assertIn('status', response.content.decode())         
-
-
-
+        self.assertTemplateUsed(response, 'dbwrapper/donation_form.html')
