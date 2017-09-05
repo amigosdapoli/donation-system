@@ -1,20 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from rest_framework import viewsets
 from .models import Donor, Donation
-from .serializers import DonorSerializer, DonationSerializer
+from . import forms
+
 import json
-class DonorViewSet(viewsets.ModelViewSet):
-    queryset = Donor.objects.all().order_by('CPF')
-    serializer_class = DonorSerializer
-
-class DonationViewSet(viewsets.ModelViewSet):
-    queryset = Donation.objects.all().order_by('value')
-    serializer_class = DonationSerializer
-
 
 def donation_form(request):
+    form = forms.FormDonor()
+    donation_form = forms.FormDonation()
+    
     if request.method == 'POST':
+        form = forms.FormDonor(request.POST)
         tax_id = request.POST.get('donor_tax_id')
         
         # tax id is required
@@ -37,4 +33,4 @@ def donation_form(request):
         new_donation.donor_tax_id = donor.tax_id
         new_donation.recurring = False
         new_donation.save()
-    return render(request, 'dbwrapper/donation_form.html', {})
+    return render(request, 'dbwrapper/donation_form.html', {'form':form,'donation_form':donation_form})
