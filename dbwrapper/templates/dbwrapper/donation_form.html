@@ -100,7 +100,7 @@
     -->
   </div>
 </nav>
-
+	  
 <div class="container-fluid bg-1 text-center">
   <h3 class="first-h3">Doações</h3>
     <form method="POST" class="form-inline">
@@ -112,18 +112,7 @@
             <h3 class="panel-title">Detalhes da doação</h3>
           </div>
           <div class="panel-body">
-			<p>
-			  <label for="donation_type">Tipo de doação</label>
-			  <select name="donation_type" id="donation_type">
-				<option>Selecione o tipo de recorrência</option>
-			    <option value="one-off">Pontual</option>
-				<option value="recurring">Recorrente</option>
-			  </select>
-			</p>
-			</p>
-			  <label for="donation_value">Valor da doação</label>
-			  <input type="text" name="donation_value" id="donation_value">
-			</p>
+			{{donation_form.as_p}}
           </div>
         </div>
 
@@ -132,30 +121,8 @@
             <h3 class="panel-title">Informações pessoais</h3>
           </div>
           <div class="panel-body">
-			<p>
-			  <label for="donor_name">Nome</label>
-			  <input type="text" name="donor_name">
-			</p>
-			<p>
-			  <label for="donor_surname">Sobrenome</label>
-			  <input type="text" name="donor_surname" >
-			</p>
-			<p>
-			  <label for="donor_tax_id">CPF</label>
-			  <input type="text" name="donor_tax_id" >
-			</p>
-			<p>
-			  <label for="donor_phone">Telefone</label>
-			  <input type="text" name="donor_phone">
-			</p>
-			<p>
-			  <label for="donor_email">E-mail</label>
-			  <input type="text" name="donor_email">
-			</p>
-			<p>
-			  <label for="donor_address">Endereço</label>
-			  <input type="text" name="donor_address">
-			</p>
+			{{form.as_p}}
+			{% csrf_token %}
           </div>
         </div>
   
@@ -187,7 +154,6 @@
       </div>
     </div>
 
-    {% csrf_token %}
     </form>
 </div>
 

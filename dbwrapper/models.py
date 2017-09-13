@@ -6,7 +6,7 @@ class Donor(models.Model):
     surname = models.CharField(max_length=30)
     tax_id = models.CharField(max_length=11, primary_key=True)
     phone_number = models.CharField(max_length=15)
-    email = models.CharField(max_length=30)
+    email = models.EmailField(max_length=50)
     address = models.CharField(max_length=50)
 
 

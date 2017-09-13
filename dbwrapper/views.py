@@ -4,13 +4,19 @@ from .models import Donor, Donation, PaymentTransaction
 from maxipago import Maxipago
 from .configuration import Configuration
 from datetime import date
-
 import logging
 from random import randint
+from . import forms
 
+
+import json
 
 def donation_form(request):
+    form = forms.FormDonor()
+    donation_form = forms.FormDonation()
+    
     if request.method == 'POST':
+        form = forms.FormDonor(request.POST)
         tax_id = request.POST.get('donor_tax_id')
         
         # tax id is required
@@ -80,4 +86,6 @@ def donation_form(request):
             raise Exception('Payment not captured')
             # update donation with failed
 
-    return render(request, 'dbwrapper/donation_form.html', {})
+
+    return render(request, 'dbwrapper/donation_form.html', {'form':form,'donation_form':donation_form})
+
