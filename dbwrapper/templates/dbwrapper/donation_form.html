@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>Doação Amigos da Poli</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  {% load static %}
-  <link rel="stylesheet" href="{% static  "css/style.css" %}">
-  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
-  <!-- 
+<head>
+    <title>Doação Amigos da Poli</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">{% load static %}
+    <link rel="stylesheet" href="{% static  " css/style.css " %}">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
+    <!-- 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -23,74 +23,22 @@
 </head>
 
 <body>
-<nav class="navbar navbar-default">
-  <div class="container">
-    <div class="navbar-header">
 
-      <a class="navbar-brand" href="#" name="nav_bar_title">Doação Amigos da Poli</a>
-    </div>
-
-  </div>
-</nav>
-	  
-<div class="container-fluid bg-1 text-center">
-  <h3 class="first-h3">Doações</h3>
     <form method="POST" class="form-inline">
 
-    <div class="row">
-      <div class="col-md-6 col-md-offset-3">
-        <div class="panel panel-primary">
-          <div class="panel-heading">
-            <h3 class="panel-title">Detalhes da doação</h3>
-          </div>
-          <div class="panel-body">
-			{{donation_form.as_p}}
-          </div>
-        </div>
-
-        <div class="panel panel-primary">
-          <div class="panel-heading">
-            <h3 class="panel-title">Informações pessoais</h3>
-          </div>
-          <div class="panel-body">
-			{{form.as_p}}
-			{% csrf_token %}
-          </div>
-        </div>
-  
-        <div class="panel panel-primary">
-          <div class="panel-heading">
-            <h3 class="panel-title">Pagamento</h3>
-          </div>
-          <div class="panel-body">
-          	<label for="payment_method">Forma de pagamento</label> 
-			<select name="payment_method">
-			  <option>Selecione a forma de pagamento</option>
-			  <option value="CC">Cartão de crédito</option>
-			  <option value="BB">Boleto bancário</option>
-			</select>
-          </div>
-        </div>
+        {{donation_form.as_p}} {{form.as_p}} {% csrf_token %}
 
         <div name="credit_cards" style="text-align:left;">
-          <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/visa.png" name="visa">
-          <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/master.png" name="mastercard">
+            <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/visa.png" name="visa">
+            <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/master.png" name="mastercard">
         </div>
 
-        <div class="btn-form">
-          <button name="subbtn" style="display:block" onclick="ga('send', {hitType: 'event',eventCategory: 'doacao',eventAction: 'submit_donation',eventLabel: 'website'});" type="submit" class="button big round color">
+        <button name="subbtn" style="display:block" onclick="ga('send', {hitType: 'event',eventCategory: 'doacao',eventAction: 'submit_donation',eventLabel: 'website'});" type="submit" class="button big round color">
             Enviar
-          </button>
-        </div>
-
-      </div>
-    </div>
+        </button>
 
     </form>
-</div>
 
 </body>
-<footer class="container-fluid bg-2 text-center">
-  <p><i>Desenvolvido por Amigos da Poli usando o tema Bootstrap feito por <a href="https://www.w3schools.com">www.w3schools.com</a></i></p> 
-</footer>
+
 </html>
