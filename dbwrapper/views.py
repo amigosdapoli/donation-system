@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from .models import Donor, Donation, PaymentTransaction
 from maxipago import Maxipago
 from .configuration import Configuration
+from datetime import date
 
 import logging
 from random import randint
@@ -44,12 +45,13 @@ def donation_form(request):
         config = Configuration()
         maxipago_id = config.get("payment", "merchant_id")
         maxipago_key = config.get("payment", "merchant_key")
+        maxipago_sandbox = config.get("payment", "sandbox")
         logging.info("Using Maxipago with customer {}".format(maxipago_id))
-        maxipago = Maxipago(maxipago_id, maxipago_key)
+        maxipago = Maxipago(maxipago_id, maxipago_key, sandbox=maxipago_sandbox)
 
         REFERENCE = randint(1, 100000)
         response = maxipago.payment.direct(
-            processor_id=1,
+            processor_id=u'1', # TEST, REDECARD = u'1', u'2'
             reference_num=REFERENCE,
             billing_name=u'Fulano de Tal',
             billing_address1=u'Rua das Alamedas, 123',
@@ -69,7 +71,10 @@ def donation_form(request):
         logging.info("Response authorized: ".format(response.authorized))
         logging.info("Response captured: ".format(response.captured))
         if response.authorized and response.captured:
-            pass
+            donation = Donation.objects.get(donation_id=new_donation.donation_id)
+            donation.order_id = response.order_id
+            donation.nsu_id = response.transaction_id
+            donation.save()
             # if sucess: update donation with transaction status and ids
         else:
             raise Exception('Payment not captured')

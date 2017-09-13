@@ -15,6 +15,8 @@ class Donation(models.Model):
     value = models.IntegerField()
     donor_tax_id = models.CharField(max_length=11)
     recurring = models.BooleanField()
+    order_id = models.CharField(max_length=35, default=None, blank=True, null=True)
+    nsu_id = models.CharField(max_length=10, default=None, blank=True, null=True)
 
 
 class PaymentTransaction(models.Model):
