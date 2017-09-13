@@ -5,5 +5,6 @@ __pycache__
 *.swp
 *.psd
 *.plist
+*.css.map
 tags
 Gemfile.lock
