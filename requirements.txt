@@ -6,4 +6,11 @@ djangorestframework==3.6.3
 phonenumberslite==8.8.0
 psycopg2==2.7.1
 pytz==2017.2
+<<<<<<< HEAD
 selenium==3.4.3
+=======
+future
+
+# testing
+selenium
+>>>>>>> b8d9049734fdd2e9c95784f11565aa84106d0898

@@ -15,7 +15,21 @@ class Donation(models.Model):
     value = models.IntegerField()
     donor_tax_id = models.CharField(max_length=11)
     recurring = models.BooleanField()
-    
+    order_id = models.CharField(max_length=35, default=None, blank=True, null=True)
+    nsu_id = models.CharField(max_length=10, default=None, blank=True, null=True)
+
+
+class PaymentTransaction(models.Model):
+    name_on_card = ""
+    card_number = ""
+    expiry_date = ""
+    card_code = ""
+
+    def save(self, *args, **kwargs):
+        pass
+
+    class Meta:
+        managed = False
 
 class TransactionResponse(models.Model):
     boleto_url = models.CharField(max_length=100)
@@ -27,5 +41,7 @@ class TransactionResponse(models.Model):
     transaction_id = models.CharField(max_length=20)
     transaction_timestamp = models.DateTimeField()
     response_code = models.IntegerField()
+
+
 
 

@@ -62,10 +62,20 @@ TODO using docker? Vagrant?
 
 # Payment Gateways
 Payment gateways will follow a pattern so we can add different services if needed.
+
 ## Available gateways
 * MaxiPago
 TODO List different payment methods
 ## Creating new gateways
+
+## Configuring payment gateway
+Fill in configuration file as following:
+```
+[payment]
+sandbox=<boolean>
+merchant_id=<id>
+merchant_key=<key>
+```
 
 # Contributing
 
