@@ -1,3 +1,9 @@
 venv/
 geckodriver.log
 __pycache__
+.sass-cache
+*.swp
+*.psd
+*.plist
+tags
+Gemfile.lock
