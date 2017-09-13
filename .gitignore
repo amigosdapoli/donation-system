@@ -6,6 +6,6 @@ __pycache__
 *.psd
 *.plist
 *.map
-dbwrapper/css/style.css
+*.css
 tags
 Gemfile.lock
