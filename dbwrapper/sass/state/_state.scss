@@ -1,0 +1,76 @@
+.clearfix::after {
+    content: " ";
+    display: table;
+    clear: both;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.accent {
+    color: cores(accent);
+}
+
+.primary {
+    color: cores(primary);
+}
+
+.bold {
+    font-weight: $font-weight--medium;
+}
+
+.heavy {
+    font-weight: $font-weight--heavy;
+    line-height: 30px;
+}
+
+.light--primary {
+    color: cores(light--primary);
+}
+
+.light--secondary {
+    color: cores(light--secondary);
+}
+
+.light--disabled {
+    color: cores(light--disabled);
+}
+
+.dark--primary {
+    color: cores(dark--primary);
+}
+
+.dark--secondary {
+    color: cores(dark--secondary);
+}
+
+.dark--disabled {
+    color: cores(dark--disabled);
+}
+
+.full-width {
+    width: 100%;
+}
+
+.relative {
+    position: relative;
+}
+
+.color {
+    @include m(facebook) {
+        @include anchor-reset(cores(facebook));
+    }
+    @include m(linkedin) {
+        @include anchor-reset(cores(linkedin));
+    }
+}
+
+.background-color {
+    @include m(facebook) {
+        background-color: cores(facebook);
+    }
+    @include m(linkedin) {
+        background-color: cores(linkedin);
+    }
+}

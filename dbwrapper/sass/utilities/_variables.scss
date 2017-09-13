@@ -1,0 +1,175 @@
+// GoogleFont
+//$font-url--google          :'https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic,700,700italic';
+
+$susy: (
+  columns: 12,
+  gutters: 1/4,
+);
+
+// Font Stacks
+// $font-family      : 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$font-family      : 'Roboto', Helvetica, Arial, sans-serif;
+// $font-family      : 'Open Sans', Helvetica, Arial, sans-serif;
+// $font-family      : 'Source Sans Pro', Helvetica, Arial, sans-serif;
+
+//Font Weight
+
+$font-weight--regular        : 400;
+$font-weight--medium         : 500;
+$font-weight--semibold       : 600;
+$font-weight--bold           : 700;
+$font-weight--heavy          : 900;
+
+//Color
+
+$color-primary      : #0896e6;
+$color-accent       : #ff5c64;
+$color-base         : rgb(238,238,238);
+
+$color-white        : #fff;
+$color-black        : black;
+$color-gray         : gray;
+
+$color-dark--primary       : rgba(0,0,0,0.87);
+$color-dark--secondary       : rgba(0,0,0,0.54);
+$color-dark--disabled       : rgba(0,0,0,0.38);
+$color-dark--24       : rgba(0,0,0,0.24);
+$color-dark--12       : rgba(0,0,0,0.12);
+
+$color-light--primary       : rgba(255,255,255,1);
+$color-light--secondary       : rgba(255,255,255,0.70);
+$color-light--disabled       : rgba(255,255,255,0.50);
+
+$color-facebook     : #3b5998;
+$color-linkedin     : #0077b5;
+
+// Font Size
+
+$base__font-size    : 18px;
+
+// Path to assets
+
+$path--rel          : "images/";
+
+// Color Palette Modifiers
+
+$tons: (
+  primary: (
+    base:   $color-primary,
+    shade:  lum($color-primary, -30),
+    tint:   lighten($color-primary, 15%),
+    pastel: lighten($color-primary, 40%)
+  ),
+  accent: (
+    base:   $color-accent,
+    shade:  lum($color-accent, -30),
+    tint:   lighten($color-accent, 15%),
+    pastel: lighten($color-accent, 40%)
+  ),
+  base: (
+    base:   $color-base,
+    shade:  lum($color-base, -30),
+    tint:   lighten($color-base, 15%),
+    pastel: lighten($color-base, 40%)
+  ),
+  white: (
+    base:   $color-white,
+    shade:  lum($color-white, -30),
+    tint:   lighten($color-white, 15%),
+    pastel: lighten($color-white, 40%)
+  ),
+  black: (
+    base:   $color-black,
+    shade:  lum($color-black, -30),
+    tint:   lighten($color-black, 15%),
+    pastel: lighten($color-black, 40%)
+  ),
+  gray: (
+    base:   $color-gray,
+    shade:  lum($color-gray, -30),
+    tint:   lighten($color-gray, 15%),
+    pastel: lighten($color-gray, 40%)
+  ),
+  dark--primary: (
+    base:   $color-dark--primary,
+    shade:  lum($color-dark--primary, -30),
+    tint:   lighten($color-dark--primary, 15%),
+    pastel: lighten($color-dark--primary, 40%)
+  ),
+  dark--secondary: (
+    base:   $color-dark--secondary,
+    shade:  lum($color-dark--secondary, -30),
+    tint:   lighten($color-dark--secondary, 15%),
+    pastel: lighten($color-dark--secondary, 40%)
+  ),
+  dark--disabled: (
+    base:   $color-dark--disabled,
+    shade:  lum($color-dark--disabled, -30),
+    tint:   lighten($color-dark--disabled, 15%),
+    pastel: lighten($color-dark--disabled, 40%)
+  ),
+  dark--24: (
+    base:   $color-dark--24,
+    shade:  lum($color-dark--24, -30),
+    tint:   lighten($color-dark--24, 15%),
+    pastel: lighten($color-dark--24, 40%)
+  ),
+  dark--12: (
+    base:   $color-dark--12,
+    shade:  lum($color-dark--12, -30),
+    tint:   lighten($color-dark--12, 15%),
+    pastel: lighten($color-dark--12, 40%)
+  ),
+  light--primary: (
+    base:   $color-light--primary,
+    shade:  lum($color-light--primary, -30),
+    tint:   lighten($color-light--primary, 15%),
+    pastel: lighten($color-light--primary, 40%)
+  ),
+  light--secondary: (
+    base:   $color-light--secondary,
+    shade:  lum($color-light--secondary, -30),
+    tint:   lighten($color-light--secondary, 15%),
+    pastel: lighten($color-light--secondary, 40%)
+  ),
+  light--disabled: (
+    base:   $color-light--disabled,
+    shade:  lum($color-light--disabled, -30),
+    tint:   lighten($color-light--disabled, 15%),
+    pastel: lighten($color-light--disabled, 40%)
+  ),
+  facebook: (
+    base:   $color-facebook,
+    shade:  lum($color-facebook, -30),
+    tint:   lighten($color-facebook, 15%),
+    pastel: lighten($color-facebook, 40%)
+  ),
+  linkedin: (
+    base:   $color-linkedin,
+    shade:  lum($color-linkedin, -30),
+    tint:   lighten($color-linkedin, 15%),
+    pastel: lighten($color-linkedin, 40%)
+  )
+);
+
+// // Breakpoints
+// $bp-small : 24em;
+// $bp-small-2 : 29.75em;
+// $bp-small-3 : 39.8em;
+// $bp-med : 46.8em;
+// $bp-med-2 : 48em;
+// $bp-large : 49.9em;
+// $bp-large-2 : 54.5em;
+// $bp-xl : 60em;
+// $bp-xl-2 : 67em;
+
+// Breakpoints
+$bp-small : 336px;
+$bp-small-2 : 416px;
+$bp-small-3 : 557px;
+$bp-med : 655px;
+$bp-med-2 : 672px;
+$bp-large : 700px;
+$bp-large-2 : 763px;
+$bp-xl : 840px;
+$bp-xl-2 : 938px;
