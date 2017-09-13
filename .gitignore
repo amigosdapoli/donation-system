@@ -5,6 +5,7 @@ __pycache__
 *.swp
 *.psd
 *.plist
-*.css.map
+*.map
+dbwrapper/css/style.css
 tags
 Gemfile.lock
