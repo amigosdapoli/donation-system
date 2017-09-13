@@ -17,7 +17,7 @@ def donation_form(request):
     
     if request.method == 'POST':
         form = forms.FormDonor(request.POST)
-        tax_id = request.POST.get('donor_tax_id')
+        tax_id = request.POST.get('CPF_field')
         
         # tax id is required
         if not tax_id:
@@ -28,8 +28,8 @@ def donation_form(request):
         if not donor:
             new_donor = Donor()
             new_donor.tax_id = tax_id
-            new_donor.name = request.POST.get('donor_name')
-            new_donor.surname = request.POST.get('donor_surname')
+            new_donor.name = request.POST.get('name')
+            new_donor.surname = request.POST.get('surname')
             new_donor.save()
             donor = new_donor
 
@@ -42,7 +42,7 @@ def donation_form(request):
 
         # Donation
         new_donation = Donation()
-        new_donation.value = request.POST.get('donation_value')
+        new_donation.value = request.POST.get('value')
         new_donation.donor_tax_id = donor.tax_id
         new_donation.recurring = False
         new_donation.save()

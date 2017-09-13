@@ -11,7 +11,7 @@ class Donor(models.Model):
 
 
 class Donation(models.Model):
-    donation_id = models.AutoField(primary_key=True)
+    donation_id = models.AutoField(primary_key=True, default=None)
     value = models.IntegerField()
     donor_tax_id = models.CharField(max_length=11)
     recurring = models.BooleanField()
