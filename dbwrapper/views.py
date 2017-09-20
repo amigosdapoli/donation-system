@@ -35,6 +35,10 @@ def donation_form(request):
                 new_donor.surname = request.POST.get('surname')
                 new_donor.phone_number = request.POST.get('phone_number')
                 new_donor.email = request.POST.get('email')
+                if request.POST.get('is_anonymous'):
+                    new_donor.is_anonymous = True
+                else:
+                    new_donor.is_anonymous = False
                 new_donor.save()
                 donor = new_donor
 
@@ -51,7 +55,10 @@ def donation_form(request):
             new_donation = Donation()
             new_donation.value = request.POST.get('value')
             new_donation.donor_tax_id = donor.tax_id
-            new_donation.recurring = False
+            if request.POST.get('is_recurring_field') == '1':
+                new_donation.recurring = True
+            else:
+                new_donation.recurring = False
             new_donation.save()
 
             # Process payment
@@ -62,23 +69,23 @@ def donation_form(request):
             logging.info("Using Maxipago with customer {}".format(maxipago_id))
             maxipago = Maxipago(maxipago_id, maxipago_key, sandbox=maxipago_sandbox)
 
-            REFERENCE = randint(1, 100000)
+            REFERENCE = new_donation.donation_id
             response = maxipago.payment.direct(
                 processor_id=u'1', # TEST, REDECARD = u'1', u'2'
                 reference_num=REFERENCE,
-                billing_name=u'Fulano de Tal',
-                billing_address1=u'Rua das Alamedas, 123',
-                billing_city=u'Rio de Janeiro',
-                billing_state=u'RJ',
-                billing_zip=u'20345678',
-                billing_country=u'RJ',
-                billing_phone=u'552140634666',
-                billing_email=u'fulano@detal.com',
-                card_number='4111111111111111',
-                card_expiration_month=u'02',
-                card_expiration_year=date.today().year + 3,
-                card_cvv='123',
-                charge_total='100.00',
+                billing_name=new_payment.name_on_card,
+                # billing_address1=u'Rua das Alamedas, 123',
+                # billing_city=u'Rio de Janeiro',
+                # billing_state=u'RJ',
+                # billing_zip=u'20345678',
+                # billing_country=u'RJ',
+                billing_phone=donor.phone_number,
+                billing_email=donor.email,
+                card_number=new_payment.card_number,
+                card_expiration_month=new_payment.expiry_date_month,
+                card_expiration_year=new_payment.expiry_date_year,
+                card_cvv=new_payment.card_code,
+                charge_total=new_donation.value,
             )
 
             logging.info("Response authorized: ".format(response.authorized))
