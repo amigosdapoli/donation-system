@@ -9,7 +9,7 @@ from configparser import ConfigParser
 class Configuration(object):
     def __init__(self, config_file=os.getenv("CONFIG_PATH") ):
         if config_file is None:
-            self.config_file = "/home/fernandosjp/coding/donation-system/dbwrapper/configs.cfg"
+            self.config_file = "dbwrapper/configs.cfg"
         else:
             self.config_file = config_file
 

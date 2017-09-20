@@ -121,8 +121,7 @@
             <h3 class="panel-title">Informações pessoais</h3>
           </div>
           <div class="panel-body">
-			{{form.as_p}}
-			{% csrf_token %}
+			{{donor_form.as_p}}
           </div>
         </div>
   
@@ -135,8 +134,9 @@
 			<select name="payment_method">
 			  <option>Selecione a forma de pagamento</option>
 			  <option value="CC">Cartão de crédito</option>
-			  <option value="BB">Boleto bancário</option>
 			</select>
+            {{ payment_form.as_p }}
+			{% csrf_token %}
           </div>
         </div>
 

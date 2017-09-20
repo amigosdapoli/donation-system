@@ -11,7 +11,7 @@ class Donor(models.Model):
 
 
 class Donation(models.Model):
-    donation_id = models.AutoField(primary_key=True)
+    donation_id = models.AutoField(primary_key=True, default=None)
     value = models.IntegerField()
     donor_tax_id = models.CharField(max_length=11)
     recurring = models.BooleanField()
@@ -20,10 +20,11 @@ class Donation(models.Model):
 
 
 class PaymentTransaction(models.Model):
-    name_on_card = ""
-    card_number = ""
-    expiry_date = ""
-    card_code = ""
+    name_on_card = models.CharField(max_length=30)
+    card_number = models.CharField(max_length=16)
+    expiry_date_month = models.CharField(max_length=2)
+    expiry_date_year = models.CharField(max_length=2)
+    card_code = models.CharField(max_length=3)
 
     def save(self, *args, **kwargs):
         pass
