@@ -69,7 +69,7 @@ TODO List different payment methods
 ## Creating new gateways
 
 ## Configuring payment gateway
-Fill in configuration file as following:
+Fill in configuration file in `dbwrapper/configs.cfg` with the content as bellow:
 ```
 [payment]
 sandbox=<boolean>
