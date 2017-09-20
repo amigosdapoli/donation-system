@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.template.loader import get_template
+from django.core.mail import EmailMultiAlternatives
 from .models import Donor, Donation, PaymentTransaction
 from maxipago import Maxipago
 from .configuration import Configuration
@@ -87,7 +89,23 @@ def donation_form(request):
                 donation.nsu_id = response.transaction_id
                 donation.save()
 
-                # if sucess: update donation with transaction status and ids
+                d = {'first_name': donor.name,
+                     'value': new_donation.value}
+
+                plaintext = get_template('dbwrapper/successful_donation_email.txt')
+                html_template = get_template('dbwrapper/successful_donation_email.html')
+
+                subject = 'Obrigado pela sua contribuição!'
+                text_content = plaintext.render(d)
+                html_content = html_template.render(d)
+
+                msg = EmailMultiAlternatives(
+                    subject,
+                    text_content,
+                    'no-reply@amigosdapoli.com.br',
+                    ['no-reply@amigosdapoli.com.br'])
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
                 return render(request, 'dbwrapper/successful_donation.html')
             else:
                 raise Exception('Payment not captured')
