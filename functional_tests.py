@@ -70,7 +70,7 @@ class NewDonorTest(unittest.TestCase):
         # ...evaluates her options...
         payment_method_CC_option = self.browser.find_element_by_xpath("//option[@value='CC']")
         self.assertIn("Cartão de crédito", payment_method_CC_option.text)
-        
+
 
 
 if __name__ == '__main__':

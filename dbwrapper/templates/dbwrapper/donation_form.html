@@ -130,11 +130,11 @@
             <h3 class="panel-title">Pagamento</h3>
           </div>
           <div class="panel-body">
-          	<label for="payment_method">Forma de pagamento</label> 
-			<select name="payment_method">
+          	<label for="payment_method">Cartão de crédito</label>
+			<!--<select name="payment_method">
 			  <option>Selecione a forma de pagamento</option>
 			  <option value="CC">Cartão de crédito</option>
-			</select>
+			</select>-->
             {{ payment_form.as_p }}
 			{% csrf_token %}
           </div>
