@@ -103,9 +103,9 @@ def donation_form(request):
                     subject,
                     text_content,
                     'no-reply@amigosdapoli.com.br',
-                    ['no-reply@amigosdapoli.com.br'])
+                    ['no-reply@amigosdapoli.com.br'],)
                 msg.attach_alternative(html_content, "text/html")
-                msg.send()
+                msg.send(fail_silently=True)
                 return render(request, 'dbwrapper/successful_donation.html')
             else:
                 raise Exception('Payment not captured')
