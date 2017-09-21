@@ -26,8 +26,40 @@
 
     <form method="POST" class="form-inline">
 
-        {{donation_form.as_p}} {{form.as_p}} {% csrf_token %}
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">Detalhes da doação</h3>
+          </div>
+          <div class="panel-body">
+			{{donation_form.as_p}}
+          </div>
+        </div>
 
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">Informações pessoais</h3>
+          </div>
+          <div class="panel-body">
+			{{donor_form.as_p}}
+          </div>
+        </div>
+  
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">Pagamento</h3>
+          </div>
+          <div class="panel-body">
+          	<label for="payment_method">Cartão de crédito</label>
+			<!--<select name="payment_method">
+			  <option>Selecione a forma de pagamento</option>
+			  <option value="CC">Cartão de crédito</option>
+			</select>-->
+            {{ payment_form.as_p }}
+			{% csrf_token %}
+          </div>
+        </div>
         <div name="credit_cards" style="text-align:left;">
             <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/visa.png" name="visa">
             <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/master.png" name="mastercard">

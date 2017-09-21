@@ -8,3 +8,4 @@ psycopg2==2.7.1
 pytz==2017.2
 selenium==3.4.3
 django-livereload-server
+future
