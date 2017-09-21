@@ -50,3 +50,25 @@ h2 {
 h3 {
     font-size: 1.5em;
 }
+
+input {
+    display: block;
+    border: none;
+    border-bottom: 1px solid cores(dark--secondary);
+    width: 100%;
+}
+
+label {
+    font-size: 0.9em;
+    color: cores(dark--secondary);
+}
+
+select {
+    display: block;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid cores(dark--secondary);
+    border-radius: 0px;
+    -webkit-appearance: none;
+}

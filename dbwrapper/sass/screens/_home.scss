@@ -1,0 +1,22 @@
+.header {
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: cover;
+    box-shadow: inset 0 0 0 1000px cores(dark--secondary);
+    background-image: url(/static/images/poli.png);
+
+    padding: 20px 20px 0;
+    color: cores(light--primary);
+    @include e(logo) {
+    }
+    @include e(title) {
+        font-weight: $font-weight--bold;
+        margin: 2em 0;
+    }
+}
+
+.donation-form {
+    padding: 1em 20px;
+    h3 {
+    }
+}
