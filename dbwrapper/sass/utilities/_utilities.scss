@@ -1,0 +1,102 @@
+// Import if Google URL is defined
+@if variable-exists(font-url--google) {
+  @import url($font-url--google);
+}
+
+// Calculate em values
+@function em($target, $context: $base__font-size) {
+  @return ($target / $context) * 1em;
+}
+
+// Call the color palette modifiers
+@function cores($ton, $shade: 'base') {
+  @if $ton=='primary' or $ton=='accent' or $ton=='background' or $ton=='white' $ton=='black' {
+    @if $shade=='base' or $shade=='shade' or $shade=='tint' or $shade=='pastel' {
+      @return map-get(map-get($tons, $ton), $shade);
+    }
+    @else {
+        @return red;
+      // @error "'#{$shade}' is not a valid shade, please use 'base, shade, tint or pastel'";
+    }
+  }
+  @else {
+        @return red;
+    // @error "'#{$ton}' is not a valid color, please use 'primary, accent, background, white or black'";
+  }
+}
+
+@function lum($color, $value) {
+  @return change-color($color, $lightness: lightness($color)*(100+$value)/100);
+}
+
+// BEM Selectors
+@mixin e($element) {
+  &__#{$element} {
+    @content;
+  }
+}
+
+@mixin m($modifier) {
+  &--#{$modifier} {
+    @content;
+  }
+}
+
+@mixin anchor-reset($color) {
+    text-decoration: none;
+    color: $color;
+    &:visited,
+    &:active,
+    &:link {
+        color: $color
+    }
+}
+
+@mixin pseudo( $el,
+$w: null,
+$h: null) {
+  @if $el=='before' or $el=='after' {
+    &:#{$el} {
+      @extend %pseudos;
+      width: $w;
+      height: $h;
+      @content;
+    }
+  }
+  @else {
+    @error "'#{$el}' is not a valid pseudo-element.";
+  }
+}
+
+@mixin shadow($color: transparent, $size: 100px) {
+    position: relative;
+    &:before {
+        @extend %pseudos;
+        width: 80%;
+        max-width: calc(100% - #{$size});
+        height: 50%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        z-index: -1;
+        box-shadow: 0 $size/10 $size cores(dark--disabled),
+                    0 $size/10 $size rgba($color, 0.5);
+    }
+}
+
+@mixin linha($margin: 1em) {
+  & + & {
+    margin-left: $margin;
+  }
+}
+
+@mixin btn-reset() {
+  &:visited,
+  &:active,
+  &:link {
+    @content;
+  }
+}

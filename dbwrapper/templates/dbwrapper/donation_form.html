@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <title>Doação Amigos da Poli</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-  <!-- 
+    <title>Doação Amigos da Poli</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">{% load static %}
+    <link rel="stylesheet" href="{% static  " css/style.css " %}">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
+    <!-- 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -17,92 +19,11 @@
     ga('send', 'pageview');
   </script>
   -->
-  <style>
-    .container-fluid {
-      padding-top: 25px;
-      padding-bottom: 25px;
-    }
-    .bg-1 { 
-      background-color: #A9A9A9; /* Gray */
-      color: #000000;
-    }
-    .bg-2 { 
-      background-color: #2f2f2f;
-      color: #ffffff;
-    }
-    .navbar {
-      padding-top: 5px;
-      padding-bottom: 5px;
-      border: 0;
-      border-radius: 0;
-      margin-bottom: 0;
-      font-size: 12px;
-      letter-spacing: 3px;
-    }
-    .navbar-nav li a:hover {
-      color: #1abc9c !important;
-    }
-    .navbar-brand{
-      font-size: 27px;
-      letter-spacing: 3px;
-    }
-    .img-main{
-      margin:40px;
-      width:128px;
-      height:128px;
-    }
-    .shopping-list{
-      font-size: 16px;
-      text-align: left;
-    }
-    body {
-      font: 20px "Montserrat", sans-serif;
-      line-height: 1.8;
-      color: #f5f6f7;
-    }
-    h3{
-      margin-top: 0px;
-      margin-bottom: 20px;
-    }
-    p{
-      font-size: 16px;
-    }
-    img{
-      color:#FFFFFF
-    }
-    footer p{
-      font-size: 14px;
-    }
-  </style>
+
 </head>
+
 <body>
 
-<nav class="navbar navbar-default">
-  <div class="container">
-    <div class="navbar-header">
-    <!--
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span> 
-      </button>
-     -->
-      <a class="navbar-brand" href="#" name="nav_bar_title">Doação Amigos da Poli</a>
-    </div>
-    <!--
-    <div class="collapse navbar-collapse" name="myNavbar">
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">WHO</a></li>
-        <li><a href="#">WHAT</a></li>
-        <li><a href="#">WHERE</a></li>
-      </ul>
-    </div>
-    -->
-  </div>
-</nav>
-	  
-<div class="container-fluid bg-1 text-center">
-  <h3 class="first-h3">Doações</h3>
     <form method="POST" class="form-inline">
 
     <div class="row">
@@ -139,26 +60,17 @@
 			{% csrf_token %}
           </div>
         </div>
-
         <div name="credit_cards" style="text-align:left;">
-          <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/visa.png" name="visa">
-          <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/master.png" name="mastercard">
+            <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/visa.png" name="visa">
+            <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/master.png" name="mastercard">
         </div>
 
-        <div class="btn-form">
-          <button name="subbtn" style="display:block" onclick="ga('send', {hitType: 'event',eventCategory: 'doacao',eventAction: 'submit_donation',eventLabel: 'website'});" type="submit" class="button big round color">
+        <button name="subbtn" style="display:block" onclick="ga('send', {hitType: 'event',eventCategory: 'doacao',eventAction: 'submit_donation',eventLabel: 'website'});" type="submit" class="button big round color">
             Enviar
-          </button>
-        </div>
-
-      </div>
-    </div>
+        </button>
 
     </form>
-</div>
 
 </body>
-<footer class="container-fluid bg-2 text-center">
-  <p><i>Desenvolvido por Amigos da Poli usando o tema Bootstrap feito por <a href="https://www.w3schools.com">www.w3schools.com</a></i></p> 
-</footer>
+
 </html>
