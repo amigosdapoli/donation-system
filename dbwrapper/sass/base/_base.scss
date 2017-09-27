@@ -1,5 +1,20 @@
 /* Base Styles -------------------- */
 
+.wrapper {
+    margin: 0px 10px;
+    max-width: 1000px;
+    @include breakpoint($bp-large-2) {
+        margin: 0 auto;
+        width: 60%;
+    }
+}
+
+footer {
+    height: 200px;
+    background-color: cores(base);
+}
+
+
 * {
     box-sizing: border-box;
     min-height: 0;
@@ -56,6 +71,10 @@ input {
     border: none;
     border-bottom: 1px solid cores(dark--secondary);
     width: 100%;
+    flex: 1;
+    &[type="radio"] {
+        display: none;
+    }
 }
 
 label {

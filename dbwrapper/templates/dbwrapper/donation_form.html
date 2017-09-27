@@ -24,8 +24,10 @@
 
 <body>
     <div class="header">
-        <img src="/static/images/logo.png" alt="" class="header__logo"/>
-        <h1 class="header__title">O futuro de nossa escola</h1>
+        <div class="wrapper">
+            <img src="/static/images/logo.png" alt="" class="header__logo"/>
+            <h1 class="header__title">O futuro de nossa escola</h1>
+        </div>
     </div>
 
     <form method="POST" class="form-inline" class="donation-form">
@@ -33,28 +35,37 @@
             <h3 class="panel-title">Como você pretende doar?</h3>
 			{{donation_form.as_p}}
 
+            <div class="test_form">
+                <input id="rad1" type="radio" name="rad"><label for="rad1">Pontualmente</label></input>
+                <input id="rad2" type="radio" name="rad"><label for="rad2">Mensalmente</label></input>
+            </div>
+
             <h3 class="panel-title">Informações pessoais</h3>
 			{{donor_form.as_p}}
   
+            <label>Deseja permanecer anônimo?</label>
+            <div class="test_form">
+                <input id="rad3" type="radio" name="rad2"><label for="rad3">Sim</label></input>
+                <input id="rad4" type="radio" name="rad2"><label for="rad4">Não</label></input>
+            </div>
+
             <h3 class="panel-title">Pagamento</h3>
-          	<!-- <label for="payment_method">Cartão de crédito</label> -->
-			<!--<select name="payment_method">
-			  <option>Selecione a forma de pagamento</option>
-			  <option value="CC">Cartão de crédito</option>
-			</select>-->
             {{ payment_form.as_p }}
 			{% csrf_token %}
 
-        <div name="credit_cards" style="text-align:left;">
-            <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/visa.png" name="visa">
-            <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/master.png" name="mastercard">
-        </div>
+        <!-- <div name="credit_cards" style="text-align:left;"> -->
+        <!--     <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/visa.png" name="visa"> -->
+        <!--     <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/master.png" name="mastercard"> -->
+        <!-- </div> -->
 
-        <button name="subbtn" style="display:block" onclick="ga('send', {hitType: 'event',eventCategory: 'doacao',eventAction: 'submit_donation',eventLabel: 'website'});" type="submit" class="button big round color">
-            Enviar
+        <button name="subbtn" onclick="ga('send', {hitType: 'event',eventCategory: 'doacao',eventAction: 'submit_donation',eventLabel: 'website'});" type="submit" class="submit-button">
+            Doar
         </button>
 
     </form>
+    <footer>
+        
+    </footer>
 
 </body>
 
