@@ -2,8 +2,9 @@ from django.shortcuts import render
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
 from .models import Donor, Donation, PaymentTransaction
-from maxipago import Maxipago
 from .configuration import Configuration
+from maxipago import Maxipago
+from maxipago.utils import payment_processors
 from datetime import date
 import logging
 from random import randint
@@ -71,7 +72,7 @@ def donation_form(request):
 
             REFERENCE = new_donation.donation_id
             response = maxipago.payment.direct(
-                processor_id=u'1', # TEST, REDECARD = u'1', u'2'
+                processor_id=payment_processors.TEST, # TEST or REDECARD
                 reference_num=REFERENCE,
                 billing_name=new_payment.name_on_card,
                 # billing_address1=u'Rua das Alamedas, 123',
