@@ -1,43 +1,37 @@
 from django import forms
+from snowpenguin.django.recaptcha2.fields import ReCaptchaField
+from snowpenguin.django.recaptcha2.widgets import ReCaptchaWidget
 from .models import Donor, Donation, PaymentTransaction
 from localflavor.br.forms import BRCPFField
 
 
 class FormDonor(forms.ModelForm):
     CPF_field = BRCPFField(label="CPF")
-    is_anonymous = forms.BooleanField(required=False)
 
     class Meta:
         model = Donor
         fields = (
-            "name", "surname", "phone_number", "email", "is_anonymous",
+            "name", "surname", "phone_number", "email",
         )
         labels = {
             "name": "Nome",
             "surname": "Sobrenome",
             "phone_number": "Telefone",
             "email": "E-mail",
-            "is_anonymous": "Gostaria de permanecer anônimo?",
         }
 
 
 class FormDonation(forms.ModelForm):
-    IS_RECURRING = (
-        (0, "Pontual"),
-        (1, "Mensal"),
-    )
-    is_recurring_field = forms.ChoiceField(choices=IS_RECURRING, label="Recorrência")
     class Meta:
         model = Donation
-        fields = ("value",)
+        fields = ("donation_value",)
         labels = {
-            "value": "Valor da doação",
-
+            "donation_value": "Valor da doação",
         }
 
 
 class FormPayment(forms.ModelForm):
-
+    captcha = ReCaptchaField(widget=ReCaptchaWidget())
     class Meta:
         model = PaymentTransaction
         fields = ("name_on_card", "card_number", "expiry_date_month", "expiry_date_year", "card_code",)

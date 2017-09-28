@@ -35,85 +35,85 @@ def donation_form(request):
                 new_donor.surname = request.POST.get('surname')
                 new_donor.phone_number = request.POST.get('phone_number')
                 new_donor.email = request.POST.get('email')
-                if request.POST.get('is_anonymous'):
+                if request.POST.get('is_anonymous')=="Sim":
                     new_donor.is_anonymous = True
                 else:
                     new_donor.is_anonymous = False
                 new_donor.save()
                 donor = new_donor
-
             # Payment
-            new_payment = PaymentTransaction()
-            new_payment.name_on_card = request.POST.get("name_on_card")
-            new_payment.card_number = request.POST.get("card_number")
-            new_payment.expiry_date_month = request.POST.get("expiry_date_month")
-            new_payment.expiry_date_year = request.POST.get("expiry_date_year")
-            new_payment.card_code = request.POST.get("card_code")
-            new_payment.save()
+            payment_form = FormPayment(request.POST)
 
-            # Donation
-            new_donation = Donation()
-            new_donation.value = request.POST.get('value')
-            new_donation.donor_tax_id = donor.tax_id
-            if request.POST.get('is_recurring_field') == '1':
-                new_donation.recurring = True
-            else:
-                new_donation.recurring = False
-            new_donation.save()
+            if payment_form.is_valid():
+                new_payment = PaymentTransaction()
+                new_payment.name_on_card = payment_form.cleaned_data['name_on_card']
+                new_payment.save()
 
-            # Process payment
-            config = Configuration()
-            maxipago_id = config.get("payment", "merchant_id")
-            maxipago_key = config.get("payment", "merchant_key")
-            maxipago_sandbox = config.get("payment", "sandbox")
-            logging.info("Using Maxipago with customer {}".format(maxipago_id))
-            maxipago = Maxipago(maxipago_id, maxipago_key, sandbox=maxipago_sandbox)
+                # Donation
+                donation_form = FormDonation(request.POST)
+                if donation_form.is_valid():
+                    new_donation = Donation()
+                    new_donation.donation_value = request.POST.get('donation_value')
+                    new_donation.donor_tax_id = donor.tax_id
+                    if request.POST.get('is_recurring') == "Mensalmente":
+                        new_donation.is_recurring = True
+                    else:
+                        new_donation.is_recurring = False
+                    new_donation.save()
 
-            REFERENCE = new_donation.donation_id
-            response = maxipago.payment.direct(
-                processor_id=u'1', # TEST, REDECARD = u'1', u'2'
-                reference_num=REFERENCE,
-                billing_name=new_payment.name_on_card,
-                # billing_address1=u'Rua das Alamedas, 123',
-                # billing_city=u'Rio de Janeiro',
-                # billing_state=u'RJ',
-                # billing_zip=u'20345678',
-                # billing_country=u'RJ',
-                billing_phone=donor.phone_number,
-                billing_email=donor.email,
-                card_number=new_payment.card_number,
-                card_expiration_month=new_payment.expiry_date_month,
-                card_expiration_year=new_payment.expiry_date_year,
-                card_cvv=new_payment.card_code,
-                charge_total=new_donation.value,
-            )
+                # Process payment
+                config = Configuration()
+                maxipago_id = config.get("payment", "merchant_id")
+                maxipago_key = config.get("payment", "merchant_key")
+                maxipago_sandbox = config.get("payment", "sandbox")
+                logging.info("Using Maxipago with customer {}".format(maxipago_id))
+                maxipago = Maxipago(maxipago_id, maxipago_key, sandbox=maxipago_sandbox)
 
-            logging.info("Response authorized: ".format(response.authorized))
-            logging.info("Response captured: ".format(response.captured))
-            if response.authorized and response.captured:
-                donation = Donation.objects.get(donation_id=new_donation.donation_id)
-                donation.order_id = response.order_id
-                donation.nsu_id = response.transaction_id
-                donation.save()
+                REFERENCE = new_donation.donation_id
+                response = maxipago.payment.direct(
+                    processor_id=u'1', # TEST, REDECARD = u'1', u'2'
+                    reference_num=REFERENCE,
+                    billing_name=payment_form.cleaned_data['name_on_card'],
+                    # billing_address1=u'Rua das Alamedas, 123',
+                    # billing_city=u'Rio de Janeiro',
+                    # billing_state=u'RJ',
+                    # billing_zip=u'20345678',
+                    # billing_country=u'RJ',
+                    billing_phone=donor.phone_number,
+                    billing_email=donor.email,
+                    card_number=payment_form.cleaned_data['card_number'],
+                    card_expiration_month=payment_form.cleaned_data['expiry_date_month'],
+                    card_expiration_year=payment_form.cleaned_data['expiry_date_year'],
+                    card_cvv=payment_form.cleaned_data['card_code'],
+                    charge_total=new_donation.donation_value,
+                )
 
-                d = {'first_name': donor.name,
-                     'value': new_donation.value}
+                logging.info("Response authorized: ".format(response.authorized))
+                logging.info("Response captured: ".format(response.captured))
+                if response.authorized and response.captured:
+                    donation = Donation.objects.get(donation_id=new_donation.donation_id)
+                    donation.order_id = response.order_id
+                    donation.nsu_id = response.transaction_id
+                    donation.save()
 
-                plaintext = get_template('dbwrapper/successful_donation_email.txt')
-                html_template = get_template('dbwrapper/successful_donation_email.html')
+                    d = {'first_name': donor.name,
+                         'value': new_donation.donation_value}
 
-                subject = 'Obrigado pela sua contribuição!'
-                text_content = plaintext.render(d)
-                html_content = html_template.render(d)
+                    plaintext = get_template('dbwrapper/successful_donation_email.txt')
+                    html_template = get_template('dbwrapper/successful_donation_email.html')
 
-                msg = EmailMultiAlternatives(
-                    subject,
-                    text_content,
-                    'no-reply@amigosdapoli.com.br',
-                    ['no-reply@amigosdapoli.com.br'],)
-                msg.attach_alternative(html_content, "text/html")
-                msg.send(fail_silently=True)
-                return render(request, 'dbwrapper/successful_donation.html')
+                    subject = 'Obrigado pela sua contribuição!'
+                    text_content = plaintext.render(d)
+                    html_content = html_template.render(d)
+
+                    msg = EmailMultiAlternatives(
+                        subject,
+                        text_content,
+                        'no-reply@amigosdapoli.com.br',
+                        ['no-reply@amigosdapoli.com.br'],)
+                    msg.attach_alternative(html_content, "text/html")
+                    msg.send(fail_silently=True)
+                    return render(request, 'dbwrapper/successful_donation.html')
             else:
                 raise Exception('Payment not captured')
                 # update donation with failed
