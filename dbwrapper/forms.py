@@ -7,34 +7,26 @@ from localflavor.br.forms import BRCPFField
 
 class FormDonor(forms.ModelForm):
     CPF_field = BRCPFField(label="CPF")
-    is_anonymous = forms.BooleanField(required=False)
 
     class Meta:
         model = Donor
         fields = (
-            "name", "surname", "phone_number", "email", "is_anonymous",
+            "name", "surname", "phone_number", "email",
         )
         labels = {
             "name": "Nome",
             "surname": "Sobrenome",
             "phone_number": "Telefone",
             "email": "E-mail",
-            "is_anonymous": "Gostaria de permanecer anônimo?",
         }
 
 
 class FormDonation(forms.ModelForm):
-    IS_RECURRING = (
-        (0, "Pontual"),
-        (1, "Mensal"),
-    )
-    is_recurring_field = forms.ChoiceField(choices=IS_RECURRING, label="Recorrência", widget=forms.RadioSelect())
     class Meta:
         model = Donation
-        fields = ("value",)
+        fields = ("donation_value",)
         labels = {
-            "value": "Valor da doação",
-
+            "donation_value": "Valor da doação",
         }
 
 

@@ -13,7 +13,7 @@ class Donor(models.Model):
 
 class Donation(models.Model):
     donation_id = models.AutoField(primary_key=True, default=None)
-    value = models.IntegerField()
+    donation_value = models.IntegerField()
     donor_tax_id = models.CharField(max_length=11)
     is_recurring = models.BooleanField()
     order_id = models.CharField(max_length=35, default=None, blank=True, null=True)
