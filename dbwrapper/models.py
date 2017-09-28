@@ -15,10 +15,10 @@ class Donation(models.Model):
     donation_id = models.AutoField(primary_key=True, default=None)
     value = models.IntegerField()
     donor_tax_id = models.CharField(max_length=11)
-    recurring = models.BooleanField()
+    is_recurring = models.BooleanField()
     order_id = models.CharField(max_length=35, default=None, blank=True, null=True)
     nsu_id = models.CharField(max_length=10, default=None, blank=True, null=True)
-
+    installments = models.IntegerField(null=True)
 
 class PaymentTransaction(models.Model):
     name_on_card = models.CharField(max_length=30)
@@ -43,7 +43,3 @@ class TransactionResponse(models.Model):
     transaction_id = models.CharField(max_length=20)
     transaction_timestamp = models.DateTimeField()
     response_code = models.IntegerField()
-
-
-
-
