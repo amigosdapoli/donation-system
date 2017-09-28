@@ -28,7 +28,7 @@ class FormDonation(forms.ModelForm):
         (0, "Pontual"),
         (1, "Mensal"),
     )
-    is_recurring_field = forms.ChoiceField(choices=IS_RECURRING, label="Recorrência")
+    is_recurring_field = forms.ChoiceField(choices=IS_RECURRING, label="Recorrência", widget=forms.RadioSelect())
     class Meta:
         model = Donation
         fields = ("value",)

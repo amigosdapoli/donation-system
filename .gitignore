@@ -3,6 +3,8 @@ geckodriver.log
 __pycache__
 .sass-cache
 *.swp
+*.swo
+*.swn
 *.psd
 *.plist
 *.map

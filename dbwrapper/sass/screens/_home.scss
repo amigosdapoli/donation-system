@@ -1,0 +1,57 @@
+.header {
+    padding: 20px;
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: cover;
+    box-shadow: inset 0 0 0 1000px cores(dark--secondary);
+    background-image: url(/static/images/poli.png);
+    color: cores(light--primary);
+    @include breakpoint($bp-med-2) {
+        padding: 4em 20px;
+    }
+    @include e(logo) {
+    }
+    @include e(title) {
+        font-weight: $font-weight--bold;
+        margin: 2em 0;
+    }
+}
+
+.donation-form {
+    padding: 1em;
+    @extend .wrapper;
+}
+
+#id_is_recurring_field {
+}
+
+.test_form {
+    display: flex;
+    input {
+        flex: 1;
+        &:checked + label {
+            background-color: cores(primary);
+            color: cores(white);
+        }
+    }
+    label {
+        flex: 1;
+        text-align: center;
+        border: 1px solid cores(primary);
+        margin: 0 5px;
+        color: cores(primary);
+        // font-size: 0.8em;
+        padding: 0.5em;
+    }
+}
+
+.submit-button {
+    display: block;
+    width: 100%;
+    text-align: center;
+    border: none;
+    margin: 0 5px;
+    background-color: cores(primary);
+    color: cores(white);
+    padding: 0.5em 2em;
+}
