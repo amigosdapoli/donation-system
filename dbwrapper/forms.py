@@ -1,4 +1,6 @@
 from django import forms
+from snowpenguin.django.recaptcha2.fields import ReCaptchaField
+from snowpenguin.django.recaptcha2.widgets import ReCaptchaWidget
 from .models import Donor, Donation, PaymentTransaction
 from localflavor.br.forms import BRCPFField
 
@@ -37,7 +39,7 @@ class FormDonation(forms.ModelForm):
 
 
 class FormPayment(forms.ModelForm):
-
+    captcha = ReCaptchaField(widget=ReCaptchaWidget())
     class Meta:
         model = PaymentTransaction
         fields = ("name_on_card", "card_number", "expiry_date_month", "expiry_date_year", "card_code",)

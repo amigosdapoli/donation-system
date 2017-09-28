@@ -1,8 +1,10 @@
+{%  load recaptcha2 %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <title>Doação Amigos da Poli</title>
+    {% recaptcha_init %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">{% load static %}
     <link rel="stylesheet" href="{% static  " css/style.css " %}">
@@ -68,7 +70,8 @@
         <button name="subbtn" style="display:block" onclick="ga('send', {hitType: 'event',eventCategory: 'doacao',eventAction: 'submit_donation',eventLabel: 'website'});" type="submit" class="button big round color">
             Enviar
         </button>
-
+      </div>
+    </div>
     </form>
 
 </body>
