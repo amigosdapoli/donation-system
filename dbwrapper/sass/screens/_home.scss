@@ -22,12 +22,10 @@
     @extend .wrapper;
 }
 
-#id_is_recurring_field {
-}
-
-.test_form {
+#id_is_recurring_field, 
+.radio-wrapper {
     display: flex;
-    input {
+    input[type="radio"] {
         flex: 1;
         &:checked + label {
             background-color: cores(primary);
