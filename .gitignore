@@ -8,6 +8,5 @@ __pycache__
 *.psd
 *.plist
 *.map
-*.css
 tags
 Gemfile.lock
