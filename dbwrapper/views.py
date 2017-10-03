@@ -126,7 +126,8 @@ def donation_form(request):
                 donation.save()
 
                 d = {'first_name': donor.name,
-                     'value': new_donation.value}
+                     'value': new_donation.value,
+                     'is_recurring': donation.is_recurring}
 
                 plaintext = get_template('dbwrapper/successful_donation_email.txt')
                 html_template = get_template('dbwrapper/successful_donation_email.html')

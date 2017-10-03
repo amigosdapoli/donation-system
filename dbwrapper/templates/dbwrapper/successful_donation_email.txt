@@ -7,9 +7,9 @@ O Fundo Patrimonial Amigos da Poli agradece imensamente sua contribuição. O va
 Valor doado: R$ {{ value }}
 
 Novamente expressamos nossa gratidão e nos colocamos a disposição para falarmos a respeito dos projetos apoiados e sobre a própria Associação.
-
+{% if is_recurring %}
 Caso deseje cancelar sua doação recorrente, basta notificar os Amigos da Poli pelo e-mail contato@amigosdapoli.com.br
-
+{% endif %}
 Sinceramente,
 
 Fundo Patrimonial Amigos da Poli
