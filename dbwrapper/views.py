@@ -13,6 +13,9 @@ from dbwrapper.forms import FormDonor, FormDonation, FormPayment
 
 import json
 
+logger = logging.getLogger(__name__)
+
+
 def donation_form(request):
     donor_form = FormDonor()
     donation_form = FormDonation()
@@ -56,8 +59,11 @@ def donation_form(request):
             new_donation = Donation()
             new_donation.value = request.POST.get('value')
             new_donation.donor_tax_id = donor.tax_id
-            if request.POST.get('is_recurring_field') == '1':
-                new_donation.recurring = True
+            is_recurring = request.POST.get('is_recurring_field')
+            print("Is recurring: {}".format(is_recurring=='1'))
+            if is_recurring == '1':
+                new_donation.is_recurring = True
+                new_donation.installments = u'12'
             else:
                 new_donation.recurring = False
             new_donation.save()
@@ -67,30 +73,52 @@ def donation_form(request):
             maxipago_id = config.get("payment", "merchant_id")
             maxipago_key = config.get("payment", "merchant_key")
             maxipago_sandbox = config.get("payment", "sandbox")
-            logging.info("Using Maxipago with customer {}".format(maxipago_id))
+            print("Using Maxipago with customer {}".format(maxipago_id))
             maxipago = Maxipago(maxipago_id, maxipago_key, sandbox=maxipago_sandbox)
 
             REFERENCE = new_donation.donation_id
-            response = maxipago.payment.direct(
-                processor_id=payment_processors.TEST, # TEST or REDECARD
-                reference_num=REFERENCE,
-                billing_name=new_payment.name_on_card,
-                # billing_address1=u'Rua das Alamedas, 123',
-                # billing_city=u'Rio de Janeiro',
-                # billing_state=u'RJ',
-                # billing_zip=u'20345678',
-                # billing_country=u'RJ',
-                billing_phone=donor.phone_number,
-                billing_email=donor.email,
-                card_number=new_payment.card_number,
-                card_expiration_month=new_payment.expiry_date_month,
-                card_expiration_year=new_payment.expiry_date_year,
-                card_cvv=new_payment.card_code,
-                charge_total=new_donation.value,
-            )
+            payment_processor = payment_processors.TEST  # TEST or REDECARD
+            print("Donation is recurring: {}".format(new_donation.is_recurring))
 
-            logging.info("Response authorized: ".format(response.authorized))
-            logging.info("Response captured: ".format(response.captured))
+            if new_donation.is_recurring:
+                response = maxipago.payment.create_recurring(
+                    processor_id=payment_processor,
+                    reference_num=REFERENCE,
+
+                    billing_name=new_payment.name_on_card,
+                    billing_phone=donor.phone_number,
+                    billing_email=donor.email,
+                    card_number=new_payment.card_number,
+                    card_expiration_month=new_payment.expiry_date_month,
+                    card_expiration_year=new_payment.expiry_date_year,
+                    card_cvv=new_payment.card_code,
+                    charge_total=new_donation.value,
+                    currency_code=u'BRL',
+
+                    recurring_action=u'new',
+                    recurring_start=date.today().strftime('%Y-%m-%d'),
+                    recurring_frequency=u'1',
+                    recurring_period=u'monthly',
+                    recurring_installments=new_donation.installments,
+                    recurring_failure_threshold=u'2',
+                )
+            else:
+                response = maxipago.payment.direct(
+                    processor_id=payment_processor,
+                    reference_num=REFERENCE,
+                    billing_name=new_payment.name_on_card,
+                    billing_phone=donor.phone_number,
+                    billing_email=donor.email,
+                    card_number=new_payment.card_number,
+                    card_expiration_month=new_payment.expiry_date_month,
+                    card_expiration_year=new_payment.expiry_date_year,
+                    card_cvv=new_payment.card_code,
+                    charge_total=new_donation.value,
+                )
+
+            print("Response code: {}".format(response.response_code))
+            print("Response authorized: {}".format(response.authorized))
+            print("Response captured: {}".format(response.captured))
             if response.authorized and response.captured:
                 donation = Donation.objects.get(donation_id=new_donation.donation_id)
                 donation.order_id = response.order_id
@@ -116,7 +144,7 @@ def donation_form(request):
                 msg.send(fail_silently=True)
                 return render(request, 'dbwrapper/successful_donation.html')
             else:
-                raise Exception('Payment not captured')
+                    raise Exception('Payment not captured')
                 # update donation with failed
 
 
