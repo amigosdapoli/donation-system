@@ -401,6 +401,7 @@ th {
       width: 60%; } }
 
 footer {
+  margin-top: auto;
   height: 200px;
   background-color: #333942; }
 
@@ -443,7 +444,7 @@ li {
 
 h2 {
   font-size: 2em;
-  line-height: 1em;
+  line-height: 1.5em;
   font-weight: 900; }
 
 h3 {
@@ -457,6 +458,8 @@ input {
   flex: 1; }
   input[type="radio"] {
     display: none; }
+  input ::placeholder {
+    color: rgba(0, 0, 0, 0.12); }
 
 label {
   font-size: 0.9em;
@@ -3684,5 +3687,9 @@ select {
   background-color: #009EE9;
   color: #fff;
   padding: 0.5em 2em; }
+
+.success {
+  padding-top: 2em;
+  padding-bottom: 3em; }
 
 /*# sourceMappingURL=style.css.map */

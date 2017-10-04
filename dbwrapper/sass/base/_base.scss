@@ -10,6 +10,7 @@
 }
 
 footer {
+    margin-top: auto;
     height: 200px;
     background-color: cores(base);
 }
@@ -59,7 +60,7 @@ li {
 }
 h2 {
     font-size: 2em;
-    line-height: 1em;
+    line-height: 1.5em;
     font-weight: $font-weight--heavy;
 }
 h3 {
@@ -74,6 +75,9 @@ input {
     flex: 1;
     &[type="radio"] {
         display: none;
+    }
+    ::placeholder {
+        color: cores(dark--12);
     }
 }
 
