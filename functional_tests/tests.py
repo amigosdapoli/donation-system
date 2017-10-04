@@ -1,14 +1,13 @@
 from django.test import LiveServerTestCase
 from selenium import webdriver
-from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
-import unittest
 import time
-
+import os
 
 class NewDonorTest(LiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox(executable_path='/usr/local/bin/geckodriver')
+        os.environ['RECAPTCHA_DISABLE'] = 'True'
 
     def tearDown(self):
         self.browser.quit()
@@ -77,12 +76,12 @@ class NewDonorTest(LiveServerTestCase):
         cc_expire_year.send_keys("18")
         cc_cvv = self.browser.find_element_by_id("id_card_code")
         cc_cvv.send_keys("123")
-        time.sleep(20)
+        time.sleep(5)
 
         # Submit
         submit = self.browser.find_element_by_name("subbtn")
         submit.send_keys(Keys.ENTER)
-        time.sleep(10)
+        time.sleep(5)
 
         self.assertIn('bem sucedida', self.browser.page_source)
 
