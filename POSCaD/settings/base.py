@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'livereload',
     'django.contrib.staticfiles',
     'rest_framework',
+    'snowpenguin.django.recaptcha2',
 ]
 
 REST_FRAMEWORK = {
@@ -137,3 +138,7 @@ EMAIL_PORT = '587'
 EMAIL_HOST_USER = '' # test@gmail.com
 EMAIL_HOST_PASSWORD = '' # password
 EMAIL_USE_TLS = True
+
+#reCAPTCHA KEY SETTINGS
+RECAPTCHA_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+RECAPTCHA_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'

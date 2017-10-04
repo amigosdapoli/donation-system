@@ -39,35 +39,37 @@ def donation_form(request):
                 new_donor.surname = request.POST.get('surname')
                 new_donor.phone_number = request.POST.get('phone_number')
                 new_donor.email = request.POST.get('email')
-                if request.POST.get('is_anonymous'):
+                if request.POST.get('is_anonymous')=="Sim":
                     new_donor.is_anonymous = True
                 else:
                     new_donor.is_anonymous = False
                 new_donor.save()
                 donor = new_donor
-
             # Payment
-            new_payment = PaymentTransaction()
-            new_payment.name_on_card = request.POST.get("name_on_card")
-            new_payment.card_number = request.POST.get("card_number")
-            new_payment.expiry_date_month = request.POST.get("expiry_date_month")
-            new_payment.expiry_date_year = request.POST.get("expiry_date_year")
-            new_payment.card_code = request.POST.get("card_code")
-            new_payment.save()
+            payment_form = FormPayment(request.POST)
 
-            # Donation
-            new_donation = Donation()
-            new_donation.value = request.POST.get('value')
-            new_donation.donor_tax_id = donor.tax_id
-            is_recurring = request.POST.get('is_recurring_field')
-            print("Is recurring: {}".format(is_recurring=='1'))
-            if is_recurring == '1':
-                new_donation.is_recurring = True
-                new_donation.installments = u'12'
+            if payment_form.is_valid():
+                new_payment = PaymentTransaction()
+                new_payment.name_on_card = payment_form.cleaned_data['name_on_card']
+                new_payment.save()
             else:
-                new_donation.recurring = False
-            new_donation.save()
-
+                raise Exception('Payment form information is not valid')
+            
+            # Donation
+            donation_form = FormDonation(request.POST)
+            if donation_form.is_valid():
+                new_donation = Donation()
+                new_donation.donation_value = request.POST.get('donation_value')
+                new_donation.donor_tax_id = donor.tax_id
+                if request.POST.get('is_recurring') == "Mensalmente":
+                    new_donation.is_recurring = True
+                    new_donation.installments = u'12'
+                else:
+                    new_donation.is_recurring = False
+                new_donation.save()
+            else:
+                raise Exception('Donation form information is not valid')
+                
             # Process payment
             config = Configuration()
             maxipago_id = config.get("payment", "merchant_id")
@@ -78,8 +80,8 @@ def donation_form(request):
 
             REFERENCE = new_donation.donation_id
             payment_processor = payment_processors.TEST  # TEST or REDECARD
+            
             print("Donation is recurring: {}".format(new_donation.is_recurring))
-
             if new_donation.is_recurring:
                 response = maxipago.payment.create_recurring(
                     processor_id=payment_processor,
@@ -145,9 +147,8 @@ def donation_form(request):
                 msg.send(fail_silently=True)
                 return render(request, 'dbwrapper/successful_donation.html')
             else:
-                    raise Exception('Payment not captured')
+                raise Exception('Payment not captured')
                 # update donation with failed
-
-
+                
     return render(request, 'dbwrapper/donation_form.html', {'donor_form':donor_form,'donation_form':donation_form, 'payment_form':payment_form})
 
