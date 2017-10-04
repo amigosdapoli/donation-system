@@ -8,17 +8,18 @@ class Donor(models.Model):
     phone_number = models.CharField(max_length=15)
     email = models.EmailField(max_length=50)
     address = models.CharField(max_length=50)
-    is_anonymous = models.BooleanField()
+    is_anonymous = models.BooleanField(default=False)
 
 
 class Donation(models.Model):
     donation_id = models.AutoField(primary_key=True, default=None)
     donation_value = models.IntegerField()
     donor_tax_id = models.CharField(max_length=11)
-    is_recurring = models.BooleanField()
+    is_recurring = models.NullBooleanField(null=True, default=False)
     order_id = models.CharField(max_length=35, default=None, blank=True, null=True)
     nsu_id = models.CharField(max_length=10, default=None, blank=True, null=True)
     installments = models.IntegerField(null=True)
+    
 
 class PaymentTransaction(models.Model):
     name_on_card = models.CharField(max_length=30)
