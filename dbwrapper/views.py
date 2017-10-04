@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
@@ -87,14 +89,14 @@ def donation_form(request):
                     processor_id=payment_processor,
                     reference_num=REFERENCE,
 
-                    billing_name=new_payment.name_on_card,
+                    billing_name=payment_form.cleaned_data['name_on_card'],
                     billing_phone=donor.phone_number,
                     billing_email=donor.email,
-                    card_number=new_payment.card_number,
-                    card_expiration_month=new_payment.expiry_date_month,
-                    card_expiration_year=new_payment.expiry_date_year,
-                    card_cvv=new_payment.card_code,
-                    charge_total=new_donation.value,
+                    card_number=payment_form.cleaned_data['card_number'],
+                    card_expiration_month=payment_form.cleaned_data['expiry_date_month'],
+                    card_expiration_year=payment_form.cleaned_data['expiry_date_year'],
+                    card_cvv=payment_form.cleaned_data['card_code'],
+                    charge_total=new_donation.donation_value,
                     currency_code=u'BRL',
 
                     recurring_action=u'new',
@@ -108,14 +110,14 @@ def donation_form(request):
                 response = maxipago.payment.direct(
                     processor_id=payment_processor,
                     reference_num=REFERENCE,
-                    billing_name=new_payment.name_on_card,
+                    billing_name=payment_form.cleaned_data['name_on_card'],
                     billing_phone=donor.phone_number,
                     billing_email=donor.email,
-                    card_number=new_payment.card_number,
-                    card_expiration_month=new_payment.expiry_date_month,
-                    card_expiration_year=new_payment.expiry_date_year,
-                    card_cvv=new_payment.card_code,
-                    charge_total=new_donation.value,
+                    card_number=payment_form.cleaned_data['card_number'],
+                    card_expiration_month=payment_form.cleaned_data['expiry_date_month'],
+                    card_expiration_year=payment_form.cleaned_data['expiry_date_year'],
+                    card_cvv=payment_form.cleaned_data['card_code'],
+                    charge_total=new_donation.donation_value,
                 )
 
             print("Response code: {}".format(response.response_code))
@@ -128,7 +130,7 @@ def donation_form(request):
                 donation.save()
 
                 d = {'first_name': donor.name,
-                     'value': new_donation.value,
+                     'value': new_donation.donation_value,
                      'is_recurring': donation.is_recurring}
 
                 plaintext = get_template('dbwrapper/successful_donation_email.txt')

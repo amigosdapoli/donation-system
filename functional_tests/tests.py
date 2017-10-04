@@ -24,12 +24,12 @@ class NewDonorTest(LiveServerTestCase):
 
         # Donor types donation info
         # she identifies the dropdown box as to select which type of donation she wants to do
-        select_elm = self.browser.find_element_by_id("id_is_recurring_field")
-        for option in select_elm.find_elements_by_tag_name('option'):
-            if option.text == 'Pontual':
-                # She chooses the "Recorrente" type donation
-                option.click()  # select() in earlier versions of webdriver
-                break
+        # select_elm = self.browser.find_element_by_id("id_is_recurring_field")
+        # for option in select_elm.find_elements_by_tag_name('option'):
+        #     if option.text == 'Pontual':
+        #         # She chooses the "Recorrente" type donation
+        #         option.click()  # select() in earlier versions of webdriver
+        #         break
 
         # She identifies the text box to input donation value
         donation_input_box = self.browser.find_element_by_xpath("//label[contains(text(),'Valor da doação')]")
@@ -77,11 +77,12 @@ class NewDonorTest(LiveServerTestCase):
         cc_expire_year.send_keys("18")
         cc_cvv = self.browser.find_element_by_id("id_card_code")
         cc_cvv.send_keys("123")
+        time.sleep(20)
 
         # Submit
         submit = self.browser.find_element_by_name("subbtn")
         submit.send_keys(Keys.ENTER)
-        time.sleep(5)
+        time.sleep(10)
 
         self.assertIn('bem sucedida', self.browser.page_source)
 
