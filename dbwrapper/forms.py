@@ -31,7 +31,7 @@ class FormDonation(forms.ModelForm):
 
 
 class FormPayment(forms.ModelForm):
-    captcha = ReCaptchaField(widget=ReCaptchaWidget())
+    captcha = ReCaptchaField(widget=ReCaptchaWidget(), label="Teste de segurança")
     class Meta:
         model = PaymentTransaction
         fields = ("name_on_card", "card_number", "expiry_date_month", "expiry_date_year", "card_code",)
@@ -41,4 +41,8 @@ class FormPayment(forms.ModelForm):
             "expiry_date_month": "Mês da data de vencimento",
             "expiry_date_year": "Ano da data de vencimento",
             "card_code": "Código de segurança",
+        }
+        widgets = {
+            'card_number': forms.NumberInput(attrs={'placeholder': 'XXXX XXXX XXXX XXXX'}),
+            'card_code': forms.NumberInput(attrs={'placeholder': 'CVV'}),
         }
