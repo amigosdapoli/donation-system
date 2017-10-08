@@ -29,6 +29,9 @@ class PaymentTransaction(models.Model):
     card_code = models.CharField(max_length=3)
 
     def save(self, *args, **kwargs):
+        """
+        Override save to make sure no credit card info is saved accidentally
+        """
         pass
 
     class Meta:
