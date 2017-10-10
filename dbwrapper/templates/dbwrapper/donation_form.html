@@ -44,7 +44,7 @@
 
             <h3 class="panel-title">Informações pessoais</h3>
 			{{donor_form.as_p}}
-  
+
             <label>Deseja permanecer anônimo?</label>
             <div class="radio-wrapper">
                 <input id="rad3" type="radio" name="is_anonymous"><label for="rad3">Sim</label></input>
@@ -52,14 +52,23 @@
             </div>
 
             <h3 class="panel-title">Pagamento</h3>
-            {{ payment_form.as_p }}
-			{% csrf_token %}
-
+            <!--{{ payment_form.as_p }}-->
+            {% for field in payment_form %}
+                <p>
+                    {{ field.errors }}
+                    <label>{{ field.label_tag }}</label>
+                    {{ field }}
+                </p>
+            {% endfor %}
+            <!--{{ payment_form.name_on_card.as_p}}-->
         <!-- <div name="credit_cards" style="text-align:left;"> -->
         <!--     <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/visa.png" name="visa"> -->
         <!--     <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/master.png" name="mastercard"> -->
         <!-- </div> -->
 
+            {{ payment_form.non_field_errors }}
+
+            {% csrf_token %}
         <button name="subbtn" onclick="ga('send', {hitType: 'event',eventCategory: 'doacao',eventAction: 'submit_donation',eventLabel: 'website'});" type="submit" class="submit-button">
             Doar
         </button>
