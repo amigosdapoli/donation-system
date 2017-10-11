@@ -24,6 +24,9 @@ def donation_form(request):
     
     if request.method == 'POST':
         donor_form = FormDonor(request.POST)
+        payment_form = FormPayment(request.POST)
+        donation_form = FormDonation(request.POST)
+
         tax_id = request.POST.get('CPF_field')
 
         if donor_form.is_valid():
@@ -47,7 +50,6 @@ def donation_form(request):
                 new_donor.save()
                 donor = new_donor
             # Payment
-            payment_form = FormPayment(request.POST)
 
             if payment_form.is_valid():
                 new_payment = PaymentTransaction()
@@ -57,7 +59,6 @@ def donation_form(request):
                 raise Exception('Payment form information is not valid')
             
             # Donation
-            donation_form = FormDonation(request.POST)
             if donation_form.is_valid():
                 new_donation = Donation()
                 new_donation.donation_value = request.POST.get('donation_value')
@@ -144,7 +145,7 @@ def donation_form(request):
                         subject,
                         text_content,
                         'no-reply@amigosdapoli.com.br',
-                        ['fernandosjp@gmail.com'],)
+                        ['ricardo.numakura@gmail.com'],)
                     msg.attach_alternative(html_content, "text/html")
                     msg.send(fail_silently=True)
                     return render(request, 'dbwrapper/successful_donation.html')
