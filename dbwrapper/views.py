@@ -10,19 +10,20 @@ from maxipago.utils import payment_processors
 from datetime import date
 import logging
 from dbwrapper.forms import FormDonor, FormDonation, FormPayment
+from django.views import View
 
-
-import json
 
 logger = logging.getLogger(__name__)
 
+class DonationFormView(View):
+    def get(self, request):
+        donor_form = FormDonor()
+        donation_form = FormDonation()
+        payment_form = FormPayment()
 
-def donation_form(request):
-    donor_form = FormDonor()
-    donation_form = FormDonation()
-    payment_form = FormPayment()
-    
-    if request.method == 'POST':
+        return render(request, 'dbwrapper/donation_form.html', {'donor_form':donor_form,'donation_form':donation_form, 'payment_form':payment_form})
+
+    def post(self, request):
         donor_form = FormDonor(request.POST)
         payment_form = FormPayment(request.POST)
         donation_form = FormDonation(request.POST)
@@ -43,7 +44,7 @@ def donation_form(request):
                 new_donor.surname = request.POST.get('surname')
                 new_donor.phone_number = request.POST.get('phone_number')
                 new_donor.email = request.POST.get('email')
-                if request.POST.get('is_anonymous')=="Sim":
+                if request.POST.get('is_anonymous') == "Sim":
                     new_donor.is_anonymous = True
                 else:
                     new_donor.is_anonymous = False
@@ -57,7 +58,7 @@ def donation_form(request):
                 new_payment.save()
             else:
                 raise Exception('Payment form information is not valid')
-            
+
             # Donation
             if donation_form.is_valid():
                 new_donation = Donation()
@@ -71,7 +72,7 @@ def donation_form(request):
                 new_donation.save()
             else:
                 raise Exception('Donation form information is not valid')
-                
+
             # Process payment
             config = Configuration()
             maxipago_id = config.get("payment", "merchant_id")
@@ -82,7 +83,7 @@ def donation_form(request):
 
             REFERENCE = new_donation.donation_id
             payment_processor = payment_processors.TEST  # TEST or REDECARD
-            
+
             print("Donation is recurring: {}".format(new_donation.is_recurring))
             try:
                 if new_donation.is_recurring:
@@ -145,7 +146,7 @@ def donation_form(request):
                         subject,
                         text_content,
                         'no-reply@amigosdapoli.com.br',
-                        ['ricardo.numakura@gmail.com'],)
+                        ['ricardo.numakura@gmail.com'], )
                     msg.attach_alternative(html_content, "text/html")
                     msg.send(fail_silently=True)
                     return render(request, 'dbwrapper/successful_donation.html')
@@ -153,7 +154,5 @@ def donation_form(request):
                     raise Exception('Payment not captured')
                     # update donation with failed
             except:
-                payment_form.add_error(None, "Infelizmente, não conseguimos processar a sua doação. Nossa equipe já foi avisada. Por favor, tente novamente mais tarde.")
-                
-    return render(request, 'dbwrapper/donation_form.html', {'donor_form':donor_form,'donation_form':donation_form, 'payment_form':payment_form})
-
+                payment_form.add_error(None,
+                                       "Infelizmente, não conseguimos processar a sua doação. Nossa equipe já foi avisada. Por favor, tente novamente mais tarde.")
