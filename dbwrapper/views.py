@@ -146,7 +146,7 @@ class DonationFormView(View):
                         subject,
                         text_content,
                         'no-reply@amigosdapoli.com.br',
-                        ['ricardo.numakura@gmail.com'], )
+                        [donor.email], )
                     msg.attach_alternative(html_content, "text/html")
                     msg.send(fail_silently=True)
                     return render(request, 'dbwrapper/successful_donation.html')
