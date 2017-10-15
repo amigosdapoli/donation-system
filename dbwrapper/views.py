@@ -16,6 +16,9 @@ from django.views import View
 logger = logging.getLogger(__name__)
 
 class DonationFormView(View):
+    """
+    This class
+    """
     def get(self, request):
         donor_form = FormDonor()
         donation_form = FormDonation()
@@ -30,7 +33,7 @@ class DonationFormView(View):
 
         tax_id = request.POST.get('CPF_field')
 
-        if donor_form.is_valid():
+        if donor_form.is_valid() and payment_form.is_valid():
             # tax id is required
             if not tax_id:
                 raise Exception('donor_tax_id need to be provided')
@@ -156,3 +159,9 @@ class DonationFormView(View):
             except:
                 payment_form.add_error(None,
                                        "Infelizmente, não conseguimos processar a sua doação. Nossa equipe já foi avisada. Por favor, tente novamente mais tarde.")
+
+        return render(
+                request,
+                'dbwrapper/donation_form.html',
+                {'donor_form': donor_form, 'donation_form': donation_form, 'payment_form': payment_form})
+

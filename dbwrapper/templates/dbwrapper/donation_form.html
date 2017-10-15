@@ -34,6 +34,24 @@
 
     <form method="POST" class="form-inline" class="donation-form">
 
+            {% if payment_form.errors %}
+                <div class="alert alert-error">
+                  <h4>Alguns dados precisam ser corrigidos:</h4>
+                  <ul>
+                    {% for field in payment_form %}
+                      {% if field.errors %}
+                        {% for error in field.errors %}
+                          <li><a href="#id_{{ field.name }}" class="error">{{ field.label }}: {{ error|escape }}</a></li>
+                        {% endfor %}
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                  {% if payment_form.non_field_errors %}
+                    {{ payment_form.non_field_errors }}
+                  {% endif %}
+                </div>
+            {% endif %}
+
             <h3 class="panel-title">Como você pretende doar?</h3>
 			{{donation_form.as_p}}
 
@@ -65,8 +83,6 @@
         <!--     <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/visa.png" name="visa"> -->
         <!--     <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/master.png" name="mastercard"> -->
         <!-- </div> -->
-
-            {{ payment_form.non_field_errors }}
 
             {% csrf_token %}
         <button name="subbtn" onclick="ga('send', {hitType: 'event',eventCategory: 'doacao',eventAction: 'submit_donation',eventLabel: 'website'});" type="submit" class="submit-button">
