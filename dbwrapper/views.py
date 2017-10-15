@@ -33,7 +33,7 @@ class DonationFormView(View):
 
         tax_id = request.POST.get('CPF_field')
 
-        if donor_form.is_valid() and payment_form.is_valid():
+        if donation_form.is_valid() and donor_form.is_valid() and payment_form.is_valid():
             # tax id is required
             if not tax_id:
                 raise Exception('donor_tax_id need to be provided')
@@ -53,28 +53,22 @@ class DonationFormView(View):
                     new_donor.is_anonymous = False
                 new_donor.save()
                 donor = new_donor
-            # Payment
-
-            if payment_form.is_valid():
-                new_payment = PaymentTransaction()
-                new_payment.name_on_card = payment_form.cleaned_data['name_on_card']
-                new_payment.save()
-            else:
-                raise Exception('Payment form information is not valid')
 
             # Donation
-            if donation_form.is_valid():
-                new_donation = Donation()
-                new_donation.donation_value = request.POST.get('donation_value')
-                new_donation.donor_tax_id = donor.tax_id
-                if request.POST.get('is_recurring') == "Mensalmente":
-                    new_donation.is_recurring = True
-                    new_donation.installments = u'12'
-                else:
-                    new_donation.is_recurring = False
-                new_donation.save()
+            new_donation = Donation()
+            new_donation.donation_value = request.POST.get('donation_value')
+            new_donation.donor_tax_id = donor.tax_id
+            if request.POST.get('is_recurring') == "Mensalmente":
+                new_donation.is_recurring = True
+                new_donation.installments = u'12'
             else:
-                raise Exception('Donation form information is not valid')
+                new_donation.is_recurring = False
+            new_donation.save()
+
+            # Payment
+            new_payment = PaymentTransaction()
+            new_payment.name_on_card = payment_form.cleaned_data['name_on_card']
+            new_payment.save()
 
             # Process payment
             config = Configuration()
@@ -158,7 +152,7 @@ class DonationFormView(View):
                     # update donation with failed
             except:
                 payment_form.add_error(None,
-                                       "Infelizmente, não conseguimos processar a sua doação. Nossa equipe já foi avisada. Por favor, tente novamente mais tarde.")
+                    "Infelizmente, não conseguimos processar a sua doação. Nossa equipe já foi avisada. Por favor, tente novamente mais tarde.")
 
         return render(
                 request,
