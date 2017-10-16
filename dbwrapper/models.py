@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class Donor(models.Model):
@@ -16,10 +17,22 @@ class Donation(models.Model):
     donation_value = models.IntegerField()
     donor_tax_id = models.CharField(max_length=11)
     is_recurring = models.NullBooleanField(null=True, default=False)
+    was_captured = models.NullBooleanField(null=True, default=False)
+    response_code = models.IntegerField(default=None, blank=True, null=True)
+    error_message = models.TextField(default=None, blank=True, null=True)
     order_id = models.CharField(max_length=35, default=None, blank=True, null=True)
     nsu_id = models.CharField(max_length=10, default=None, blank=True, null=True)
-    installments = models.IntegerField(null=True)
-    
+    installments = models.IntegerField(default=1, null=True)
+    created_at = models.DateTimeField(editable=False, default=None, null=True)
+    updated_at = models.DateTimeField(default=None, null=True)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.donation_id:
+            self.created_at = timezone.now()
+        self.updated_at = timezone.now()
+        return super(Donation, self).save(*args, **kwargs)
+
 
 class PaymentTransaction(models.Model):
     name_on_card = models.CharField(max_length=30)

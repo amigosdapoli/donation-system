@@ -120,10 +120,17 @@ class DonationFormView(View):
                     )
 
                 print("Response code: {}".format(response.response_code))
+                if hasattr(response, 'response_message'):
+                    print("Response message: {}".format(response.response_message))
+                if hasattr(response, 'error_message'):
+                    print("Response error message: {}".format(response.error_message))
                 print("Response authorized: {}".format(response.authorized))
                 print("Response captured: {}".format(response.captured))
+
+                donation = Donation.objects.get(donation_id=new_donation.donation_id)
                 if response.authorized and response.captured:
-                    donation = Donation.objects.get(donation_id=new_donation.donation_id)
+                    donation.was_captured = response.captured
+                    donation.response_code = response.response_code
                     donation.order_id = response.order_id
                     donation.nsu_id = response.transaction_id
                     donation.save()
@@ -148,8 +155,12 @@ class DonationFormView(View):
                     msg.send(fail_silently=True)
                     return render(request, 'dbwrapper/successful_donation.html')
                 else:
-                    raise Exception('Payment not captured')
-                    # update donation with failed
+                    payment_form.add_error(None,
+                        "Infelizmente, não conseguimos processar a sua doação. Nossa equipe já foi avisada. Por favor, tente novamente mais tarde.")
+                    donation.was_captured = response.captured
+                    donation.response_code = response.response_code
+                    donation.save()
+
             except:
                 payment_form.add_error(None,
                     "Infelizmente, não conseguimos processar a sua doação. Nossa equipe já foi avisada. Por favor, tente novamente mais tarde.")
