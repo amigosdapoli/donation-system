@@ -11,13 +11,15 @@ class FormDonor(forms.ModelForm):
     class Meta:
         model = Donor
         fields = (
-            "name", "surname", "phone_number", "email",
+            "name", "surname", "phone_number", "email", "course_taken"
         )
+        field_order = ("name", "surname", "phone_number", "email", "course_taken")
         labels = {
             "name": "Nome",
             "surname": "Sobrenome",
             "phone_number": "Telefone",
             "email": "E-mail",
+            "course_taken": "Engenharia cursada (Opcional):",
         }
 
 

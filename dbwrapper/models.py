@@ -2,6 +2,23 @@ from django.db import models
 from django.utils import timezone
 
 
+COURSE_CHOICES = (
+    ('Não cursei engenharia na Poli', 'Não cursei engenharia na Poli'),
+    ('Engenharia Ambiental', 'Engenharia Ambiental'),
+    ('Engenharia Civil', 'Engenharia Civil'),
+    ('Engenharia de Computação', 'Engenharia de Computação'),
+    ('Engenharia de Materiais', 'Engenharia de Materiais'),
+    ('Engenharia de Minas', 'Engenharia de Minas'),
+    ('Engenharia de Petróleo', 'Engenharia de Petróleo'),
+    ('Engenharia de Produção', 'Engenharia de Produção'),
+    ('Engenharia Elétrica', 'Engenharia Elétrica'),
+    ('Engenharia Mecânica', 'Engenharia Mecânica'),
+    ('Engenharia Mecatrônica', 'Engenharia Mecatrônica'),
+    ('Engenharia Metalurgica', 'Engenharia Metalurgica'),
+    ('Engenharia Naval', 'Engenharia Naval'),
+    ('Engenharia Química', 'Engenharia Química'),
+)
+
 class Donor(models.Model):
     name = models.CharField(max_length=30)
     surname = models.CharField(max_length=30)
@@ -9,6 +26,7 @@ class Donor(models.Model):
     phone_number = models.CharField(max_length=15)
     email = models.EmailField(max_length=50)
     address = models.CharField(max_length=50)
+    course_taken = models.CharField(max_length=30, choices=COURSE_CHOICES, default=None, null=True)
     is_anonymous = models.BooleanField(default=False)
 
 
