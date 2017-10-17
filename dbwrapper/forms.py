@@ -6,43 +6,52 @@ from localflavor.br.forms import BRCPFField
 
 
 class FormDonor(forms.ModelForm):
-    CPF_field = BRCPFField(label="CPF")
+    tax_id_no_pk_validation = BRCPFField(label="CPF")
 
     class Meta:
         model = Donor
         fields = (
-            "name", "surname", "phone_number", "email",
+            "name", "surname", "phone_number", "email", "course_taken", "course_year",
         )
         labels = {
-            "name": "Nome",
+            "name": "Nome:",
             "surname": "Sobrenome",
-            "phone_number": "Telefone",
+            "phone_number": "Telefone (Opcional):",
             "email": "E-mail",
+            "course_taken": "Engenharia cursada (Opcional):",
+            "course_year": "Ano de formatura (Opcional):",
         }
 
 
 class FormDonation(forms.ModelForm):
+
     class Meta:
         model = Donation
-        fields = ("donation_value",)
+        fields = ("donation_value", "referral_channel", "installments")
         labels = {
             "donation_value": "Valor da doação",
+            "referral_channel": "Por onde você conheceu o amigos da Poli? (Opcional)",
+            "installments": "Duração",
         }
 
 
 class FormPayment(forms.ModelForm):
+    card_number = forms.CharField(
+        widget=forms.NumberInput(attrs={'placeholder': 'XXXX XXXX XXXX XXXX'}),
+        min_length=16,
+        max_length=16,
+        label="Número do cartão (VISA/MASTER)")
     captcha = ReCaptchaField(widget=ReCaptchaWidget(), label="Teste de segurança")
+
     class Meta:
         model = PaymentTransaction
         fields = ("name_on_card", "card_number", "expiry_date_month", "expiry_date_year", "card_code",)
         labels = {
             "name_on_card": "Nome do titular",
-            "card_number": "Número do cartão",
             "expiry_date_month": "Mês da data de vencimento",
             "expiry_date_year": "Ano da data de vencimento",
             "card_code": "Código de segurança",
         }
         widgets = {
-            'card_number': forms.NumberInput(attrs={'placeholder': 'XXXX XXXX XXXX XXXX'}),
             'card_code': forms.NumberInput(attrs={'placeholder': 'CVV'}),
         }
