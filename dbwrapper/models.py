@@ -39,8 +39,8 @@ REFERRAL_CHOICES = (
     ('Mídias externas (rádio/jornal/revista)', 'Mídias externas (rádio/jornal/revista)'),
 )
 
-INSTALLMENT_CHOICES=[('12','1 ano'),
-                     ('48','Irei notificar o Amigos da Poli via e-mail (contato@amigosdapoli.com.br)')]
+INSTALLMENT_CHOICES=[(12,'1 ano'),
+                     (48,'Irei notificar o Amigos da Poli via e-mail (contato@amigosdapoli.com.br)')]
 
 class Donation(models.Model):
     donation_id = models.AutoField(primary_key=True, default=None)
