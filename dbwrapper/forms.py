@@ -22,11 +22,8 @@ class FormDonor(forms.ModelForm):
             "course_year": "Ano de formatura (Opcional):",
         }
 
-INSTALLMENT_CHOICES=[('12','1 ano'),
-                     ('48','Irei notificar o Amigos da Poli via e-mail (contato@amigosdapoli.com.br)')]
 
 class FormDonation(forms.ModelForm):
-    installments = forms.ChoiceField(label="Até", choices=INSTALLMENT_CHOICES, widget=forms.RadioSelect())
 
     class Meta:
         model = Donation
@@ -34,6 +31,7 @@ class FormDonation(forms.ModelForm):
         labels = {
             "donation_value": "Valor da doação",
             "referral_channel": "Por onde você conheceu o amigos da Poli? (Opcional)",
+            "installments": "Duração",
         }
 
 
