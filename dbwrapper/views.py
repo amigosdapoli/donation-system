@@ -31,7 +31,7 @@ class DonationFormView(View):
         payment_form = FormPayment(request.POST)
         donation_form = FormDonation(request.POST)
 
-        tax_id = request.POST.get('tax_id')
+        tax_id = request.POST.get('tax_id_no_pk_validation')
 
         if donation_form.is_valid() and donor_form.is_valid() and payment_form.is_valid():
             # tax id is required
@@ -43,10 +43,12 @@ class DonationFormView(View):
             if not donor:
                 new_donor = Donor()
                 new_donor.tax_id = tax_id
-                new_donor.name = request.POST.get('name')
-                new_donor.surname = request.POST.get('surname')
-                new_donor.phone_number = request.POST.get('phone_number')
-                new_donor.email = request.POST.get('email')
+                new_donor.name = donor_form.cleaned_data['name']
+                new_donor.surname = donor_form.cleaned_data['surname']
+                new_donor.phone_number = donor_form.cleaned_data['phone_number']
+                new_donor.email = donor_form.cleaned_data['email']
+                new_donor.course_taken = donor_form.cleaned_data['course_taken']
+                new_donor.course_year = donor_form.cleaned_data['course_year']
                 if request.POST.get('is_anonymous') == "Sim":
                     new_donor.is_anonymous = True
                 else:
@@ -56,11 +58,13 @@ class DonationFormView(View):
 
             # Donation
             new_donation = Donation()
-            new_donation.donation_value = request.POST.get('donation_value')
+            new_donation.donation_value = donation_form.cleaned_data['donation_value']
+            new_donation.donor = donor
             new_donation.donor_tax_id = donor.tax_id
-            if request.POST.get('is_recurring') == "Mensalmente":
+            new_donation.referral_channel = donation_form.cleaned_data['referral_channel']
+            if request.POST.get('is_recurring') == "Mensal":
                 new_donation.is_recurring = True
-                new_donation.installments = u'12'
+                new_donation.installments = donation_form.cleaned_data['installments']
             else:
                 new_donation.is_recurring = False
             new_donation.save()
