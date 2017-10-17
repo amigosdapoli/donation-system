@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">{% load static %}
     <link rel="stylesheet" href="{% static  "css/style.css" %}">
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <script src="{% static  "js/donation_form.js" %}"></script>
 
     <!-- 
   <script>
@@ -34,10 +35,24 @@
 
     <form method="POST" class="form-inline" class="donation-form">
 
-            {% if payment_form.errors %}
+            {% if payment_form.errors or donor_form.errors or donation_form.errors %}
                 <div class="alert alert-error">
                   <h4>Alguns dados precisam ser corrigidos:</h4>
                   <ul>
+                    {% for field in donation_form %}
+                      {% if field.errors %}
+                        {% for error in field.errors %}
+                          <li><a href="#id_{{ field.name }}" class="error">{{ field.label }}: {{ error|escape }}</a></li>
+                        {% endfor %}
+                      {% endif %}
+                    {% endfor %}
+                    {% for field in donor_form %}
+                      {% if field.errors %}
+                        {% for error in field.errors %}
+                          <li><a href="#id_{{ field.name }}" class="error">{{ field.label }}: {{ error|escape }}</a></li>
+                        {% endfor %}
+                      {% endif %}
+                    {% endfor %}
                     {% for field in payment_form %}
                       {% if field.errors %}
                         {% for error in field.errors %}
@@ -45,28 +60,85 @@
                         {% endfor %}
                       {% endif %}
                     {% endfor %}
+                    {% if donation_form.non_field_errors %}
+                        <li><a href="" class="error">{{ donation_form.non_field_errors }}</a></li>
+                    {% endif %}
+                    {% if donor_form.non_field_errors %}
+                        <li><a href="" class="error">{{ donor_form.non_field_errors }}</a></li>
+                    {% endif %}
+                    {% if payment_form.non_field_errors %}
+                        <li><a href="" class="error">{{ payment_form.non_field_errors }}</a></li>
+                    {% endif %}
                   </ul>
-                  {% if payment_form.non_field_errors %}
-                    {{ payment_form.non_field_errors }}
-                  {% endif %}
                 </div>
             {% endif %}
 
             <h3 class="panel-title">Como você pretende doar?</h3>
-			{{donation_form.as_p}}
+
+            <p>
+                {{ donation_form.donation_value.errors }}
+                <label>{{ donation_form.donation_value.label_tag }}</label>
+                {{ donation_form.donation_value }}
+            </p>
 
             <div class="radio-wrapper">
-                <input id="rad1" type="radio" name="is_recurring"><label for="rad1">Pontualmente</label></input>
-                <input id="rad2" type="radio" name="is_recurring"><label for="rad2">Mensalmente</label></input>
+                <input id="rad1" type="radio" name="is_recurring" checked="checked"><label for="rad1">Única</label></input>
+                <input id="rad2" type="radio" name="is_recurring"><label for="rad2">Mensal</label></input>
             </div>
 
+            <p>
+                {{ donation_form.installments.errors }}
+                <label>{{ donation_form.installments.label_tag }}</label>
+                {{ donation_form.installments}}
+            </p>
+
             <h3 class="panel-title">Informações pessoais</h3>
-			{{donor_form.as_p}}
+
+            <p>
+                {{ donor_form.name.errors }}
+                <label>{{ donor_form.name.label_tag }}</label>
+                {{ donor_form.name }}
+            </p>
+            <p>
+                {{ donor_form.surname.errors }}
+                <label>{{ donor_form.surname.label_tag }}</label>
+                {{ donor_form.surname }}
+            </p>
+            <p>
+                {{ donor_form.tax_id.errors }}
+                <label>{{ donor_form.tax_id.label_tag }}</label>
+                {{ donor_form.tax_id }}
+            </p>
+            <p>
+                {{ donor_form.email.errors }}
+                <label>{{ donor_form.email.label_tag }}</label>
+                {{ donor_form.email }}
+            </p>
+            <p>
+                {{ donor_form.phone_number.errors }}
+                <label>{{ donor_form.phone_number.label_tag }}</label>
+                {{ donor_form.phone_number }}
+            </p>
+            <p>
+                {{ donor_form.course_taken.errors }}
+                <label>{{ donor_form.course_taken.label_tag }}</label>
+                {{ donor_form.course_taken }}
+            </p>
+            <p>
+                {{ donor_form.course_year.errors }}
+                <label>{{ donor_form.course_year.label_tag }}</label>
+                {{ donor_form.course_year }}
+            </p>
+            <p>
+                {{ donation_form.referral_channel.errors }}
+                <label>{{ donation_form.referral_channel.label_tag }}</label>
+                {{ donation_form.referral_channel }}
+            </p>
 
             <label>Deseja permanecer anônimo?</label>
             <div class="radio-wrapper">
                 <input id="rad3" type="radio" name="is_anonymous"><label for="rad3">Sim</label></input>
-                <input id="rad4" type="radio" name="is_anonymous"><label for="rad4">Não</label></input>
+                <input id="rad4" type="radio" name="is_anonymous" checked="checked"><label for="rad4">Não</label></input>
             </div>
 
             <h3 class="panel-title">Pagamento</h3>

@@ -6,29 +6,35 @@ from localflavor.br.forms import BRCPFField
 
 
 class FormDonor(forms.ModelForm):
-    CPF_field = BRCPFField(label="CPF")
+    tax_id = BRCPFField(label="CPF")
 
     class Meta:
         model = Donor
         fields = (
-            "name", "surname", "phone_number", "email", "course_taken"
+            "name", "surname", "phone_number", "email", "course_taken", "course_year","tax_id"
         )
-        field_order = ("name", "surname", "phone_number", "email", "course_taken")
+        field_order = ("name", "surname", "phone_number", "email", "course_taken", "course_year")
         labels = {
             "name": "Nome",
             "surname": "Sobrenome",
-            "phone_number": "Telefone",
+            "phone_number": "Telefone (Opcional)",
             "email": "E-mail",
             "course_taken": "Engenharia cursada (Opcional):",
+            "course_year": "Ano de formatura (Opcional):",
         }
 
+INSTALLMENT_CHOICES=[('12','1 ano'),
+                     ('48','Irei notificar o Amigos da Poli via e-mail (contato@amigosdapoli.com.br)')]
 
 class FormDonation(forms.ModelForm):
+    installments = forms.ChoiceField(label="Até:", choices=INSTALLMENT_CHOICES, widget=forms.RadioSelect())
+
     class Meta:
         model = Donation
-        fields = ("donation_value",)
+        fields = ("donation_value", "referral_channel", "installments")
         labels = {
             "donation_value": "Valor da doação",
+            "referral_channel": "Por onde você conheceu o amigos da Poli? (Opcional)",
         }
 
 

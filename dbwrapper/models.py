@@ -27,8 +27,16 @@ class Donor(models.Model):
     email = models.EmailField(max_length=50)
     address = models.CharField(max_length=50)
     course_taken = models.CharField(max_length=30, choices=COURSE_CHOICES, default=None, null=True)
+    course_year = models.IntegerField(default=None, null=True, choices=[(x, x) for x in range(1950, 2026)])
     is_anonymous = models.BooleanField(default=False)
 
+REFERRAL_CHOICES = (
+    ('Indicação de amigos', 'Indicação de amigos'),
+    ('Facebook', 'Facebook'),
+    ('Linkedin', 'Linkedin'),
+    ('Site de buscas (Google)', 'Site de buscas (Google)'),
+    ('Mídias externas (rádio/jornal/revista)', 'Mídias externas (rádio/jornal/revista)'),
+)
 
 class Donation(models.Model):
     donation_id = models.AutoField(primary_key=True, default=None)
@@ -43,6 +51,7 @@ class Donation(models.Model):
     installments = models.IntegerField(default=1, null=True)
     created_at = models.DateTimeField(editable=False, default=None, null=True)
     updated_at = models.DateTimeField(default=None, null=True)
+    referral_channel = models.CharField(max_length=40,choices=REFERRAL_CHOICES, default=None, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
