@@ -3,6 +3,7 @@ from django.utils import timezone
 
 
 COURSE_CHOICES = (
+    (None, 'Escolha...'),
     ('Não cursei engenharia na Poli', 'Não cursei engenharia na Poli'),
     ('Engenharia Ambiental', 'Engenharia Ambiental'),
     ('Engenharia Civil', 'Engenharia Civil'),
@@ -19,6 +20,10 @@ COURSE_CHOICES = (
     ('Engenharia Química', 'Engenharia Química'),
 )
 
+years = [(str(x), str(x)) for x in range(1950, 2026)]
+years.insert(0, (None, 'Escolha...'))
+YEAR_CHOICES = years
+
 class Donor(models.Model):
     donor_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=30)
@@ -28,10 +33,11 @@ class Donor(models.Model):
     email = models.EmailField(max_length=50)
     address = models.CharField(max_length=50)
     course_taken = models.CharField(max_length=30, choices=COURSE_CHOICES, default=None, null=True)
-    course_year = models.IntegerField(default=None, null=True, choices=[(x, x) for x in range(1950, 2026)])
+    course_year = models.IntegerField(default=None, null=True, choices=YEAR_CHOICES)
     is_anonymous = models.BooleanField(default=False)
 
 REFERRAL_CHOICES = (
+    (None, 'Escolha...'),
     ('Indicação de amigos', 'Indicação de amigos'),
     ('Facebook', 'Facebook'),
     ('Linkedin', 'Linkedin'),

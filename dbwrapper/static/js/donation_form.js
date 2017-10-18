@@ -11,7 +11,7 @@ $(document).ready(function(){
     });
 
     $('#id_course_taken').on('change', function() {
-      if ( this.selectedIndex != '0')
+      if ( this.selectedIndex != '0' && this.selectedIndex != '1')
       {
         $("#id_course_year").show();
       }
