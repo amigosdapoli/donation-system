@@ -6,7 +6,14 @@ from localflavor.br.forms import BRCPFField
 
 
 class FormDonor(forms.ModelForm):
-    tax_id_no_pk_validation = BRCPFField(label="CPF")
+    tax_id_no_pk_validation = BRCPFField(
+        widget=forms.TextInput(attrs={'placeholder': '000.000.000-00', 'class': 'cpf', }),
+        label="CPF")
+    phone_number = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': '(XX) XXXXX XXXX', 'class': 'phone_with_ddd',}),
+        min_length=10,
+        max_length=11,
+        label="Telefone (Opcional)")
 
     class Meta:
         model = Donor
@@ -16,7 +23,6 @@ class FormDonor(forms.ModelForm):
         labels = {
             "name": "Nome:",
             "surname": "Sobrenome",
-            "phone_number": "Telefone (Opcional):",
             "email": "E-mail",
             "course_taken": "Engenharia cursada (Opcional):",
             "course_year": "Ano de formatura (Opcional):",
@@ -24,6 +30,9 @@ class FormDonor(forms.ModelForm):
 
 
 class FormDonation(forms.ModelForm):
+    donation_value = forms.IntegerField(
+        widget=forms.TextInput(attrs={'placeholder': '', 'class':'money'}),
+        label="Valor da doação")
 
     class Meta:
         model = Donation
