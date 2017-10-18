@@ -29,10 +29,10 @@ class Donor(models.Model):
     name = models.CharField(max_length=30)
     surname = models.CharField(max_length=30)
     tax_id = models.CharField(max_length=11, unique=True)
-    phone_number = models.CharField(max_length=15, default=None, null=True)
+    phone_number = models.CharField(max_length=15, default=None, null=True, blank=True)
     email = models.EmailField(max_length=50)
     address = models.CharField(max_length=50)
-    course_taken = models.CharField(max_length=30, choices=COURSE_CHOICES, default=None, null=True)
+    course_taken = models.CharField(max_length=30, choices=COURSE_CHOICES, default=None, null=True, blank=True)
     course_year = models.IntegerField(default=None, null=True, choices=YEAR_CHOICES)
     is_anonymous = models.BooleanField(default=False)
 
