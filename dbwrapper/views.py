@@ -86,42 +86,46 @@ class DonationFormView(View):
             payment_processor = payment_processors.TEST  # TEST or REDECARD
 
             print("Donation is recurring: {}".format(new_donation.is_recurring))
+
             try:
                 if new_donation.is_recurring:
-                    response = maxipago.payment.create_recurring(
-                        processor_id=payment_processor,
-                        reference_num=REFERENCE,
+                    data = {
+                        'processor_id':payment_processor,
+                        'reference_num':REFERENCE,
+                        'billing_name':payment_form.cleaned_data['name_on_card'],
+                        'billing_phone':donor.phone_number,
+                        'billing_email':donor.email,
+                        'card_number':payment_form.cleaned_data['card_number'],
+                        'card_expiration_month':payment_form.cleaned_data['expiry_date_month'],
+                        'card_expiration_year':payment_form.cleaned_data['expiry_date_year'],
+                        'card_cvv':payment_form.cleaned_data['card_code'],
+                        'charge_total':new_donation.donation_value,
 
-                        billing_name=payment_form.cleaned_data['name_on_card'],
-                        billing_phone=donor.phone_number,
-                        billing_email=donor.email,
-                        card_number=payment_form.cleaned_data['card_number'],
-                        card_expiration_month=payment_form.cleaned_data['expiry_date_month'],
-                        card_expiration_year=payment_form.cleaned_data['expiry_date_year'],
-                        card_cvv=payment_form.cleaned_data['card_code'],
-                        charge_total=new_donation.donation_value,
-                        currency_code=u'BRL',
-
-                        recurring_action=u'new',
-                        recurring_start=date.today().strftime('%Y-%m-%d'),
-                        recurring_frequency=u'1',
-                        recurring_period=u'monthly',
-                        recurring_installments=new_donation.installments,
-                        recurring_failure_threshold=u'2',
-                    )
+                        'currency_code':u'BRL',
+                        'recurring_action':u'new',
+                        'recurring_start':date.today().strftime('%Y-%m-%d'),
+                        'recurring_frequency':u'1',
+                        'recurring_period':u'monthly',
+                        'recurring_installments':new_donation.installments,
+                        'recurring_failure_threshold':u'2',
+                    }
+                    if donor.phone_number is None:
+                        data.pop('billing_phone', None)
+                    response = maxipago.payment.create_recurring(**data)
                 else:
-                    response = maxipago.payment.direct(
-                        processor_id=payment_processor,
-                        reference_num=REFERENCE,
-                        billing_name=payment_form.cleaned_data['name_on_card'],
-                        billing_phone=donor.phone_number,
-                        billing_email=donor.email,
-                        card_number=payment_form.cleaned_data['card_number'],
-                        card_expiration_month=payment_form.cleaned_data['expiry_date_month'],
-                        card_expiration_year=payment_form.cleaned_data['expiry_date_year'],
-                        card_cvv=payment_form.cleaned_data['card_code'],
-                        charge_total=new_donation.donation_value,
-                    )
+                    data ={'processor_id': payment_processor,
+                        'reference_num':REFERENCE,
+                        'billing_name':payment_form.cleaned_data['name_on_card'],
+                        'billing_phone':donor.phone_number,
+                        'billing_email':donor.email,
+                        'card_number':payment_form.cleaned_data['card_number'],
+                        'card_expiration_month':payment_form.cleaned_data['expiry_date_month'],
+                        'card_expiration_year':payment_form.cleaned_data['expiry_date_year'],
+                        'card_cvv':payment_form.cleaned_data['card_code'],
+                        'charge_total':new_donation.donation_value,}
+                    if donor.phone_number is None:
+                        data.pop('billing_phone', None)
+                    response = maxipago.payment.direct(**data)
 
                 print("Response code: {}".format(response.response_code))
                 if hasattr(response, 'response_message'):

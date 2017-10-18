@@ -9,8 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">{% load static %}
     <link rel="stylesheet" href="{% static  "css/style.css" %}">
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
     <script src="{% static  "js/donation_form.js" %}"></script>
-
     <!-- 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -86,7 +87,7 @@
                 <input id="rad2" type="radio" name="is_recurring" value="Mensal"><label for="rad2">Mensal</label></input>
             </div>
 
-            <p>
+            <p id="id_installments" style="display: none;">
                 {{ donation_form.installments.errors }}
                 <label>{{ donation_form.installments.label_tag }}</label>
                 {{ donation_form.installments}}
@@ -124,7 +125,7 @@
                 <label>{{ donor_form.course_taken.label_tag }}</label>
                 {{ donor_form.course_taken }}
             </p>
-            <p>
+            <p id="id_course_year" style="display: none;">
                 {{ donor_form.course_year.errors }}
                 <label>{{ donor_form.course_year.label_tag }}</label>
                 {{ donor_form.course_year }}

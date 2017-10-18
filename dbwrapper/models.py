@@ -3,6 +3,7 @@ from django.utils import timezone
 
 
 COURSE_CHOICES = (
+    (None, 'Escolha...'),
     ('Não cursei engenharia na Poli', 'Não cursei engenharia na Poli'),
     ('Engenharia Ambiental', 'Engenharia Ambiental'),
     ('Engenharia Civil', 'Engenharia Civil'),
@@ -19,19 +20,24 @@ COURSE_CHOICES = (
     ('Engenharia Química', 'Engenharia Química'),
 )
 
+years = [(str(x), str(x)) for x in range(1950, 2026)]
+years.insert(0, (None, 'Escolha...'))
+YEAR_CHOICES = years
+
 class Donor(models.Model):
     donor_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=30)
     surname = models.CharField(max_length=30)
     tax_id = models.CharField(max_length=11, unique=True)
-    phone_number = models.CharField(max_length=15, default=None, null=True)
+    phone_number = models.CharField(max_length=15, default=None, null=True, blank=True)
     email = models.EmailField(max_length=50)
     address = models.CharField(max_length=50)
-    course_taken = models.CharField(max_length=30, choices=COURSE_CHOICES, default=None, null=True)
-    course_year = models.IntegerField(default=None, null=True, choices=[(x, x) for x in range(1950, 2026)])
+    course_taken = models.CharField(max_length=30, choices=COURSE_CHOICES, default=None, null=True, blank=True)
+    course_year = models.IntegerField(default=None, null=True, choices=YEAR_CHOICES)
     is_anonymous = models.BooleanField(default=False)
 
 REFERRAL_CHOICES = (
+    (None, 'Escolha...'),
     ('Indicação de amigos', 'Indicação de amigos'),
     ('Facebook', 'Facebook'),
     ('Linkedin', 'Linkedin'),
@@ -39,8 +45,8 @@ REFERRAL_CHOICES = (
     ('Mídias externas (rádio/jornal/revista)', 'Mídias externas (rádio/jornal/revista)'),
 )
 
-INSTALLMENT_CHOICES=[('12','1 ano'),
-                     ('48','Irei notificar o Amigos da Poli via e-mail (contato@amigosdapoli.com.br)')]
+INSTALLMENT_CHOICES=[(12,'1 ano'),
+                     (48,'Irei notificar o Amigos da Poli via e-mail (contato@amigosdapoli.com.br)')]
 
 class Donation(models.Model):
     donation_id = models.AutoField(primary_key=True, default=None)
