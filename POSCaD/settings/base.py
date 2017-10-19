@@ -139,6 +139,11 @@ EMAIL_HOST_USER = '' # test@gmail.com
 EMAIL_HOST_PASSWORD = '' # password
 EMAIL_USE_TLS = True
 
-#reCAPTCHA KEY SETTINGS
+# reCAPTCHA key settings
 RECAPTCHA_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
 RECAPTCHA_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
+
+# Payment Gateway settings
+MERCHANT_ID = os.getenv("MERCHANT_ID", "")
+MERCHANT_KEY = os.getenv("MERCHANT_KEY", "")
+GATEWAY_SANDBOX = bool(os.getenv("GATEWAY_SANDBOX", ""))

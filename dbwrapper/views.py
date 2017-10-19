@@ -1,19 +1,22 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from django.views import View
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
+from django.conf import settings
+
+from dbwrapper.forms import FormDonor, FormDonation, FormPayment
 from .models import Donor, Donation, PaymentTransaction
 from .configuration import Configuration
+
 from maxipago import Maxipago
 from maxipago.utils import payment_processors
 from datetime import date
 import logging
-from dbwrapper.forms import FormDonor, FormDonation, FormPayment
-from django.views import View
-
 
 logger = logging.getLogger(__name__)
+
 
 class DonationFormView(View):
     """
@@ -31,7 +34,7 @@ class DonationFormView(View):
         payment_form = FormPayment(request.POST)
         donation_form = FormDonation(request.POST)
 
-        tax_id = request.POST.get('tax_id_no_pk_validation')
+        tax_id = request.POST.get('tax_id_no_pk_validation').replace(".","").replace("-","")
 
         if donation_form.is_valid() and donor_form.is_valid() and payment_form.is_valid():
             # tax id is required
@@ -75,15 +78,17 @@ class DonationFormView(View):
             new_payment.save()
 
             # Process payment
-            config = Configuration()
-            maxipago_id = config.get("payment", "merchant_id")
-            maxipago_key = config.get("payment", "merchant_key")
-            maxipago_sandbox = config.get("payment", "sandbox")
+            maxipago_id = settings.MERCHANT_ID
+            maxipago_key = settings.MERCHANT_KEY
+            maxipago_sandbox = settings.GATEWAY_SANDBOX
             print("Using Maxipago with customer {}".format(maxipago_id))
             maxipago = Maxipago(maxipago_id, maxipago_key, sandbox=maxipago_sandbox)
 
             REFERENCE = new_donation.donation_id
-            payment_processor = payment_processors.TEST  # TEST or REDECARD
+            if maxipago_sandbox:
+                payment_processor = payment_processors.TEST  # TEST or REDECARD
+            else:
+                payment_processor = payment_processors.REDECARD # TEST or REDECARD
 
             print("Donation is recurring: {}".format(new_donation.is_recurring))
 
