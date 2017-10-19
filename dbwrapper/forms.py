@@ -11,7 +11,7 @@ class FormDonor(forms.ModelForm):
         label="CPF")
     phone_number = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': '(XX) XXXXX XXXX', 'class': 'phone_with_ddd',}),
-        min_length=14,
+        min_length=10,
         max_length=15,
         label="Telefone (Opcional)")
 
