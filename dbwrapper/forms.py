@@ -11,9 +11,14 @@ class FormDonor(forms.ModelForm):
         label="CPF")
     phone_number = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': '(XX) XXXXX XXXX', 'class': 'phone_with_ddd',}),
-        min_length=10,
-        max_length=11,
+        min_length=14,
+        max_length=15,
         label="Telefone (Opcional)")
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get("phone_number")
+        phone_number = phone_number.replace("(", "").replace(")", "").replace("-", "").replace(" ", "")
+        return phone_number
 
     class Meta:
         model = Donor
@@ -24,8 +29,8 @@ class FormDonor(forms.ModelForm):
             "name": "Nome:",
             "surname": "Sobrenome",
             "email": "E-mail",
-            "course_taken": "Engenharia cursada (Opcional):",
-            "course_year": "Ano de formatura (Opcional):",
+            "course_taken": "Engenharia cursada (Opcional)",
+            "course_year": "Ano de formatura (Opcional)",
         }
 
 
@@ -63,4 +68,6 @@ class FormPayment(forms.ModelForm):
         }
         widgets = {
             'card_code': forms.NumberInput(attrs={'placeholder': 'CVV'}),
+            "expiry_date_month": forms.NumberInput(attrs={'placeholder': 'MM'}),
+            "expiry_date_year": forms.NumberInput(attrs={'placeholder': 'YY'}),
         }

@@ -28,12 +28,12 @@ class Donor(models.Model):
     donor_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=30)
     surname = models.CharField(max_length=30)
-    tax_id = models.CharField(max_length=11, unique=True)
+    tax_id = models.CharField(max_length=15, unique=True)
     phone_number = models.CharField(max_length=15, default=None, null=True, blank=True)
     email = models.EmailField(max_length=50)
     address = models.CharField(max_length=50)
     course_taken = models.CharField(max_length=30, choices=COURSE_CHOICES, default=None, null=True, blank=True)
-    course_year = models.IntegerField(default=None, null=True, choices=YEAR_CHOICES)
+    course_year = models.CharField(max_length=4, default=None, null=True, choices=YEAR_CHOICES)
     is_anonymous = models.BooleanField(default=False)
 
 REFERRAL_CHOICES = (
@@ -52,7 +52,7 @@ class Donation(models.Model):
     donation_id = models.AutoField(primary_key=True, default=None)
     donation_value = models.IntegerField()
     donor = models.ForeignKey(Donor, on_delete=models.CASCADE)
-    donor_tax_id = models.CharField(max_length=11)
+    donor_tax_id = models.CharField(max_length=15)
     is_recurring = models.NullBooleanField(null=True, default=False)
     was_captured = models.NullBooleanField(null=True, default=False)
     response_code = models.IntegerField(default=None, blank=True, null=True)
