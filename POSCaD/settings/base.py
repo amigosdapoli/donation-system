@@ -166,7 +166,7 @@ LOGGING = {
         'file': {
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
             'class': 'logging.FileHandler',
-            'filename': LOG_PATH + '/debug.log',
+            'filename': LOG_PATH + 'log/debug.log',
             'formatter': 'verbose',
         },
         'console': {
