@@ -33,7 +33,7 @@ class Donor(models.Model):
     email = models.EmailField(max_length=50)
     address = models.CharField(max_length=50)
     course_taken = models.CharField(max_length=30, choices=COURSE_CHOICES, default=None, null=True, blank=True)
-    course_year = models.CharField(max_length=4, default=None, null=True, choices=YEAR_CHOICES)
+    course_year = models.CharField(max_length=4, default=None, null=True, choices=YEAR_CHOICES, blank=True)
     is_anonymous = models.BooleanField(default=False)
 
 REFERRAL_CHOICES = (
