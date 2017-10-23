@@ -8,13 +8,13 @@ from django.conf import settings
 
 from dbwrapper.forms import FormDonor, FormDonation, FormPayment
 from .models import Donor, Donation, PaymentTransaction
-from .configuration import Configuration
 
 from maxipago import Maxipago
 from maxipago.utils import payment_processors
 from datetime import date
 import logging
 
+# Get an instance of a logger
 logger = logging.getLogger(__name__)
 
 
@@ -27,14 +27,19 @@ class DonationFormView(View):
         donation_form = FormDonation()
         payment_form = FormPayment()
 
-        return render(request, 'dbwrapper/donation_form.html', {'donor_form':donor_form,'donation_form':donation_form, 'payment_form':payment_form})
+        return render(request,
+                      'dbwrapper/donation_form.html',
+                      {'donor_form': donor_form,
+                       'donation_form': donation_form,
+                       'payment_form': payment_form})
 
     def post(self, request):
+        logger.info("Receiving POST")
         donor_form = FormDonor(request.POST)
         payment_form = FormPayment(request.POST)
         donation_form = FormDonation(request.POST)
 
-        tax_id = request.POST.get('tax_id_no_pk_validation').replace(".","").replace("-","")
+        tax_id = request.POST.get('tax_id_no_pk_validation').replace(".", "").replace("-", "")
 
         if donation_form.is_valid() and donor_form.is_valid() and payment_form.is_valid():
             # tax id is required
@@ -81,64 +86,64 @@ class DonationFormView(View):
             maxipago_id = settings.MERCHANT_ID
             maxipago_key = settings.MERCHANT_KEY
             maxipago_sandbox = settings.GATEWAY_SANDBOX
-            print("Using Maxipago with customer {}".format(maxipago_id))
+            logger.info("Using Maxipago with customer {}".format(maxipago_id))
             maxipago = Maxipago(maxipago_id, maxipago_key, sandbox=maxipago_sandbox)
 
             REFERENCE = new_donation.donation_id
             if maxipago_sandbox:
                 payment_processor = payment_processors.TEST  # TEST or REDECARD
             else:
-                payment_processor = payment_processors.REDECARD # TEST or REDECARD
+                payment_processor = payment_processors.REDECARD  # TEST or REDECARD
 
-            print("Donation is recurring: {}".format(new_donation.is_recurring))
+            logger.info("Donation is recurring: {}".format(new_donation.is_recurring))
 
             try:
                 if new_donation.is_recurring:
                     data = {
-                        'processor_id':payment_processor,
-                        'reference_num':REFERENCE,
-                        'billing_name':payment_form.cleaned_data['name_on_card'],
-                        'billing_phone':donor.phone_number,
-                        'billing_email':donor.email,
-                        'card_number':payment_form.cleaned_data['card_number'],
-                        'card_expiration_month':payment_form.cleaned_data['expiry_date_month'],
-                        'card_expiration_year':payment_form.cleaned_data['expiry_date_year'],
-                        'card_cvv':payment_form.cleaned_data['card_code'],
-                        'charge_total':new_donation.donation_value,
+                        'processor_id': payment_processor,
+                        'reference_num': REFERENCE,
+                        'billing_name': payment_form.cleaned_data['name_on_card'],
+                        'billing_phone': donor.phone_number,
+                        'billing_email': donor.email,
+                        'card_number': payment_form.cleaned_data['card_number'],
+                        'card_expiration_month': payment_form.cleaned_data['expiry_date_month'],
+                        'card_expiration_year': payment_form.cleaned_data['expiry_date_year'],
+                        'card_cvv': payment_form.cleaned_data['card_code'],
+                        'charge_total': new_donation.donation_value,
 
-                        'currency_code':u'BRL',
-                        'recurring_action':u'new',
-                        'recurring_start':date.today().strftime('%Y-%m-%d'),
-                        'recurring_frequency':u'1',
-                        'recurring_period':u'monthly',
-                        'recurring_installments':new_donation.installments,
-                        'recurring_failure_threshold':u'2',
+                        'currency_code': u'BRL',
+                        'recurring_action': u'new',
+                        'recurring_start': date.today().strftime('%Y-%m-%d'),
+                        'recurring_frequency': u'1',
+                        'recurring_period': u'monthly',
+                        'recurring_installments': new_donation.installments,
+                        'recurring_failure_threshold': u'2',
                     }
                     if donor.phone_number is None:
                         data.pop('billing_phone', None)
                     response = maxipago.payment.create_recurring(**data)
                 else:
-                    data ={'processor_id': payment_processor,
-                        'reference_num':REFERENCE,
-                        'billing_name':payment_form.cleaned_data['name_on_card'],
-                        'billing_phone':donor.phone_number,
-                        'billing_email':donor.email,
-                        'card_number':payment_form.cleaned_data['card_number'],
-                        'card_expiration_month':payment_form.cleaned_data['expiry_date_month'],
-                        'card_expiration_year':payment_form.cleaned_data['expiry_date_year'],
-                        'card_cvv':payment_form.cleaned_data['card_code'],
-                        'charge_total':new_donation.donation_value,}
+                    data = {'processor_id': payment_processor,
+                            'reference_num': REFERENCE,
+                            'billing_name': payment_form.cleaned_data['name_on_card'],
+                            'billing_phone': donor.phone_number,
+                            'billing_email': donor.email,
+                            'card_number': payment_form.cleaned_data['card_number'],
+                            'card_expiration_month': payment_form.cleaned_data['expiry_date_month'],
+                            'card_expiration_year': payment_form.cleaned_data['expiry_date_year'],
+                            'card_cvv': payment_form.cleaned_data['card_code'],
+                            'charge_total': new_donation.donation_value, }
                     if donor.phone_number is None:
                         data.pop('billing_phone', None)
                     response = maxipago.payment.direct(**data)
 
-                print("Response code: {}".format(response.response_code))
+                logger.info("Response code: {}".format(response.response_code))
                 if hasattr(response, 'response_message'):
-                    print("Response message: {}".format(response.response_message))
+                    logger.info("Response message: {}".format(response.response_message))
                 if hasattr(response, 'error_message'):
-                    print("Response error message: {}".format(response.error_message))
-                print("Response authorized: {}".format(response.authorized))
-                print("Response captured: {}".format(response.captured))
+                    logger.info("Response error message: {}".format(response.error_message))
+                logger.info("Response authorized: {}".format(response.authorized))
+                logger.info("Response captured: {}".format(response.captured))
 
                 donation = Donation.objects.get(donation_id=new_donation.donation_id)
                 if response.authorized and response.captured:
@@ -152,12 +157,14 @@ class DonationFormView(View):
                          'value': new_donation.donation_value,
                          'is_recurring': donation.is_recurring}
 
+                    logger.info("Preparing to send e-mail receipt")
                     plaintext = get_template('dbwrapper/successful_donation_email.txt')
                     html_template = get_template('dbwrapper/successful_donation_email.html')
 
                     subject = 'Obrigado pela sua contribuição!'
                     text_content = plaintext.render(d)
                     html_content = html_template.render(d)
+                    logger.info("Templates loaded")
 
                     msg = EmailMultiAlternatives(
                         subject,
@@ -166,20 +173,25 @@ class DonationFormView(View):
                         [donor.email], )
                     msg.attach_alternative(html_content, "text/html")
                     msg.send(fail_silently=True)
+
                     return render(request, 'dbwrapper/successful_donation.html')
+
                 else:
+                    logger.info("Else")
                     payment_form.add_error(None,
                         "Infelizmente, não conseguimos processar a sua doação. Nossa equipe já foi avisada. Por favor, tente novamente mais tarde.")
                     donation.was_captured = response.captured
                     donation.response_code = response.response_code
                     donation.save()
 
-            except:
+            except Exception as e:
+                logger.error('Failed to execute payment', exc_info=True)
                 payment_form.add_error(None,
-                    "Infelizmente, não conseguimos processar a sua doação. Nossa equipe já foi avisada. Por favor, tente novamente mais tarde.")
+                                       "Infelizmente, não conseguimos processar a sua doação. Nossa equipe já foi avisada. Por favor, tente novamente mais tarde.")
 
         return render(
-                request,
-                'dbwrapper/donation_form.html',
-                {'donor_form': donor_form, 'donation_form': donation_form, 'payment_form': payment_form})
-
+            request,
+            'dbwrapper/donation_form.html',
+            {'donor_form': donor_form,
+             'donation_form': donation_form,
+             'payment_form': payment_form})

@@ -130,20 +130,59 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'static/'
 
 # SMTP Settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = '' #eg.: smtp.gmail.com
+EMAIL_HOST = os.getenv("EMAIL_SMTP", "") #eg.: smtp.gmail.com
 EMAIL_PORT = '587'
-EMAIL_HOST_USER = '' # test@gmail.com
-EMAIL_HOST_PASSWORD = '' # password
+EMAIL_HOST_USER = os.getenv("EMAIL_USERNAME", "") # test@gmail.com
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASSWD", "") # password
 EMAIL_USE_TLS = True
 
 # reCAPTCHA key settings
-RECAPTCHA_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
-RECAPTCHA_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
+RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY", "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI")
+RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY", "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe")
 
 # Payment Gateway settings
 MERCHANT_ID = os.getenv("MERCHANT_ID", "")
 MERCHANT_KEY = os.getenv("MERCHANT_KEY", "")
 GATEWAY_SANDBOX = bool(os.getenv("GATEWAY_SANDBOX", ""))
+
+# Logging settings
+LOG_PATH = os.getenv("LOG_PATH", "")
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'class': 'logging.FileHandler',
+            'filename': LOG_PATH + 'log/debug.log',
+            'formatter': 'verbose',
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'dbwrapper': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
