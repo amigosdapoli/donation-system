@@ -27,7 +27,7 @@ class DonationPageTest(TestCase):
 
     def test_payment(self):
         data = {'donation_value': 30,
-				'donor_tax_id': 1,
+				'donor_tax_id': "369.023.248-16",
 				'donor_name': 'Fulano',
 				'donor_surname': 'de Tal'}
         response = self.client.post('/', data=data)

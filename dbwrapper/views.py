@@ -39,7 +39,7 @@ class DonationFormView(View):
         payment_form = FormPayment(request.POST)
         donation_form = FormDonation(request.POST)
 
-        tax_id = request.POST.get('tax_id_no_pk_validation').replace(".", "").replace("-", "")
+        tax_id = request.POST.get('tax_id_no_pk_validation', '').replace(".","").replace("-","")
 
         if donation_form.is_valid() and donor_form.is_valid() and payment_form.is_valid():
             # tax id is required
