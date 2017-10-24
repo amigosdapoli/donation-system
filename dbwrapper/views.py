@@ -12,6 +12,7 @@ from .models import Donor, Donation, PaymentTransaction
 from maxipago import Maxipago
 from maxipago.utils import payment_processors
 from datetime import date
+import os
 import logging
 
 # Get an instance of a logger
@@ -22,7 +23,9 @@ class DonationFormView(View):
     """
     This class
     """
+
     def get(self, request):
+        logger.info(os.environ)
         donor_form = FormDonor()
         donation_form = FormDonation()
         payment_form = FormPayment()
@@ -138,8 +141,25 @@ class DonationFormView(View):
                     response = maxipago.payment.direct(**data)
 
                 logger.info("Response code: {}".format(response.response_code))
+                error_response = "Infelizmente, não conseguimos processar a sua doação. Nossa equipe já foi avisada. Por favor, tente novamente mais tarde."
                 if hasattr(response, 'response_message'):
                     logger.info("Response message: {}".format(response.response_message))
+                if response.response_code == "1":
+                    error_response = "Transação negada."
+                elif response.response_code == "2":
+                    error_response = "Transação negada por duplicidade ou fraude."
+                elif response.response_code == "5":
+                    error_response = "Em análise manual de fraude."
+                elif response.response_code == "1022":
+                    error_response = "Erro na operadora do cartão."
+                elif response.response_code == "1024":
+                    error_response = "Erro nas informações de cartão de crédito enviadas."
+                elif response.response_code == "1025":
+                    error_response = "Erro nas credenciais."
+                elif response.response_code == "2048":
+                    error_response = "Erro interno do gateway de pagamento."
+                elif response.response_code == "4097":
+                    error_response = "Timeout do tempo de resposta da adquirente."
                 if hasattr(response, 'error_message'):
                     logger.info("Response error message: {}".format(response.error_message))
                 logger.info("Response authorized: {}".format(response.authorized))
@@ -179,7 +199,7 @@ class DonationFormView(View):
                 else:
                     logger.info("Else")
                     payment_form.add_error(None,
-                        "Infelizmente, não conseguimos processar a sua doação. Nossa equipe já foi avisada. Por favor, tente novamente mais tarde.")
+                                           error_response)
                     donation.was_captured = response.captured
                     donation.response_code = response.response_code
                     donation.save()
