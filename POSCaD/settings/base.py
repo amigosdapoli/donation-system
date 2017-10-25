@@ -25,7 +25,12 @@ SECRET_KEY = '%3gi6537usk%aei_6570kvzszell8h5vum(&q*3#5)^*h0xq8&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    '.compute-1.amazonaws.com', # allows viewing of instances directly
+    '.elasticbeanstalk.com'
+]
 
 
 # Application definition
@@ -176,7 +181,7 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True,
         },
         'dbwrapper': {
