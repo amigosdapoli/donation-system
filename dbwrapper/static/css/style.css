@@ -3692,4 +3692,24 @@ select {
   padding-top: 2em;
   padding-bottom: 3em; }
 
+.errorlist {
+    color: #CC0000;
+    font-size: 0.8em;
+}
+
+.alert {
+    background-color: rgba(204,0,0, 0.2);
+    padding: 1em;
+}
+
+.alert h4 {
+    color: #CC0000;
+    font-weight: 900;
+    margin-top: 0px;
+}
+
+.alert .error {
+    color: #CC0000;
+    font-size: 0.8em;
+}
 /*# sourceMappingURL=style.css.map */

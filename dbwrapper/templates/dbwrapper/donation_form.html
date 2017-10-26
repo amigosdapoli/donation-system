@@ -77,8 +77,8 @@
             <h3 class="panel-title">Como você pretende doar?</h3>
 
             <p>
-                {{ donation_form.donation_value.errors }}
                 <label>{{ donation_form.donation_value.label_tag }}</label>
+                {{ donation_form.donation_value.errors }}
                 {{ donation_form.donation_value }}
             </p>
 
@@ -88,26 +88,26 @@
             </div>
 
             <p id="id_installments" style="display: none;">
-                {{ donation_form.installments.errors }}
                 <label>{{ donation_form.installments.label_tag }}</label>
+                {{ donation_form.installments.errors }}
                 {{ donation_form.installments}}
             </p>
 
             <h3 class="panel-title">Informações pessoais</h3>
 
             <p>
-                {{ donor_form.name.errors }}
                 <label>{{ donor_form.name.label_tag }}</label>
+                {{ donor_form.name.errors }}
                 {{ donor_form.name }}
             </p>
             <p>
-                {{ donor_form.surname.errors }}
                 <label>{{ donor_form.surname.label_tag }}</label>
+                {{ donor_form.surname.errors }}
                 {{ donor_form.surname }}
             </p>
             <p>
-                {{ donor_form.tax_id_no_pk_validation.errors }}
                 <label>{{ donor_form.tax_id_no_pk_validation.label_tag }}</label>
+                {{ donor_form.tax_id_no_pk_validation.errors }}
                 {{ donor_form.tax_id_no_pk_validation }}
             </p>
             <p>
@@ -116,23 +116,23 @@
                 {{ donor_form.email }}
             </p>
             <p>
-                {{ donor_form.phone_number.errors }}
                 <label>{{ donor_form.phone_number.label_tag }}</label>
+                {{ donor_form.phone_number.errors }}
                 {{ donor_form.phone_number }}
             </p>
             <p>
-                {{ donor_form.course_taken.errors }}
                 <label>{{ donor_form.course_taken.label_tag }}</label>
+                {{ donor_form.course_taken.errors }}
                 {{ donor_form.course_taken }}
             </p>
             <p id="id_course_year" style="display: none;">
-                {{ donor_form.course_year.errors }}
                 <label>{{ donor_form.course_year.label_tag }}</label>
+                {{ donor_form.course_year.errors }}
                 {{ donor_form.course_year }}
             </p>
             <p>
-                {{ donation_form.referral_channel.errors }}
                 <label>{{ donation_form.referral_channel.label_tag }}</label>
+                {{ donation_form.referral_channel.errors }}
                 {{ donation_form.referral_channel }}
             </p>
 
@@ -146,8 +146,8 @@
 
             {% for field in payment_form %}
                 <p>
-                    {{ field.errors }}
                     <label>{{ field.label_tag }}</label>
+                    {{ field.errors }}
                     {{ field }}
                 </p>
             {% endfor %}

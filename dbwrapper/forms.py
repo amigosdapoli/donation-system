@@ -36,7 +36,7 @@ class FormDonor(forms.ModelForm):
 
 class FormDonation(forms.ModelForm):
     donation_value = forms.IntegerField(
-        widget=forms.TextInput(attrs={'placeholder': '', 'class':'money'}),
+        widget=forms.NumberInput(attrs={'placeholder': '', 'class': 'money'}),
         label="Valor da doação")
 
     class Meta:
