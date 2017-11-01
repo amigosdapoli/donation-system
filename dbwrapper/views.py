@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
+from django.db.models import Count, Min, Sum, Avg
 
 from dbwrapper.forms import FormDonor, FormDonation, FormPayment
 from .models import Donor, Donation, PaymentTransaction
@@ -14,6 +15,7 @@ from maxipago.utils import payment_processors
 from datetime import date
 import os
 import logging
+import json
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -30,11 +32,18 @@ class DonationFormView(View):
         donation_form = FormDonation()
         payment_form = FormPayment()
 
-        return render(request,
-                      'dbwrapper/donation_form.html',
-                      {'donor_form': donor_form,
-                       'donation_form': donation_form,
-                       'payment_form': payment_form})
+        campaign_name = request.GET.get('campaign_name', None)
+        campaign_group = request.GET.get('campaign_group', None)
+        campaign_data = {"campaign_name": campaign_name,
+                         "campaign_group": campaign_group}
+
+        data = {'donor_form': donor_form,
+                'donation_form': donation_form,
+                'payment_form': payment_form,
+                'campaign_data': campaign_data}
+
+        return render(request, 'dbwrapper/donation_form.html', data)
+
 
     def post(self, request):
         logger.info("Receiving POST")
@@ -78,6 +87,8 @@ class DonationFormView(View):
                 new_donation.installments = donation_form.cleaned_data['installments']
             else:
                 new_donation.is_recurring = False
+            new_donation.campaign_name = donation_form.cleaned_data['campaign_name']
+            new_donation.campaign_group = donation_form.cleaned_data['campaign_group']
             new_donation.save()
 
             # Payment
@@ -177,7 +188,7 @@ class DonationFormView(View):
                          'value': new_donation.donation_value,
                          'is_recurring': donation.is_recurring}
 
-                    logger.info("Preparing to send e-mail receipt")
+                    logger.info("Preparing to send e-mail receipt with {}".format(d))
                     plaintext = get_template('dbwrapper/successful_donation_email.txt')
                     html_template = get_template('dbwrapper/successful_donation_email.html')
 
@@ -210,8 +221,26 @@ class DonationFormView(View):
                                        "Infelizmente, não conseguimos processar a sua doação. Nossa equipe já foi avisada. Por favor, tente novamente mais tarde.")
 
         return render(
-            request,
-            'dbwrapper/donation_form.html',
-            {'donor_form': donor_form,
-             'donation_form': donation_form,
-             'payment_form': payment_form})
+                request,
+                'dbwrapper/donation_form.html',
+                {'donor_form': donor_form, 'donation_form': donation_form, 'payment_form': payment_form})
+
+
+class StatisticsView(View):
+    """
+    This class
+    """
+    def get(self, request):
+        queryset = Donation.objects.exclude(campaign_name__isnull=True).values('campaign_group').annotate(Count('donation_id')).order_by('campaign_group')
+        logger.info(queryset)
+
+        labels = []
+        data = []
+        for row in queryset:
+            labels.append(row["campaign_group"].replace('-', ' ').replace('_', ' ').title())
+            data.append(row["donation_id__count"])
+
+        template_data = {"labels": labels,
+                         "data": data}
+        logger.info(template_data)
+        return render(request, 'dbwrapper/statistics.html', template_data)

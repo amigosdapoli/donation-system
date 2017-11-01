@@ -12,7 +12,7 @@ class FormDonor(forms.ModelForm):
     phone_number = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': '(XX) XXXXX XXXX', 'class': 'phone_with_ddd',}),
         min_length=10,
-        max_length=15,
+        max_length=16,
         label="Telefone (Opcional)")
 
     def clean_phone_number(self):
@@ -41,7 +41,7 @@ class FormDonation(forms.ModelForm):
 
     class Meta:
         model = Donation
-        fields = ("donation_value", "referral_channel", "installments")
+        fields = ("donation_value", "referral_channel", "installments", "campaign_name", "campaign_group")
         labels = {
             "donation_value": "Valor da doação",
             "referral_channel": "Por onde você conheceu o amigos da Poli? (Opcional)",
