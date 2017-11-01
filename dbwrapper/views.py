@@ -32,11 +32,18 @@ class DonationFormView(View):
         donation_form = FormDonation()
         payment_form = FormPayment()
 
-        return render(request,
-                      'dbwrapper/donation_form.html',
-                      {'donor_form': donor_form,
-                       'donation_form': donation_form,
-                       'payment_form': payment_form})
+        campaign_name = request.GET.get('campaign_name', None)
+        campaign_group = request.GET.get('campaign_group', None)
+        campaign_data = {"campaign_name": campaign_name,
+                         "campaign_group": campaign_group}
+
+        data = {'donor_form': donor_form,
+                'donation_form': donation_form,
+                'payment_form': payment_form,
+                'campaign_data': campaign_data}
+
+        return render(request, 'dbwrapper/donation_form.html', data)
+
 
     def post(self, request):
         logger.info("Receiving POST")
@@ -80,6 +87,8 @@ class DonationFormView(View):
                 new_donation.installments = donation_form.cleaned_data['installments']
             else:
                 new_donation.is_recurring = False
+            new_donation.campaign_name = donation_form.cleaned_data['campaign_name']
+            new_donation.campaign_group = donation_form.cleaned_data['campaign_group']
             new_donation.save()
 
             # Payment
@@ -222,14 +231,13 @@ class StatisticsView(View):
     This class
     """
     def get(self, request):
-        queryset = Donation.objects.exclude(referral_channel__isnull=True).values('referral_channel').annotate(Count('donation_id')).order_by('referral_channel')
+        queryset = Donation.objects.exclude(campaign_name__isnull=True).values('campaign_group').annotate(Count('donation_id')).order_by('campaign_group')
         logger.info(queryset)
 
         labels = []
         data = []
         for row in queryset:
-            logger.info(row["referral_channel"])
-            labels.append(row["referral_channel"])
+            labels.append(row["campaign_group"].replace('-', ' ').replace('_', ' ').title())
             data.append(row["donation_id__count"])
 
         template_data = {"labels": labels,

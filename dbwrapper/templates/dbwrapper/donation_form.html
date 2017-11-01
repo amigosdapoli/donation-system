@@ -12,6 +12,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
     <script src="{% static  "js/donation_form.js" %}"></script>
+
     <!-- 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -75,6 +76,13 @@
             {% endif %}
 
             <h3 class="panel-title">Como você pretende doar?</h3>
+
+            <input type="hidden" name="{{ donation_form.campaign_name.name }}" id="{{ donation_form.campaign_name.id_for_label }}"
+               value="{{ campaign_data.campaign_name }}"
+               maxlength="{{ donation_form.campaign_name.field.max_length }}">
+            <input type="hidden" name="{{ donation_form.campaign_group.name }}" id="{{ donation_form.campaign_group.id_for_label }}"
+               value="{{ campaign_data.campaign_group }}"
+               maxlength="{{ donation_form.campaign_group.field.max_length }}">
 
             <p>
                 <label>{{ donation_form.donation_value.label_tag }}</label>
@@ -151,13 +159,20 @@
                     {{ field }}
                 </p>
             {% endfor %}
+
             <!-- <div name="credit_cards" style="text-align:left;"> -->
             <!--     <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/visa.png" name="visa"> -->
             <!--     <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/master.png" name="mastercard"> -->
             <!-- </div> -->
+=======
+        <!-- <div name="credit_cards" style="text-align:left;"> -->
+        <!--     <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/visa.png" name="visa"> -->
+        <!--     <img style="height:49px" src="https://www.amigosdapoli.com.br/assets/images/master.png" name="mastercard"> -->
+        <!-- </div> -->
+>>>>>>> Colects campaign data and shows in /statistics
 
             {% csrf_token %}
-        <button name="subbtn" onclick="ga('send', {hitType: 'event',eventCategory: 'doacao',eventAction: 'submit_donation',eventLabel: 'website'});" type="submit" class="submit-button">
+        <button class="submit-button" name="subbtn" onclick="ga('send', {hitType: 'event',eventCategory: 'doacao',eventAction: 'submit_donation',eventLabel: 'website'});" type="submit" >
             Doar
         </button>
       </div>

@@ -63,6 +63,9 @@ class Donation(models.Model):
     created_at = models.DateTimeField(editable=False, default=None, null=True)
     updated_at = models.DateTimeField(default=None, null=True)
     referral_channel = models.CharField(max_length=40,choices=REFERRAL_CHOICES, default=None, blank=True, null=True)
+    campaign_name = models.CharField(max_length=40, default=None, blank=True, null=True)
+    campaign_group = models.CharField(max_length=40, default=None, blank=True, null=True)
+
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
