@@ -12,3 +12,8 @@ __pycache__
 *.pyc
 tags
 Gemfile.lock
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
