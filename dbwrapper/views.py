@@ -110,6 +110,7 @@ class DonationFormView(View):
                 payment_processor = payment_processors.REDECARD  # TEST or REDECARD
 
             logger.info("Donation is recurring: {}".format(new_donation.is_recurring))
+            logger.info("Donation value {}".format(donation_form.cleaned_data['donation_value']))
 
             try:
                 if new_donation.is_recurring:
@@ -203,7 +204,11 @@ class DonationFormView(View):
                         'no-reply@amigosdapoli.com.br',
                         [donor.email], )
                     msg.attach_alternative(html_content, "text/html")
-                    msg.send(fail_silently=True)
+                    response = msg.send(fail_silently=True)
+                    email_success = False
+                    if response==1:
+                        email_success = True
+                    logger.info("E-mail sent successfuly: {}".format(email_success))
 
                     return render(request, 'dbwrapper/successful_donation.html')
 

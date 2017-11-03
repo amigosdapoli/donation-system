@@ -50,7 +50,7 @@ INSTALLMENT_CHOICES=[(12,'1 ano'),
 
 class Donation(models.Model):
     donation_id = models.AutoField(primary_key=True, default=None)
-    donation_value = models.IntegerField()
+    donation_value = models.DecimalField(max_digits=8, decimal_places=2)
     donor = models.ForeignKey(Donor, on_delete=models.CASCADE)
     donor_tax_id = models.CharField(max_length=15)
     is_recurring = models.NullBooleanField(null=True, default=False)
@@ -59,7 +59,7 @@ class Donation(models.Model):
     error_message = models.TextField(default=None, blank=True, null=True)
     order_id = models.CharField(max_length=35, default=None, blank=True, null=True)
     nsu_id = models.CharField(max_length=10, default=None, blank=True, null=True)
-    installments = models.IntegerField(default=1, null=True, choices=INSTALLMENT_CHOICES)
+    installments = models.IntegerField(default=2, null=True, choices=INSTALLMENT_CHOICES)
     created_at = models.DateTimeField(editable=False, default=None, null=True)
     updated_at = models.DateTimeField(default=None, null=True)
     referral_channel = models.CharField(max_length=40,choices=REFERRAL_CHOICES, default=None, blank=True, null=True)
@@ -77,10 +77,10 @@ class Donation(models.Model):
 
 class PaymentTransaction(models.Model):
     name_on_card = models.CharField(max_length=30)
-    card_number = models.CharField(max_length=16)
+    card_number = models.CharField(max_length=19)
     expiry_date_month = models.CharField(max_length=2)
     expiry_date_year = models.CharField(max_length=2)
-    card_code = models.CharField(max_length=3)
+    card_code = models.CharField(max_length=4)
 
     def save(self, *args, **kwargs):
         """

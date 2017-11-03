@@ -35,27 +35,35 @@ class FormDonor(forms.ModelForm):
 
 
 class FormDonation(forms.ModelForm):
-    donation_value = forms.IntegerField(
-        widget=forms.NumberInput(attrs={'placeholder': '', 'class': 'money'}),
+    donation_value = forms.DecimalField(
+        max_digits=8,
+        decimal_places=2,
+        localize=True,
+        widget=forms.TextInput(attrs={'placeholder': '', 'class': 'money'}),
         label="Valor da doação")
 
     class Meta:
         model = Donation
         fields = ("donation_value", "referral_channel", "installments", "campaign_name", "campaign_group")
         labels = {
-            "donation_value": "Valor da doação",
-            "referral_channel": "Por onde você conheceu o amigos da Poli? (Opcional)",
+            "donation_value": "Valor da doação (R$)",
+            "referral_channel": "Por onde você conheceu o Amigos da Poli? (Opcional)",
             "installments": "Duração",
         }
 
 
 class FormPayment(forms.ModelForm):
     card_number = forms.CharField(
-        widget=forms.NumberInput(attrs={'placeholder': 'XXXX XXXX XXXX XXXX'}),
+        widget=forms.TextInput(attrs={'placeholder': 'XXXX XXXX XXXX XXXX', 'class': 'card_number'}),
         min_length=16,
-        max_length=16,
+        max_length=19,
         label="Número do cartão (VISA/MASTER)")
     captcha = ReCaptchaField(widget=ReCaptchaWidget(), label="Teste de segurança")
+
+    def clean_card_number(self):
+        card_number = self.cleaned_data.get("card_number")
+        card_number = card_number.replace(" ", "")
+        return card_number
 
     class Meta:
         model = PaymentTransaction
