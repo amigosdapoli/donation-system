@@ -40,7 +40,7 @@ class FormDonation(forms.ModelForm):
         decimal_places=2,
         localize=True,
         widget=forms.TextInput(attrs={'placeholder': '', 'class': 'money'}),
-        label="Valor da doação")
+        label="Valor da doação (R$) ")
 
     class Meta:
         model = Donation
