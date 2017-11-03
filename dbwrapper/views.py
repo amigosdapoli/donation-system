@@ -27,7 +27,6 @@ class DonationFormView(View):
     """
 
     def get(self, request):
-        logger.info(os.environ)
         donor_form = FormDonor()
         donation_form = FormDonation()
         payment_form = FormPayment()
@@ -100,7 +99,7 @@ class DonationFormView(View):
             maxipago_id = settings.MERCHANT_ID
             maxipago_key = settings.MERCHANT_KEY
             maxipago_sandbox = settings.GATEWAY_SANDBOX
-            logger.info("Using Maxipago with customer {}".format(maxipago_id))
+            logger.info("Using Maxipago with customer {} with Sandbox mode: {}".format(maxipago_id, maxipago_sandbox))
             maxipago = Maxipago(maxipago_id, maxipago_key, sandbox=maxipago_sandbox)
 
             REFERENCE = new_donation.donation_id

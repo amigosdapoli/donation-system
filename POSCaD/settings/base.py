@@ -153,7 +153,7 @@ RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY", "6LeIxAcTAAAAAGG-vFI1
 # Payment Gateway settings
 MERCHANT_ID = os.getenv("MERCHANT_ID", "")
 MERCHANT_KEY = os.getenv("MERCHANT_KEY", "")
-GATEWAY_SANDBOX = bool(os.getenv("GATEWAY_SANDBOX", ""))
+GATEWAY_SANDBOX = bool(os.getenv("GATEWAY_SANDBOX", "") == "True")
 
 # Logging settings
 LOG_PATH = os.getenv("LOG_PATH", "")
