@@ -11,9 +11,8 @@ class FormDonor(forms.ModelForm):
         label="CPF")
     phone_number = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': '(XX) XXXXX XXXX', 'class': 'phone_with_ddd',}),
-        min_length=10,
         max_length=16,
-        label="Telefone (Opcional)")
+        label="Telefone")
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get("phone_number")
