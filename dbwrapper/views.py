@@ -235,16 +235,23 @@ class StatisticsView(View):
     This class
     """
     def get(self, request):
-        queryset = Donation.objects.exclude(campaign_name__isnull=True).values('campaign_group').annotate(Count('donation_id')).order_by('campaign_group')
+        queryset = Donation.objects.exclude(
+            campaign_name__isnull=True).exclude(
+            was_captured=False).exclude(
+            campaign_name="None").exclude(
+            campaign_group="None").filter(
+            campaign_name="dia-de-doar").values('campaign_group').annotate(Count('donation_id')).order_by('campaign_group')
         logger.info(queryset)
 
         labels = []
         data = []
+
         for row in queryset:
             labels.append(row["campaign_group"].replace('-', ' ').replace('_', ' ').title())
             data.append(row["donation_id__count"])
 
         template_data = {"labels": labels,
-                         "data": data}
+                         "data": data,
+                         "x_axis_max": max(data)+1}
         logger.info(template_data)
         return render(request, 'dbwrapper/statistics.html', template_data)
