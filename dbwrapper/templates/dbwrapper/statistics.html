@@ -36,7 +36,7 @@
         </div>
     </div>
     <center>
-    <div align="center" style="align:center;margin:15px;width:800px; height:500px;">
+    <div align="center" class="donation-form">
         <canvas id="bar-chart-horizontal"></canvas>
         <script>
             new Chart(document.getElementById("bar-chart-horizontal"), {
@@ -64,7 +64,8 @@
                         ticks: {
                             beginAtZero:true,
                             stepSize: 1,
-                            min: 0
+                            min: 0,
+                            max: {{ x_axis_max }}
                         }
                     }]
                   }
