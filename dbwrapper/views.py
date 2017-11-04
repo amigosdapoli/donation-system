@@ -240,15 +240,18 @@ class StatisticsView(View):
             was_captured=False).exclude(
             campaign_name="None").exclude(
             campaign_group="None").filter(
-            campaign_name="dia-de-doar").values('campaign_group').annotate(Count('donation_id')).order_by('campaign_group')
+            campaign_name="dia-de-dor").values('campaign_group').annotate(Count('donation_id')).order_by('campaign_group')
         logger.info(queryset)
 
         labels = []
         data = []
 
-        for row in queryset:
-            labels.append(row["campaign_group"].replace('-', ' ').replace('_', ' ').title())
-            data.append(row["donation_id__count"])
+        if not queryset:
+            data = [0] # avoid graph from breaking
+        else:
+            for row in queryset:
+                labels.append(row["campaign_group"].replace('-', ' ').replace('_', ' ').title())
+                data.append(row["donation_id__count"])
 
         template_data = {"labels": labels,
                          "data": data,
