@@ -235,7 +235,7 @@ class StatisticsView(View):
     This class
     """
     def get(self, request):
-        queryset = Donation.objects.exclude(campaign_name__isnull=True).values('campaign_group').annotate(Count('donation_id')).order_by('campaign_group')
+        queryset = Donation.objects.exclude(campaign_name__isnull=True, was_captured=True, campaign_name__ne="None").values('campaign_group').annotate(Count('donation_id')).order_by('campaign_group')
         logger.info(queryset)
 
         labels = []
