@@ -79,6 +79,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'POSCaD.context_processors.google_analytics'
             ],
         },
     },
@@ -192,3 +193,5 @@ LOGGING = {
         },
     },
 }
+
+GOOGLE_ANALYTICS_PROPERTY_ID = os.getenv("GOOGLE_ANALYTICS_PROPERTY_ID", "UA-83574914-2")
