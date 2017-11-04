@@ -46,7 +46,7 @@ REFERRAL_CHOICES = (
 )
 
 INSTALLMENT_CHOICES=[(12,'1 ano'),
-                     (48,'Irei notificar o Amigos da Poli via e-mail (contato@amigosdapoli.com.br)')]
+                     (48,'Indeterminada (cancelamento via e-mail contato@amigosdapoli.com.br)')]
 
 class Donation(models.Model):
     donation_id = models.AutoField(primary_key=True, default=None)
@@ -59,7 +59,7 @@ class Donation(models.Model):
     error_message = models.TextField(default=None, blank=True, null=True)
     order_id = models.CharField(max_length=35, default=None, blank=True, null=True)
     nsu_id = models.CharField(max_length=10, default=None, blank=True, null=True)
-    installments = models.IntegerField(default=2, null=True, choices=INSTALLMENT_CHOICES)
+    installments = models.IntegerField(null=True, choices=INSTALLMENT_CHOICES)
     created_at = models.DateTimeField(editable=False, default=None, null=True)
     updated_at = models.DateTimeField(default=None, null=True)
     referral_channel = models.CharField(max_length=40,choices=REFERRAL_CHOICES, default=None, blank=True, null=True)

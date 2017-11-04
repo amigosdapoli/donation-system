@@ -2,6 +2,7 @@ from django import forms
 from snowpenguin.django.recaptcha2.fields import ReCaptchaField
 from snowpenguin.django.recaptcha2.widgets import ReCaptchaWidget
 from .models import Donor, Donation, PaymentTransaction
+from .models import INSTALLMENT_CHOICES
 from localflavor.br.forms import BRCPFField
 
 
@@ -40,14 +41,18 @@ class FormDonation(forms.ModelForm):
         localize=True,
         widget=forms.TextInput(attrs={'placeholder': '', 'class': 'money'}),
         label="Valor da doação (R$) ")
+    installments = forms.ChoiceField(
+        widget=forms.Select(attrs={'class': 'id_installments_select'}),
+        choices=INSTALLMENT_CHOICES,
+        label="Duração",
+        initial=INSTALLMENT_CHOICES[1][1])
 
     class Meta:
         model = Donation
         fields = ("donation_value", "referral_channel", "installments", "campaign_name", "campaign_group")
         labels = {
             "donation_value": "Valor da doação (R$)",
-            "referral_channel": "Por onde você conheceu o Amigos da Poli? (Opcional)",
-            "installments": "Duração",
+            "referral_channel": "Como você conheceu o Amigos da Poli? (Opcional)",
         }
 
 

@@ -10,6 +10,7 @@ $(document).ready(function(){
       if ( $('#rad2').is(':checked'))
       {
         $("#id_installments").show();
+        $(".id_installments_select").get(0).selectedIndex = 1;
       }
       else
       {
