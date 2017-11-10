@@ -240,7 +240,7 @@ class StatisticsView(View):
             was_captured=False).exclude(
             campaign_name="None").exclude(
             campaign_group="None").filter(
-            campaign_name="dia-de-dor").values('campaign_group').annotate(Count('donation_id')).order_by('campaign_group')
+            campaign_name="dia-de-doar").values('campaign_group').annotate(Count('donation_id')).order_by('campaign_group')
         logger.info(queryset)
 
         labels = []
