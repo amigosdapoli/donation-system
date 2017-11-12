@@ -6,9 +6,9 @@ Here is how the system will initially work: one page where donors can fill in in
 
 The goal of this project is to help other endowment funds and non profits in general to have an effective and low cost donation system. As an open source project, we expect it can also help other non profit organizations to leverage financial resources and increase its impact in society. 
 
-![donation_page][donation_page]
-
-[donation_page]: https://github.com/amigosdapoli/donation-system/raw/master/docs/img/donation_page.png "Logo Title Text 2"
+<p align="center">
+  <img align="center" src="https://github.com/amigosdapoli/donation-system/raw/master/docs/img/donation_page.png" width="600">
+</p>
 
 # Installation
 
