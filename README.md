@@ -6,6 +6,10 @@ Here is how the system will initially work: one page where donors can fill in in
 
 The goal of this project is to help other endowment funds and non profits in general to have an effective and low cost donation system. As an open source project, we expect it can also help other non profit organizations to leverage financial resources and increase its impact in society. 
 
+![donation_page][donation_page]
+
+[donation_page]: https://github.com/amigosdapoli/donation-system/raw/master/docs/img/donation_page.png "Logo Title Text 2"
+
 # Installation
 
 ## Start
@@ -69,12 +73,11 @@ TODO List different payment methods
 ## Creating new gateways
 
 ## Configuring payment gateway
-Fill in configuration file in `dbwrapper/configs.cfg` with the content as bellow:
+Set the following environment variables
 ```
-[payment]
-sandbox=<boolean>
-merchant_id=<id>
-merchant_key=<key>
+GATEWAY_SANDBOX=<boolean>
+MERCHANT_ID=<id>
+MERCHANT_KEY=<key>
 ```
 
 # Contributing
