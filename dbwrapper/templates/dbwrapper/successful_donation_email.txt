@@ -2,11 +2,11 @@ Obrigado pela sua contribuição
 
 Olá {{ first_name }},
 
-O Fundo Patrimonial Amigos da Poli agradece imensamente sua contribuição. O valor doado será utilizado para apoiar projetos excepcionais da Escola Politécnica da Universidade de São Paulo, contribuindo para o desenvolvimento da engenharia e para a formação de engenheiros cada vez mais capacitados. Além disso, a doação contribui para o sucesso dessa iniciativa, que precisa se espalhar e atingir muitas outras universidades Brasil afora.
+O Fundo Patrimonial Amigos da Poli agradece sua contribuição. Seu apoio proporcionará mais projetos inovadores na Escola Politécnica da Universidade de São Paulo, contribuindo para o desenvolvimento dos alunos e o fortalecimento da engenharia.
 
 Valor doado: R$ {{ value }}
 
-Novamente expressamos nossa gratidão e nos colocamos a disposição para falarmos a respeito dos projetos apoiados e sobre a própria Associação.
+Mais detalhes do Amigos da Poli e dos últimos projetos apoiados em: http://www.amigosdapoli.com.br/media/amigos-da-poli-relatorio-anual-2016.pdf.
 {% if is_recurring %}
 Caso deseje cancelar sua doação recorrente, basta notificar os Amigos da Poli pelo e-mail contato@amigosdapoli.com.br
 {% endif %}
