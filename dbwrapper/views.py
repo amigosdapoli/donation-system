@@ -224,10 +224,13 @@ class DonationFormView(View):
                 payment_form.add_error(None,
                                        "Infelizmente, não conseguimos processar a sua doação. Nossa equipe já foi avisada. Por favor, tente novamente mais tarde.")
 
-        return render(
-                request,
-                'dbwrapper/donation_form.html',
-                {'donor_form': donor_form, 'donation_form': donation_form, 'payment_form': payment_form})
+        data = {'donor_form': donor_form,
+                'donation_form': donation_form,
+                'payment_form': payment_form,
+                'campaign_data': {"campaign_name": request.POST.get('campaign_name', ''),
+                                  "campaign_group": request.POST.get('campaign_group', '')}}
+
+        return render(request, 'dbwrapper/donation_form.html', data)
 
 
 class StatisticsView(View):

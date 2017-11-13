@@ -46,6 +46,9 @@ class FormDonation(forms.ModelForm):
         choices=INSTALLMENT_CHOICES,
         label="Duração",
         initial=INSTALLMENT_CHOICES[1][1])
+    campaign_name = forms.CharField(
+        widget=forms.HiddenInput(),
+    )
 
     class Meta:
         model = Donation
@@ -63,6 +66,12 @@ class FormPayment(forms.ModelForm):
         max_length=19,
         label="Número do cartão (VISA/MASTER)")
     captcha = ReCaptchaField(widget=ReCaptchaWidget(), label="Teste de segurança")
+    expiry_date_month = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'placeholder': 'MM', 'class': 'expiry_date_month'}),
+        label="Mês da data de vencimento")
+    expiry_date_year = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'placeholder': 'YY', 'class': 'expiry_date_year'}),
+        label="Ano da data de vencimento")
 
     def clean_card_number(self):
         card_number = self.cleaned_data.get("card_number")
@@ -74,12 +83,8 @@ class FormPayment(forms.ModelForm):
         fields = ("name_on_card", "card_number", "expiry_date_month", "expiry_date_year", "card_code",)
         labels = {
             "name_on_card": "Nome do titular",
-            "expiry_date_month": "Mês da data de vencimento",
-            "expiry_date_year": "Ano da data de vencimento",
             "card_code": "Código de segurança",
         }
         widgets = {
             'card_code': forms.NumberInput(attrs={'placeholder': 'CVV'}),
-            "expiry_date_month": forms.NumberInput(attrs={'placeholder': 'MM'}),
-            "expiry_date_year": forms.NumberInput(attrs={'placeholder': 'YY'}),
         }

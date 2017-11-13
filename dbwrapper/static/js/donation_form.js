@@ -4,6 +4,9 @@ $(document).ready(function(){
     $('.cpf').mask('000.000.000-00');
     $('.money').mask('000.000.000.000.000,00', {reverse: true});
     $('.card_number').mask('0000 0000 0000 0000');
+    $('.expiry_date_month').mask('00');
+    $('.expiry_date_year').mask('00');
+
 
     // Conditional fields
     $('input[name=is_recurring]').on('change', function() {
