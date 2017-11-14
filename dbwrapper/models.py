@@ -72,6 +72,10 @@ class Donation(models.Model):
         if not self.donation_id:
             self.created_at = timezone.now()
         self.updated_at = timezone.now()
+        if self.campaign_name is not None:
+            self.campaign_name = self.campaign_name.lower()
+        if self.campaign_group is not None:
+            self.campaign_group = self.campaign_group.lower()
         return super(Donation, self).save(*args, **kwargs)
 
 

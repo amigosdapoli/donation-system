@@ -45,7 +45,7 @@
                           {% endautoescape %},
                   datasets: [
                     {
-                      label: "Doações",
+                      label: "Doadores",
                       backgroundColor: "#3e95cd",
                       data: {{ data }}
                     }
@@ -55,13 +55,18 @@
                   legend: { display: false },
                   title: {
                     display: true,
-                    text: 'Doações Dia de Doar'
+                    text: 'Doadores Dia de Doar'
                   },
                   scales: {
                     xAxes: [{
+                        display: true,
+                        scaleLabel:{
+                            display: true,
+                            labelString: 'Número de doadores',
+                        },
                         ticks: {
                             beginAtZero:true,
-                            stepSize: 1,
+                            stepSize: 5,
                             min: 0,
                             max: {{ x_axis_max }}
                         }
