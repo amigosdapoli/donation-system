@@ -242,8 +242,9 @@ class StatisticsView(View):
             campaign_name__isnull=True).exclude(
             was_captured=False).exclude(
             campaign_name="None").exclude(
+            campaign_name="none").exclude(
             campaign_group="None").filter(
-            campaign_name="dia-de-doar").values('campaign_group').annotate(Count('donation_id')).order_by('campaign_group')
+            campaign_name="dia-de-doar").values('campaign_group').annotate(Count('donor_tax_id', distinct=True)).order_by('campaign_group')
         logger.info(queryset)
 
         labels = []
@@ -254,7 +255,7 @@ class StatisticsView(View):
         else:
             for row in queryset:
                 labels.append(row["campaign_group"].replace('-', ' ').replace('_', ' ').title())
-                data.append(row["donation_id__count"])
+                data.append(row["donor_tax_id__count"])
 
         template_data = {"labels": labels,
                          "data": data,
