@@ -1,5 +1,7 @@
 # donation-system (name yet to be defined)
 
+![travis-ci](https://travis-ci.org/amigosdapoli/donation-system.svg?branch=master)
+
 Donation system is an open source project to help non profit organizations to easily collect and manage one-off and recurring donations via credit card, invoice or other payment methods. The project is being developed to help Amigos da Poli with the challenge making donations interface user friendly and easier to manage. 
 
 Here is how the system will initially work: one page where donors can fill in information and register a one-off or a recurring donation and an admin page where the non profit fundraising responsible is able to easily consolidate all donation to the organization. 
