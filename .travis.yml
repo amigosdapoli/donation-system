@@ -22,6 +22,7 @@ install:
 
 before_script:
   - bash scripts/setup_database_linux.sh
+  - bash scripts/install_geckodriver.sh
 
 script:
   - bash scripts/build_donation-system.sh
