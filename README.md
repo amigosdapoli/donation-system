@@ -1,5 +1,6 @@
 # donation-system (name yet to be defined)
 
+[![Latest Release](https://img.shields.io/github/release/amigosdapoli/donation-system.svg?label=latest%20release)](https://github.com/amigosdapoli/donation-system/releases)
 [![travis-ci](https://travis-ci.org/amigosdapoli/donation-system.svg?branch=master)](https://travis-ci.org/amigosdapoli/donation-system)
 [![Maintainability](https://api.codeclimate.com/v1/badges/2726dc794a5d74e9572c/maintainability)](https://codeclimate.com/github/amigosdapoli/donation-system/maintainability)
 
