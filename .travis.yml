@@ -1,17 +1,16 @@
-language: python
-
+env:
+  global:
+    - DJANGO=1.11.3
+    - DISPLAY=:99.0
 sudo: required
 
+language: python
 python:
     - 3.5.2
 
 services: postgresql
-
 addons:
   firefox: "49.0"
-
-env:
-  - DJANGO=1.11.3
 
 before_install:
   - export DJANGO_SETTINGS_MODULE=POSCaD.settings.dev
