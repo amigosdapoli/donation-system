@@ -30,7 +30,7 @@ sudo apt-get update
 sudo apt-get install postgresql postgresql-contrib 
 
 # Set up database
-bash setup_database_linux.sh
+bash scripts/etup_database_linux.sh
 ```
 
 ## If in Mac
