@@ -1,0 +1,30 @@
+env:
+  global:
+    - DJANGO=1.11.3
+    - DISPLAY=:99.0
+sudo: required
+
+language: python
+python:
+    - 3.5.2
+
+services: postgresql
+addons:
+  firefox: latest
+
+before_install:
+  - export DJANGO_SETTINGS_MODULE=POSCaD.settings.dev
+  - export PYTHONPATH=$HOME/builds/amigosdapoli/donation-system
+  - export PIP_USE_MIRRORS=true
+
+install:
+  - pip install -r requirements.txt
+  - pip install django==$DJANGO --quiet
+  - pip install psycopg2 --quiet
+
+before_script:
+  - bash scripts/setup_database_linux.sh
+  - bash scripts/install_geckodriver.sh
+
+script:
+  - bash scripts/build_donation-system.sh

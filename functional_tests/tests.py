@@ -47,11 +47,11 @@ class NewDonorTest(LiveServerTestCase):
         # ...and surname.
         surname_input_box.send_keys("Silva")
 
-        # Identifies the text box for her CNPJ...
-        CPNJ_input_box = self.browser.find_element_by_xpath("//label[contains(text(),'CPF')]")
+        # Identifies the text box for her CPF...
+        CPF_input_box = self.browser.find_element_by_xpath("//label[contains(text(),'CPF')]")
 
         # ... and inputs her own
-        CPNJ_input_box.send_keys("37002113844")
+        CPF_input_box.send_keys("128.164.150-23")
 
         # Identifies the text box for her phone number...
         phone_input_box = self.browser.find_element_by_xpath("//label[contains(text(),'Telefone')]")
@@ -111,7 +111,7 @@ class NewDonorTest(LiveServerTestCase):
         # ...And inputs hers
         name_input_box.send_keys("Maria")
         surname_input_box.send_keys("Silva")
-        CPNJ_input_box.send_keys("37002113844")
+        CPNJ_input_box.send_keys("128.164.150-23")
         phone_input_box.send_keys("11998765432")
         email_input_box.send_keys("fernandosjp@gmail.com")
 
@@ -134,9 +134,9 @@ class NewDonorTest(LiveServerTestCase):
         time.sleep(5)
 
         self.assertIn('Alguns dados precisam ser corrigidos:', self.browser.page_source)
-        self.assertIn('Número do cartão (VISA/MASTER): Certifique-se de que', self.browser.page_source)
+        self.assertIn('Erro nas informações de cartão de crédito enviadas.', self.browser.page_source)
 
-    def test_can_enter_donation_form_and_execute_donation(self):
+    def test_donor_fills_wrong_credit_card_and_gets_error(self):
         # Donor has heard about the opportunity to donate to the organization and enters the website
         self.browser.get(self.live_server_url)
 
@@ -175,7 +175,7 @@ class NewDonorTest(LiveServerTestCase):
         CPNJ_input_box = self.browser.find_element_by_xpath("//label[contains(text(),'CPF')]")
 
         # ... and inputs her own
-        CPNJ_input_box.send_keys("37002113844")
+        CPNJ_input_box.send_keys("128.164.150-23")
 
         # Identifies the text box for her phone number...
         phone_input_box = self.browser.find_element_by_xpath("//label[contains(text(),'Telefone')]")
