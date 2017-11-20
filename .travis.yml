@@ -32,7 +32,7 @@ before_script:
 script:
   - bash scripts/build_donation-system.sh
   - coverage run --source 'POSCaD,dbwrapper' --omit 'venv/*' manage.py test dbwrapper
-  - coverage report
+  - coverage xml
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
