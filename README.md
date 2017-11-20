@@ -1,7 +1,9 @@
 # donation-system (name yet to be defined)
 
-[![travis-ci](https://travis-ci.org/amigosdapoli/donation-system.svg?branch=master)](https://travis-ci.org/amigosdapoli/donation-system)
+[![Latest Release](https://img.shields.io/github/release/amigosdapoli/donation-system.svg?label=latest%20release)](https://github.com/amigosdapoli/donation-system/releases)
+[![Travis-CI](https://travis-ci.org/amigosdapoli/donation-system.svg?branch=master)](https://travis-ci.org/amigosdapoli/donation-system)
 [![Maintainability](https://api.codeclimate.com/v1/badges/2726dc794a5d74e9572c/maintainability)](https://codeclimate.com/github/amigosdapoli/donation-system/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/2726dc794a5d74e9572c/test_coverage)](https://codeclimate.com/github/amigosdapoli/donation-system/test_coverage)
 
 Donation system is an open source project to help non profit organizations to easily collect and manage one-off and recurring donations via credit card, invoice or other payment methods. The project is being developed to help Amigos da Poli with the challenge making donations interface user friendly and easier to manage. 
 

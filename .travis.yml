@@ -2,6 +2,8 @@ env:
   global:
     - DJANGO=1.11.3
     - DISPLAY=:99.0
+    - CC_TEST_REPORTER_ID=7258bc8fa5569217ee14f1caa8fd0f39ac04feeb2cfd92e2f300a509406e4596
+
 sudo: required
 
 language: python
@@ -25,6 +27,12 @@ install:
 before_script:
   - bash scripts/setup_database_linux.sh
   - bash scripts/install_geckodriver.sh
+  - bash scripts/prepare_codeclimate_testcoverage.sh
 
 script:
   - bash scripts/build_donation-system.sh
+  - coverage run --source 'POSCaD,dbwrapper' --omit 'venv/*' manage.py test dbwrapper
+  - coverage xml
+
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
