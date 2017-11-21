@@ -12,10 +12,12 @@ admin.site.disable_action('delete_selected')
 
 class DonationAdmin(admin.ModelAdmin):
     actions = ['download_csv']
-    search_fields = ('donor_full_name', 'donor_tax_id')
+    search_fields = ('donor_tax_id',)
     list_display = ('created_at_format', 'donor_full_name', 'donor_email', 'donor_phone_number', 'order_id', \
                     'nsu_id', 'donor_tax_id', 'donation_value', 'is_recurring', 'was_captured')
     list_filter = ('was_captured', 'created_at',)
+    list_select_related = ("donor",)
+
 
     def download_csv(self, request, queryset):
         """
@@ -24,12 +26,6 @@ class DonationAdmin(admin.ModelAdmin):
 
         today = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = 'donations{}.csv'.format(today)
-
-        donation_ids = []
-        for s in queryset:
-            donation_ids.append(s.donation_id)
-
-        donations = Donation.objects.select_related("donor").filter(donation_id__in=donation_ids)
 
         columns = [
             "created_at",
@@ -47,7 +43,7 @@ class DonationAdmin(admin.ModelAdmin):
         writer = csv.writer(f)
         writer.writerow(columns)
 
-        for s in donations:
+        for s in queryset:
             writer.writerow([
                 s.created_at,
                 s.donor.name.title() + " " + s.donor.surname.title(),
