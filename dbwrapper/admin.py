@@ -22,7 +22,7 @@ class DonationAdmin(admin.ModelAdmin):
         Generates csv for download.
         """
 
-        today = datetime.now().strftime("%Y%m%d")
+        today = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = 'donations{}.csv'.format(today)
 
         donation_ids = []
