@@ -37,7 +37,7 @@
     <div align="center" class="donation-form">
         <h2>Resultados consolidados</h2>
         <h4 align="left">Meta = 800 doadores</h4>
-        <canvas id="bar-chart-horizontal-total" height="50"></canvas>
+        <canvas id="bar-chart-horizontal-total" height="50px"></canvas>
         <script>
             new Chart(document.getElementById("bar-chart-horizontal-total"), {
                 type: 'horizontalBar',
@@ -60,13 +60,10 @@
                   scales: {
                     xAxes: [{
                         display: true,
-                        scaleLabel:{
-                            display: true,
-                            labelString: 'Número de doadores',
-                        },
+                        labelString: 'Número de doadores',
                         ticks: {
                             beginAtZero:true,
-                            stepSize: 100,
+                            stepSize: 200,
                             min: 0,
                             max: 800
                         }
