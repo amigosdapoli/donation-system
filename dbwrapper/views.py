@@ -259,7 +259,10 @@ class StatisticsView(View):
 
         email_to_exclude = '@yopmail.com'
         total_qs = Donation.objects.exclude(
-            donor__email__endswith=email_to_exclude).filter(
+            donor__email__endswith=email_to_exclude).exclude(
+            donor__name__icontains='nadjon').exclude(
+            donor__surname__icontains='aquino').exclude(
+            donor__name__icontains='nome').filter(
             was_captured=True).filter(
             donation_value__gte=10.0).aggregate(Count('donor_tax_id', distinct=True))
         total = 180 + total_qs['donor_tax_id__count']
