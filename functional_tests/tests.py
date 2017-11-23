@@ -37,25 +37,26 @@ class NewDonorTest(LiveServerTestCase):
         phone_input_box.send_keys("11998765432")
         email_input_box.send_keys("teste@gmail.com")
 
-    def test_can_enter_donation_form_and_execute_donation(self):
-        # Donor has heard about the opportunity to donate to the organization and enters the website
-        self.browser.get(self.live_server_url)
-
-        self.fill_in_donation_fields_right()
-        self.fill_in_personal_fields_right()
-
+    def fill_in_cc_fields(self, credit_card_number):
         # Inputs Payment details
         cc_name = self.browser.find_element_by_id("id_name_on_card")
         cc_name.send_keys("Fulano de Tal")
         cc_number = self.browser.find_element_by_id("id_card_number")
-        cc_number.send_keys("4111111111111111")
+        cc_number.send_keys(credit_card_number)
         cc_expire_month = self.browser.find_element_by_id("id_expiry_date_month")
         cc_expire_month.send_keys("12")
         cc_expire_year = self.browser.find_element_by_id("id_expiry_date_year")
         cc_expire_year.send_keys("18")
         cc_cvv = self.browser.find_element_by_id("id_card_code")
         cc_cvv.send_keys("123")
-        time.sleep(5)
+
+    def test_can_enter_donation_form_and_execute_donation(self):
+        # Donor has heard about the opportunity to donate to the organization and enters the website
+        self.browser.get(self.live_server_url)
+
+        self.fill_in_donation_fields_right()
+        self.fill_in_personal_fields_right()
+        self.fill_in_cc_fields("4111111111111111")
 
         # Submit
         submit = self.browser.find_element_by_name("subbtn")
@@ -73,19 +74,7 @@ class NewDonorTest(LiveServerTestCase):
 
         self.fill_in_donation_fields_right()
         self.fill_in_personal_fields_right()
-
-        # Inputs Payment details
-        cc_name = self.browser.find_element_by_id("id_name_on_card")
-        cc_name.send_keys("Fulano de Tal")
-        cc_number = self.browser.find_element_by_id("id_card_number")
-        cc_number.send_keys("411111111111111") # Missing one number
-        cc_expire_month = self.browser.find_element_by_id("id_expiry_date_month")
-        cc_expire_month.send_keys("12")
-        cc_expire_year = self.browser.find_element_by_id("id_expiry_date_year")
-        cc_expire_year.send_keys("18")
-        cc_cvv = self.browser.find_element_by_id("id_card_code")
-        cc_cvv.send_keys("123")
-        time.sleep(5)
+        self.fill_in_cc_fields("411111111111111") # Missing one number
 
         # Submit
         submit = self.browser.find_element_by_name("subbtn")
@@ -101,19 +90,7 @@ class NewDonorTest(LiveServerTestCase):
 
         self.fill_in_donation_fields_right()
         self.fill_in_personal_fields_right()
-
-        # Inputs Payment details
-        cc_name = self.browser.find_element_by_id("id_name_on_card")
-        cc_name.send_keys("Fulano de Tal")
-        cc_number = self.browser.find_element_by_id("id_card_number")
-        cc_number.send_keys("4111111111111112")
-        cc_expire_month = self.browser.find_element_by_id("id_expiry_date_month")
-        cc_expire_month.send_keys("12")
-        cc_expire_year = self.browser.find_element_by_id("id_expiry_date_year")
-        cc_expire_year.send_keys("18")
-        cc_cvv = self.browser.find_element_by_id("id_card_code")
-        cc_cvv.send_keys("123")
-        time.sleep(5)
+        self.fill_in_cc_fields("4111111111111112")
 
         # Submit
         submit = self.browser.find_element_by_name("subbtn")
