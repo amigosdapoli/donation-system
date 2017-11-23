@@ -257,8 +257,19 @@ class StatisticsView(View):
                 labels.append(row["campaign_group"].replace('-', ' ').replace('_', ' ').title())
                 data.append(row["donor_tax_id__count"])
 
-        template_data = {"labels": labels,
+        email_to_exclude = '@yopmail.com'
+        total_qs = Donation.objects.exclude(
+            donor__email__endswith=email_to_exclude).filter(
+            was_captured=True).filter(
+            donation_value__gte=10.0).aggregate(Count('donor_tax_id', distinct=True))
+        total = 180 + total_qs['donor_tax_id__count']
+        logger.info(total)
+
+        template_data = {"total": total,
+                         "labels": labels,
                          "data": data,
                          "x_axis_max": max(data)+1}
         logger.info(template_data)
+
+
         return render(request, 'dbwrapper/statistics.html', template_data)

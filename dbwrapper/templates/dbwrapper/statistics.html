@@ -35,6 +35,51 @@
     </div>
     <center>
     <div align="center" class="donation-form">
+        <h2>Resultados consolidados</h2>
+        <h4 align="left">Meta = 800 doadores</h4>
+        <canvas id="bar-chart-horizontal-total" height="50"></canvas>
+        <script>
+            new Chart(document.getElementById("bar-chart-horizontal-total"), {
+                type: 'horizontalBar',
+                data: {
+                  labels: ["Total"],
+                  datasets: [
+                    {
+                      label: "Doadores",
+                      backgroundColor: "#3e95cd",
+                      data: [{{ total }}]
+                    }
+                  ]
+                },
+                options: {
+                  legend: { display: false },
+                  title: {
+                    display: true,
+                    text: 'Total de doadores durante o Mês de Doar'
+                  },
+                  scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel:{
+                            display: true,
+                            labelString: 'Número de doadores',
+                        },
+                        ticks: {
+                            beginAtZero:true,
+                            stepSize: 100,
+                            min: 0,
+                            max: 800
+                        }
+                    }],
+                    yAxes: [{
+                        barPercentage: 1.0,
+                        categoryPercentage: 1.0,
+                    }]
+                  }
+                }
+            });
+        </script>
+        <h2>Grupos de alunos apoiadores da campanha</h2>
         <canvas id="bar-chart-horizontal"></canvas>
         <script>
             new Chart(document.getElementById("bar-chart-horizontal"), {
@@ -55,7 +100,7 @@
                   legend: { display: false },
                   title: {
                     display: true,
-                    text: 'Doadores Dia de Doar'
+                    text: 'Doadores Mês de Doar'
                   },
                   scales: {
                     xAxes: [{
