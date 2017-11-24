@@ -265,7 +265,9 @@ class StatisticsView(View):
             donor__name__icontains='nome').filter(
             was_captured=True).filter(
             donation_value__gte=10.0).aggregate(Count('donor_tax_id', distinct=True))
-        total = 180 + total_qs['donor_tax_id__count']
+
+        base_donors = 0
+        total = base_donors + total_qs['donor_tax_id__count']
         logger.info(total)
 
         template_data = {"total": total,
