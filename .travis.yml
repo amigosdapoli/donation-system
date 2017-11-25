@@ -31,7 +31,7 @@ before_script:
 
 script:
   - bash scripts/build_donation-system.sh
-  - coverage run --source 'POSCaD,dbwrapper' --omit 'venv/*' manage.py test dbwrapper
+  - coverage run --source 'POSCaD,dbwrapper' --omit 'venv/*' manage.py test
   - coverage xml
 
 after_script:
