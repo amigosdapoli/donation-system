@@ -244,7 +244,7 @@ class StatisticsView(View):
             campaign_name="None").exclude(
             campaign_name="none").exclude(
             campaign_group="None").filter(
-            campaign_name="dia-de-doar").values('campaign_group').annotate(Count('donor_tax_id', distinct=True)).order_by('campaign_group')
+            campaign_name="dia-de-doar").values('campaign_group').annotate(donor_count=Count('donor_tax_id', distinct=True)).order_by('-donor_count')
         logger.info(queryset)
 
         labels = []
@@ -255,7 +255,7 @@ class StatisticsView(View):
         else:
             for row in queryset:
                 labels.append(row["campaign_group"].replace('-', ' ').replace('_', ' ').title())
-                data.append(row["donor_tax_id__count"])
+                data.append(row["donor_count"])
 
         email_to_exclude = '@yopmail.com'
         total_qs = Donation.objects.exclude(
