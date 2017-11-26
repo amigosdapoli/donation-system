@@ -244,7 +244,8 @@ class StatisticsView(View):
             campaign_name="None").exclude(
             campaign_name="none").exclude(
             campaign_group="None").filter(
-            campaign_name="dia-de-doar").values('campaign_group').annotate(donor_count=Count('donor_tax_id', distinct=True)).order_by('-donor_count')
+            campaign_name="dia-de-doar").filter(
+            donation_value__gte=10.0).values('campaign_group').annotate(donor_count=Count('donor_tax_id', distinct=True)).order_by('-donor_count')
         logger.info(queryset)
 
         labels = []
