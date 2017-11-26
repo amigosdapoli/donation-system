@@ -16,7 +16,7 @@ Pillow==4.2.1
 psycopg2==2.7.1
 pytz==2017.2
 requests==2.4.3
-selenium==3.4.3
+selenium==3.7.0
 six==1.11.0
 tornado==4.5.2
 gunicorn==19.7.1
