@@ -266,7 +266,8 @@ class StatisticsView(View):
             donor__surname__icontains='aquino').exclude(
             donor__name__icontains='nome').filter(
             was_captured=True).filter(
-            donation_value__gte=10.0).aggregate(Count('donor_tax_id', distinct=True))
+            donation_value__gte=10.0).filter(
+            created_at__month='11').aggregate(Count('donor_tax_id', distinct=True))
 
         base_donors = 0
         total = base_donors + total_qs['donor_tax_id__count']
