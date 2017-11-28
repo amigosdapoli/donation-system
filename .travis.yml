@@ -12,7 +12,7 @@ python:
 
 services: postgresql
 addons:
-  firefox: latest
+  firefox: 56.0.2
 
 before_install:
   - export DJANGO_SETTINGS_MODULE=POSCaD.settings.dev
