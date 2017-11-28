@@ -1,8 +1,12 @@
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import WebDriverException
 import time
 import os
+
+MAX_WAIT = 10
+
 
 class NewDonorTest(LiveServerTestCase):
     def setUp(self):
@@ -11,6 +15,16 @@ class NewDonorTest(LiveServerTestCase):
 
     def tearDown(self):
         self.browser.quit()
+
+    def wait_for(self, fn):
+        start_time = time.time()
+        while True:
+            try:
+                return fn()  
+            except (AssertionError, WebDriverException) as e:
+                if time.time() - start_time > MAX_WAIT:
+                    raise e
+                time.sleep(0.5)
 
     def fill_in_donation_fields_right(self):
         # She identifies the text box to input donation value
@@ -61,9 +75,8 @@ class NewDonorTest(LiveServerTestCase):
         # Submit
         submit = self.browser.find_element_by_name("subbtn")
         submit.send_keys(Keys.ENTER)
-        time.sleep(5)
 
-        self.assertIn('Muito obrigado pela sua doação!', self.browser.page_source)
+        self.wait_for(lambda: self.assertIn('Muito obrigado pela sua doação!', self.browser.page_source))
 
     def test_donor_fills_wrong_info_and_gets_list_of_fields_to_correct(self):
         """
@@ -79,9 +92,8 @@ class NewDonorTest(LiveServerTestCase):
         # Submit
         submit = self.browser.find_element_by_name("subbtn")
         submit.send_keys(Keys.ENTER)
-        time.sleep(5)
 
-        self.assertIn('Alguns dados precisam ser corrigidos:', self.browser.page_source)
+        self.wait_for(lambda: self.assertIn('Alguns dados precisam ser corrigidos:', self.browser.page_source))
         self.assertIn('Erro nas informações de cartão de crédito enviadas.', self.browser.page_source)
 
     def test_donor_fills_wrong_credit_card_and_gets_error(self):
@@ -95,6 +107,5 @@ class NewDonorTest(LiveServerTestCase):
         # Submit
         submit = self.browser.find_element_by_name("subbtn")
         submit.send_keys(Keys.ENTER)
-        time.sleep(5)
 
-        self.assertIn('Erro nas informações de cartão de crédito enviadas.', self.browser.page_source)
+        self.wait_for(lambda: self.assertIn('Erro nas informações de cartão de crédito enviadas.', self.browser.page_source))
