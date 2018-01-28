@@ -245,7 +245,7 @@ class StatisticsView(View):
             campaign_name="none").exclude(
             campaign_group="None").filter(
             campaign_name="dia-de-doar").filter(
-            donation_value__gte=10.0).filter(
+            donation_value__gte=5.0).filter(
             created_at__month='11').values('campaign_group').annotate(donor_count=Count('donor_tax_id', distinct=True)).order_by('-donor_count')
         logger.info(queryset)
 
@@ -266,10 +266,10 @@ class StatisticsView(View):
             donor__surname__icontains='aquino').exclude(
             donor__name__icontains='nome').filter(
             was_captured=True).filter(
-            donation_value__gte=10.0).filter(
+            donation_value__gte=5.0).filter(
             created_at__month='11').aggregate(Count('donor_tax_id', distinct=True))
 
-        base_donors = 0
+        base_donors = 95
         total = base_donors + total_qs['donor_tax_id__count']
         logger.info(total)
 

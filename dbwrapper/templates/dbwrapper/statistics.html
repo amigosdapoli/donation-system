@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
     <!-- http://tobiasahlin.com/blog/chartjs-charts-to-get-you-started/#1-bar-chart -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script> 
 
 
     <script>
@@ -47,7 +47,7 @@
                     {
                       label: "Doadores",
                       backgroundColor: "#3e95cd",
-                      data: [{{ total }}]
+                      data: ["{{ total }}".replace('.','')]
                     }
                   ]
                 },
@@ -65,7 +65,14 @@
                             beginAtZero:true,
                             stepSize: 200,
                             min: 0,
-                            max: 800
+                            max: 1400,
+                            callback: function(value, index, values) {
+                              if(parseInt(value) >= 1000){
+                                return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                              } else {
+                                return value;
+                              }
+                            }
                         }
                     }],
                     yAxes: [{
@@ -108,7 +115,7 @@
                         },
                         ticks: {
                             beginAtZero:true,
-                            stepSize: 5,
+                            stepSize: 20,
                             min: 0,
                             max: {{ x_axis_max }}
                         }
@@ -117,7 +124,7 @@
                 }
             });
         </script>
-        <i><p align="left"><sup>1</sup>: doadores com doação de 10 reais ou mais.</p></i>
+        <i><p align="left"><sup>1</sup>: doadores com doação de 5 reais ou mais.</p></i>
     </div>
     </center>
     <footer>
