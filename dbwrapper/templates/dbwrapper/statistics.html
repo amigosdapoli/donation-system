@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
     <!-- http://tobiasahlin.com/blog/chartjs-charts-to-get-you-started/#1-bar-chart -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script> 
 
 
     <script>
@@ -35,6 +35,55 @@
     </div>
     <center>
     <div align="center" class="donation-form">
+        <h2>Resultados consolidados</h2>
+        <h4 align="left">Meta = 800 doadores<sup>1</sup></h4>
+        <canvas id="bar-chart-horizontal-total" height="50px"></canvas>
+        <script>
+            new Chart(document.getElementById("bar-chart-horizontal-total"), {
+                type: 'horizontalBar',
+                data: {
+                  labels: ["Total"],
+                  datasets: [
+                    {
+                      label: "Doadores",
+                      backgroundColor: "#3e95cd",
+                      data: ["{{ total }}".replace('.','')]
+                    }
+                  ]
+                },
+                options: {
+                  legend: { display: false },
+                  title: {
+                    display: true,
+                    text: 'Total de doadores durante o Mês de Doar'
+                  },
+                  scales: {
+                    xAxes: [{
+                        display: true,
+                        labelString: 'Número de doadores',
+                        ticks: {
+                            beginAtZero:true,
+                            stepSize: 200,
+                            min: 0,
+                            max: 1400,
+                            callback: function(value, index, values) {
+                              if(parseInt(value) >= 1000){
+                                return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                              } else {
+                                return value;
+                              }
+                            }
+                        }
+                    }],
+                    yAxes: [{
+                        barPercentage: 1.0,
+                        categoryPercentage: 1.0,
+                    }]
+                  }
+                }
+            });
+        </script>
+        <h2>Grupos de alunos apoiadores da campanha</h2>
         <canvas id="bar-chart-horizontal"></canvas>
         <script>
             new Chart(document.getElementById("bar-chart-horizontal"), {
@@ -55,7 +104,7 @@
                   legend: { display: false },
                   title: {
                     display: true,
-                    text: 'Doadores Dia de Doar'
+                    text: 'Doadores Mês de Doar'
                   },
                   scales: {
                     xAxes: [{
@@ -66,7 +115,7 @@
                         },
                         ticks: {
                             beginAtZero:true,
-                            stepSize: 5,
+                            stepSize: 20,
                             min: 0,
                             max: {{ x_axis_max }}
                         }
@@ -75,6 +124,7 @@
                 }
             });
         </script>
+        <i><p align="left"><sup>1</sup>: doadores com doação de 5 reais ou mais.</p></i>
     </div>
     </center>
     <footer>

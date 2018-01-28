@@ -244,7 +244,9 @@ class StatisticsView(View):
             campaign_name="None").exclude(
             campaign_name="none").exclude(
             campaign_group="None").filter(
-            campaign_name="dia-de-doar").values('campaign_group').annotate(Count('donor_tax_id', distinct=True)).order_by('campaign_group')
+            campaign_name="dia-de-doar").filter(
+            donation_value__gte=5.0).filter(
+            created_at__month='11').values('campaign_group').annotate(donor_count=Count('donor_tax_id', distinct=True)).order_by('-donor_count')
         logger.info(queryset)
 
         labels = []
@@ -255,10 +257,27 @@ class StatisticsView(View):
         else:
             for row in queryset:
                 labels.append(row["campaign_group"].replace('-', ' ').replace('_', ' ').title())
-                data.append(row["donor_tax_id__count"])
+                data.append(row["donor_count"])
 
-        template_data = {"labels": labels,
+        email_to_exclude = '@yopmail.com'
+        total_qs = Donation.objects.exclude(
+            donor__email__endswith=email_to_exclude).exclude(
+            donor__name__icontains='nadjon').exclude(
+            donor__surname__icontains='aquino').exclude(
+            donor__name__icontains='nome').filter(
+            was_captured=True).filter(
+            donation_value__gte=5.0).filter(
+            created_at__month='11').aggregate(Count('donor_tax_id', distinct=True))
+
+        base_donors = 95
+        total = base_donors + total_qs['donor_tax_id__count']
+        logger.info(total)
+
+        template_data = {"total": total,
+                         "labels": labels,
                          "data": data,
                          "x_axis_max": max(data)+1}
         logger.info(template_data)
+
+
         return render(request, 'dbwrapper/statistics.html', template_data)
