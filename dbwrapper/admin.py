@@ -1,7 +1,10 @@
 from django.contrib import admin
 from django.http import HttpResponse
 from .models import Donation, Donor
+<<<<<<< HEAD
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
+=======
+>>>>>>> 12f38bfd8a96b9f2c93959ef189457faf8992947
 import io
 import csv
 import logging
@@ -19,7 +22,6 @@ class DonationAdmin(admin.ModelAdmin):
                     'nsu_id', 'donor_tax_id', 'donation_value', 'is_recurring', 'was_captured')
     list_filter = ('was_captured', ('created_at', DateTimeRangeFilter), 'created_at')
     list_select_related = ("donor",)
-
 
     def download_csv(self, request, queryset):
         """
