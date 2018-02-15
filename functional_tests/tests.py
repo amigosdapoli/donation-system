@@ -1,4 +1,5 @@
-from django.test import LiveServerTestCase
+from django.test import LiveServerTestCase, Client
+from django.contrib.auth.models import User
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
@@ -38,6 +39,7 @@ class NewDonorTest(LiveServerTestCase):
 
     def fill_in_personal_fields_right(self):
         # She starts filling in personal information
+
         # First, she identifies the boxes to write then she fill them in...
 
         # Identifies the text box for her phone number...
@@ -112,3 +114,36 @@ class NewDonorTest(LiveServerTestCase):
         submit.send_keys(Keys.ENTER)
 
         self.wait_for(lambda: self.assertIn('Erro nas informações de cartão de crédito enviadas.', self.browser.page_source))
+
+    def _create_user(self):
+        self.username = "test_admin"
+        self.password = User.objects.make_random_password()
+        user, created = User.objects.get_or_create(username=self.username)
+        user.set_password(self.password)
+        user.is_staff = True
+        user.is_superuser = True
+        user.is_active = True
+        user.save()
+        self.user = user
+
+    def test_admin_pages(self):
+        self._create_user()
+        client = Client()
+        client.login(username=self.username, password=self.password)
+        admin_pages = [
+            "/admin/",
+            # put all the admin pages for your models in here.
+            "/admin/auth/",
+            "/admin/auth/group/",
+            "/admin/auth/group/add/",
+            "/admin/auth/user/",
+            "/admin/auth/user/add/",
+            "/admin/password_change/",
+            "/admin/dbwrapper/donation/",
+            "/admin/dbwrapper/donor/",
+        ]
+        for page in admin_pages:
+            resp = client.get(page)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(b'<!DOCTYPE html', resp.content)
+
