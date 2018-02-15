@@ -39,6 +39,7 @@ class NewDonorTest(LiveServerTestCase):
 
     def fill_in_personal_fields_right(self):
         # She starts filling in personal information
+
         # First, she identifies the boxes to write then she fill them in...
 
         # Identifies the text box for her phone number...
@@ -138,8 +139,8 @@ class NewDonorTest(LiveServerTestCase):
             "/admin/auth/user/",
             "/admin/auth/user/add/",
             "/admin/password_change/",
-            "/admin/dbwrapper/donation",
-            "/admin/dbwrapper/donor",
+            "/admin/dbwrapper/donation/",
+            "/admin/dbwrapper/donor/",
         ]
         for page in admin_pages:
             resp = client.get(page)
