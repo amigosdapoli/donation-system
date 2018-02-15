@@ -2,6 +2,7 @@ from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.firefox.options import Options
 import time
 import os
 
@@ -10,7 +11,9 @@ MAX_WAIT = 10
 
 class NewDonorTest(LiveServerTestCase):
     def setUp(self):
-        self.browser = webdriver.Firefox(executable_path='/usr/local/bin/geckodriver')
+        options = Options()
+        #options.add_argument('-headless')
+        self.browser = webdriver.Firefox(executable_path='/usr/local/bin/geckodriver', firefox_options=options)
         os.environ['RECAPTCHA_DISABLE'] = 'True'
 
     def tearDown(self):
@@ -28,7 +31,7 @@ class NewDonorTest(LiveServerTestCase):
 
     def fill_in_donation_fields_right(self):
         # She identifies the text box to input donation value
-        donation_input_box = self.browser.find_element_by_xpath("//label[contains(text(),'Valor da doação')]")
+        donation_input_box = self.browser.find_element_by_id("id_donation_value")
 
         # She sees a text box to input the donation value
         donation_input_box.send_keys('50')
@@ -38,11 +41,11 @@ class NewDonorTest(LiveServerTestCase):
         # First, she identifies the boxes to write then she fill them in...
 
         # Identifies the text box for her phone number...
-        name_input_box = self.browser.find_element_by_xpath("//label[contains(text(),'Nome')]")
-        surname_input_box = self.browser.find_element_by_xpath("//label[contains(text(),'Sobrenome')]")
-        CPNJ_input_box = self.browser.find_element_by_xpath("//label[contains(text(),'CPF')]")
-        phone_input_box = self.browser.find_element_by_xpath("//label[contains(text(),'Telefone')]")
-        email_input_box = self.browser.find_element_by_xpath("//label[contains(text(),'E-mail')]")
+        name_input_box = self.browser.find_element_by_id("id_name")
+        surname_input_box = self.browser.find_element_by_id("id_surname")
+        CPNJ_input_box = self.browser.find_element_by_id("id_tax_id_no_pk_validation")
+        phone_input_box = self.browser.find_element_by_id("id_phone_number")
+        email_input_box = self.browser.find_element_by_id("id_email")
 
         # ...And inputs hers
         name_input_box.send_keys("Maria")
