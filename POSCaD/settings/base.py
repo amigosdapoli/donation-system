@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'snowpenguin.django.recaptcha2',
+    'rangefilter',
 ]
 
 REST_FRAMEWORK = {

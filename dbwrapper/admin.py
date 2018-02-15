@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.http import HttpResponse
 from .models import Donation, Donor
+from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 import io
 import csv
 import logging
@@ -10,12 +11,13 @@ logger = logging.getLogger(__name__)
 
 admin.site.disable_action('delete_selected')
 
+
 class DonationAdmin(admin.ModelAdmin):
     actions = ['download_csv']
     search_fields = ('donor_tax_id',)
     list_display = ('created_at_format', 'donor_full_name', 'donor_email', 'donor_phone_number', 'order_id', \
                     'nsu_id', 'donor_tax_id', 'donation_value', 'is_recurring', 'was_captured')
-    list_filter = ('was_captured', 'created_at',)
+    list_filter = ('was_captured', ('created_at', DateTimeRangeFilter), 'created_at')
     list_select_related = ("donor",)
 
 
@@ -27,16 +29,10 @@ class DonationAdmin(admin.ModelAdmin):
         today = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = 'donations{}.csv'.format(today)
 
-        columns = [
-            "created_at",
-            "donor_full_name",
-            "donor_email",
-            "donor_phone_number",
-            "order_id",
-            "nsu_id",
-            "donor_tax_id",
-            "donation_value",
-            "is_recurring",
+        columns = ["created_at", "donor_full_name",
+            "donor_email", "donor_phone_number",
+            "order_id", "nsu_id", "donor_tax_id",
+            "donation_value", "is_recurring",
             "was_captured"]
 
         f = io.StringIO()
