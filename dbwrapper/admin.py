@@ -1,10 +1,7 @@
 from django.contrib import admin
 from django.http import HttpResponse
 from .models import Donation, Donor
-<<<<<<< HEAD
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
-=======
->>>>>>> 12f38bfd8a96b9f2c93959ef189457faf8992947
 import io
 import csv
 import logging
