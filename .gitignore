@@ -2,6 +2,7 @@ venv/
 .idea/
 geckodriver.log
 __pycache__
+.env
 .sass-cache
 *.swp
 *.swo
