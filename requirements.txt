@@ -15,6 +15,7 @@ olefile==0.44
 phonenumberslite==8.8.0
 Pillow==4.2.1
 psycopg2==2.7.1
+python-dotenv==0.7.1
 pytz==2017.2
 requests==2.4.3
 selenium==3.9.0
