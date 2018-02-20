@@ -80,6 +80,7 @@ class DonationFormView(View):
             new_donation.donation_value = donation_form.cleaned_data['donation_value']
             new_donation.donor = donor
             new_donation.donor_tax_id = donor.tax_id
+            new_donation.donor_ip_address = request.META['REMOTE_ADDR']
             new_donation.referral_channel = donation_form.cleaned_data['referral_channel']
             if request.POST.get('is_recurring') == "Mensal":
                 new_donation.is_recurring = True

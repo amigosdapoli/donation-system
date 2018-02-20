@@ -53,6 +53,7 @@ class Donation(models.Model):
     donation_value = models.DecimalField(max_digits=8, decimal_places=2)
     donor = models.ForeignKey(Donor, on_delete=models.CASCADE)
     donor_tax_id = models.CharField(max_length=15)
+    donor_ip_address = models.GenericIPAddressField(null=True, blank=True)
     is_recurring = models.NullBooleanField(null=True, default=False)
     was_captured = models.NullBooleanField(null=True, default=False)
     response_code = models.IntegerField(default=None, blank=True, null=True)
