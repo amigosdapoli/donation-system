@@ -1,5 +1,6 @@
 from django.test import LiveServerTestCase, Client
 from django.contrib.auth.models import User
+from dbwrapper.models import EmailBlacklist
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
@@ -11,6 +12,10 @@ MAX_WAIT = 10
 
 
 class NewDonorTest(LiveServerTestCase):
+    RIGHT_CC_NUMBER = "4111111111111111"
+    MISSING_ONE_CC_NUMBER = "411111111111111"
+    WRONG_CC_NUMBER = "4111111111111112"
+
     def setUp(self):
         options = Options()
         #options.add_argument('-headless')
@@ -30,14 +35,22 @@ class NewDonorTest(LiveServerTestCase):
                     raise e
                 time.sleep(0.5)
 
-    def fill_in_donation_fields_right(self):
+    def fill_in_donation_fields_right(self, is_recurring=False):
         # She identifies the text box to input donation value
         donation_input_box = self.browser.find_element_by_id("id_donation_value")
 
         # She sees a text box to input the donation value
         donation_input_box.send_keys('50')
 
-    def fill_in_personal_fields_right(self):
+        if is_recurring:
+            self.browser.find_element_by_xpath(
+                ".//*[contains(text(), 'Mensal')]"
+            ).click()
+
+    def fill_in_personal_fields_right(self, email=None):
+        if email is None:
+            email = "teste@gmail.com"
+
         # She starts filling in personal information
 
         # First, she identifies the boxes to write then she fill them in...
@@ -54,7 +67,7 @@ class NewDonorTest(LiveServerTestCase):
         surname_input_box.send_keys("Silva")
         CPNJ_input_box.send_keys("128.164.150-23")
         phone_input_box.send_keys("11998765432")
-        email_input_box.send_keys("teste@gmail.com")
+        email_input_box.send_keys(email)
 
     def fill_in_cc_fields(self, credit_card_number):
         # Inputs Payment details
@@ -75,7 +88,21 @@ class NewDonorTest(LiveServerTestCase):
 
         self.fill_in_donation_fields_right()
         self.fill_in_personal_fields_right()
-        self.fill_in_cc_fields("4111111111111111")
+        self.fill_in_cc_fields(self.RIGHT_CC_NUMBER)
+
+        # Submit
+        submit = self.browser.find_element_by_name("subbtn")
+        submit.send_keys(Keys.ENTER)
+
+        self.wait_for(lambda: self.assertIn('Muito obrigado pela sua doação!', self.browser.page_source))
+
+    def test_can_enter_donation_form_and_execute_recurring_donation(self):
+        # Donor has heard about the opportunity to donate to the organization and enters the website
+        self.browser.get(self.live_server_url)
+
+        self.fill_in_donation_fields_right(is_recurring=True)
+        self.fill_in_personal_fields_right()
+        self.fill_in_cc_fields(self.RIGHT_CC_NUMBER)
 
         # Submit
         submit = self.browser.find_element_by_name("subbtn")
@@ -92,7 +119,7 @@ class NewDonorTest(LiveServerTestCase):
 
         self.fill_in_donation_fields_right()
         self.fill_in_personal_fields_right()
-        self.fill_in_cc_fields("411111111111111") # Missing one number
+        self.fill_in_cc_fields(self.MISSING_ONE_CC_NUMBER)
 
         # Submit
         submit = self.browser.find_element_by_name("subbtn")
@@ -107,7 +134,7 @@ class NewDonorTest(LiveServerTestCase):
 
         self.fill_in_donation_fields_right()
         self.fill_in_personal_fields_right()
-        self.fill_in_cc_fields("4111111111111112")
+        self.fill_in_cc_fields(self.WRONG_CC_NUMBER)
 
         # Submit
         submit = self.browser.find_element_by_name("subbtn")

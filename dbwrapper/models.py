@@ -96,6 +96,18 @@ class PaymentTransaction(models.Model):
     class Meta:
         managed = False
 
+
+class EmailBlacklist(models.Model):
+    id = models.AutoField(primary_key=True, default=None)
+    created_at = models.DateTimeField(editable=False, default=None, null=True)
+    email_pattern = models.CharField(max_length=35, default=None, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created_at = timezone.now()
+
+
 class TransactionResponse(models.Model):
     boleto_url = models.CharField(max_length=100)
     onlineDebit_url = models.CharField(max_length=100)
