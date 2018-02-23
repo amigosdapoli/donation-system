@@ -190,7 +190,7 @@ LOGGING = {
         },
         'dbwrapper': {
             'handlers': ['file', 'console'],
-            'level': 'INFO
+            'level': 'INFO'
             'propagate': True,
             'formatter': 'simple',
         },
