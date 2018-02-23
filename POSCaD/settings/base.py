@@ -186,11 +186,13 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'INFO',
             'propagate': True,
+            'formatter': 'simple',
         },
         'dbwrapper': {
             'handlers': ['file', 'console'],
-            'level': 'INFO',
+            'level': 'INFO
             'propagate': True,
+            'formatter': 'simple',
         },
     },
 }
