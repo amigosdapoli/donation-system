@@ -66,6 +66,7 @@ class Donation(models.Model):
     referral_channel = models.CharField(max_length=40,choices=REFERRAL_CHOICES, default=None, blank=True, null=True)
     campaign_name = models.CharField(max_length=40, default=None, blank=True, null=True)
     campaign_group = models.CharField(max_length=40, default=None, blank=True, null=True)
+    is_fraud = models.BooleanField(default=False)
 
 
     def save(self, *args, **kwargs):
