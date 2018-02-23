@@ -74,6 +74,8 @@ class Donation(models.Model):
         if not self.donation_id:
             self.created_at = timezone.now()
         self.updated_at = timezone.now()
+
+        # Campaign fields in lower case
         if self.campaign_name is not None:
             self.campaign_name = self.campaign_name.lower()
         if self.campaign_group is not None:
@@ -99,14 +101,17 @@ class PaymentTransaction(models.Model):
 
 
 class EmailBlacklist(models.Model):
-    id = models.AutoField(primary_key=True, default=None)
+    id = models.AutoField(primary_key=True,)
     created_at = models.DateTimeField(editable=False, default=None, null=True)
+    updated_at = models.DateTimeField(editable=False, default=None, null=True)
     email_pattern = models.CharField(max_length=35, default=None, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         ''' On save, update timestamps '''
         if not self.id:
             self.created_at = timezone.now()
+        self.updated_at = timezone.now()
+        return super(EmailBlacklist, self).save(*args, **kwargs)
 
 
 class TransactionResponse(models.Model):

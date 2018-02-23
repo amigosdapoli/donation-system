@@ -11,7 +11,6 @@ from dbwrapper.actions import DonationProcess
 from datetime import date
 import logging
 
-# Get an instance of a logger
 logger = logging.getLogger(__name__)
 
 
@@ -50,7 +49,7 @@ class DonationFormView(View):
             if not tax_id:
                 raise Exception('donor_tax_id need to be provided')
             donor = Donor.objects.filter(tax_id=tax_id).first()
-
+            logger.debug("Donor already exists?: {}".format(donor))
             # creates  a new donor
             if not donor:
                 new_donor = Donor()
@@ -67,6 +66,7 @@ class DonationFormView(View):
                     new_donor.is_anonymous = False
                 new_donor.save()
                 donor = new_donor
+                logger.debug("Donor created: {}".format(donor))
 
             # Donation
             new_donation = Donation()
@@ -90,7 +90,7 @@ class DonationFormView(View):
             new_payment.save()
 
             logger.info("Donation is recurring: {}".format(new_donation.is_recurring))
-            logger.info("Donation value {}".format(donation_form.cleaned_data['donation_value']))
+            logger.info("Donation value: {}".format(donation_form.cleaned_data['donation_value']))
 
             payment_data = {
                 'reference_num': new_donation.donation_id,
@@ -116,36 +116,43 @@ class DonationFormView(View):
                 payment_data.pop('billing_phone', None)
 
             dp = DonationProcess(payment_data)
-            #if dp.is_fraud():
-            try:
-                response = dp.register_donation(new_donation.is_recurring)
-                donation = Donation.objects.get(donation_id=new_donation.donation_id)
-                if response['was_captured']:
-                    donation.was_captured = response['was_captured']
-                    donation.response_code = response['response_code']
-                    donation.order_id = response['order_id']
-                    donation.nsu_id = response['transaction_id']
-                    donation.save()
-
-                    template_data = {'first_name': donor.name,
-                         'value': new_donation.donation_value,
-                         'is_recurring': donation.is_recurring}
-                    logger.info("Preparing to send e-mail receipt with {}".format(template_data))
-                    dp.send_email_receipt(donor.email, template_data)
-
-                    return render(request, 'dbwrapper/successful_donation.html')
-                else:
-                    logger.info("Else")
-                    payment_form.add_error(None,
-                                           response['error_msg'])
-                    donation.was_captured = response['was_captured']
-                    donation.response_code = response['response_code']
-                    donation.save()
-
-            except Exception as e:
-                logger.error('Failed to execute payment', exc_info=True)
+            is_fraud = dp.fraud_check()
+            if is_fraud:
+                logger.info("Is donor blacklisted?: {}".format(is_fraud))
+                new_donation.is_fraud = True
+                new_donation.save()
                 payment_form.add_error(None,
-                                       "Infelizmente, não conseguimos processar a sua doação. Nossa equipe já foi avisada. Por favor, tente novamente mais tarde.")
+                                       "Erro nas informações de cartão de crédito enviadas.")
+            else:
+                try:
+                    response = dp.register_donation(new_donation.is_recurring)
+                    #donation = Donation.objects.get(donation_id=new_donation.donation_id)
+                    if response['was_captured']:
+                        new_donation.was_captured = response['was_captured']
+                        new_donation.response_code = response['response_code']
+                        new_donation.order_id = response['order_id']
+                        new_donation.nsu_id = response['transaction_id']
+                        new_donation.save()
+
+                        template_data = {'first_name': donor.name,
+                             'value': new_donation.donation_value,
+                             'is_recurring': new_donation.is_recurring}
+                        logger.info("Preparing to send e-mail receipt with {}".format(template_data))
+                        dp.send_email_receipt(donor.email, template_data)
+
+                        return render(request, 'dbwrapper/successful_donation.html')
+                    else:
+                        logger.info("Else")
+                        payment_form.add_error(None,
+                                               response['error_msg'])
+                        new_donation.was_captured = response['was_captured']
+                        new_donation.response_code = response['response_code']
+                        new_donation.save()
+
+                except Exception as e:
+                    logger.error('Failed to execute payment', exc_info=True)
+                    payment_form.add_error(None,
+                                           "Infelizmente, não conseguimos processar a sua doação. Nossa equipe já foi avisada. Por favor, tente novamente mais tarde.")
 
         data = {'donor_form': donor_form,
                 'donation_form': donation_form,
