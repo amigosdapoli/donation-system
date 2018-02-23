@@ -6,7 +6,7 @@ from django.db.models import Count, Min, Sum, Avg
 
 from dbwrapper.forms import FormDonor, FormDonation, FormPayment
 from .models import Donor, Donation, PaymentTransaction
-from dbwrapper.action import DonationProcess
+from dbwrapper.actions import DonationProcess
 
 from datetime import date
 import logging
