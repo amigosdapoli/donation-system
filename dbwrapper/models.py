@@ -53,6 +53,7 @@ class Donation(models.Model):
     donation_value = models.DecimalField(max_digits=8, decimal_places=2)
     donor = models.ForeignKey(Donor, on_delete=models.CASCADE)
     donor_tax_id = models.CharField(max_length=15)
+    donor_ip_address = models.GenericIPAddressField(null=True, blank=True)
     is_recurring = models.NullBooleanField(null=True, default=False)
     was_captured = models.NullBooleanField(null=True, default=False)
     response_code = models.IntegerField(default=None, blank=True, null=True)
@@ -65,6 +66,7 @@ class Donation(models.Model):
     referral_channel = models.CharField(max_length=40,choices=REFERRAL_CHOICES, default=None, blank=True, null=True)
     campaign_name = models.CharField(max_length=40, default=None, blank=True, null=True)
     campaign_group = models.CharField(max_length=40, default=None, blank=True, null=True)
+    is_fraud = models.BooleanField(default=False)
 
 
     def save(self, *args, **kwargs):
@@ -72,6 +74,8 @@ class Donation(models.Model):
         if not self.donation_id:
             self.created_at = timezone.now()
         self.updated_at = timezone.now()
+
+        # Campaign fields in lower case
         if self.campaign_name is not None:
             self.campaign_name = self.campaign_name.lower()
         if self.campaign_group is not None:
@@ -94,6 +98,21 @@ class PaymentTransaction(models.Model):
 
     class Meta:
         managed = False
+
+
+class EmailBlacklist(models.Model):
+    id = models.AutoField(primary_key=True,)
+    created_at = models.DateTimeField(editable=False, default=None, null=True)
+    updated_at = models.DateTimeField(editable=False, default=None, null=True)
+    email_pattern = models.CharField(max_length=35, default=None, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.id:
+            self.created_at = timezone.now()
+        self.updated_at = timezone.now()
+        return super(EmailBlacklist, self).save(*args, **kwargs)
+
 
 class TransactionResponse(models.Model):
     boleto_url = models.CharField(max_length=100)
