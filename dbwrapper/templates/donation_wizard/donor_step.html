@@ -1,0 +1,58 @@
+{% extends "donation_wizard/base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+{% endblock %}
+{% block content %}
+{# super() }
+{{ wizard.management_form }}
+    <h3 class="panel-title">Informações pessoais</h3>
+
+    <p>
+        <label>{{ wizard.form.name.label_tag }}</label>
+        {{ wizard.form.name.errors }}
+        {{ wizard.form.name }}
+    </p>
+    <p>
+        <label>{{ wizard.form.surname.label_tag }}</label>
+        {{ wizard.form.surname.errors }}
+        {{ wizard.form.surname }}
+    </p>
+    <p>
+        <label>{{ wizard.form.tax_id_no_pk_validation.label_tag }}</label>
+        {{ wizard.form.tax_id_no_pk_validation.errors }}
+        {{ wizard.form.tax_id_no_pk_validation }}
+    </p>
+    <p>
+        {{ wizard.form.email.errors }}
+        <label>{{ wizard.form.email.label_tag }}</label>
+        {{ wizard.form.email }}
+    </p>
+    <p>
+        <label>{{ wizard.form.phone_number.label_tag }}</label>
+        {{ wizard.form.phone_number.errors }}
+        {{ wizard.form.phone_number }}
+    </p>
+    <p>
+        <label>{{ wizard.form.course_taken.label_tag }}</label>
+        {{ wizard.form.course_taken.errors }}
+        {{ wizard.form.course_taken }}
+    </p>
+    <p id="id_course_year" style="display: none;">
+        <label>{{ wizard.form.course_year.label_tag }}</label>
+        {{ wizard.form.course_year.errors }}
+        {{ wizard.form.course_year }}
+    </p>
+
+    <label>Deseja permanecer anônimo?</label>
+    <div class="radio-wrapper">
+        <input id="rad3" type="radio" name="is_anonymous" value="Sim"><label for="rad3">Sim</label></input>
+        <input id="rad4" type="radio" name="is_anonymous" value="Não" checked="checked"><label for="rad4">Não</label></input>
+    </div>
+
+    <button class="submit-button" name="subbtn" type="submit" >
+        proximo
+    </button>
+{% endblock %}

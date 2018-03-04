@@ -1,0 +1,41 @@
+{% extends "donation_wizard/base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+{% endblock %}
+    {{ form.management_form }}
+{% block content %}
+    {{ form.management_form }}
+
+    <h3 class="panel-title">Escolha o valor e a frequência de sua doação</h3>
+
+    <input type="hidden" name="{{ form.campaign_name.name }}" id="{{ form.campaign_name.id_for_label }}"
+       value="{{ campaign_data.campaign_name }}"
+       maxlength="{{ form.campaign_name.field.max_length }}">
+    <input type="hidden" name="{{ form.campaign_group.name }}" id="{{ form.campaign_group.id_for_label }}"
+       value="{{ campaign_data.campaign_group }}"
+       maxlength="{{ form.campaign_group.field.max_length }}">
+
+    <p>
+        <label>{{ form.donation_value.label_tag }}</label>
+        {{ form.donation_value.errors }}
+        {{ form.donation_value }}
+    </p>
+
+    <div class="radio-wrapper">
+        <input id="rad1" type="radio" name="is_recurring" checked="checked" value="Única"><label for="rad1">Única</label></input>
+        <input id="rad2" type="radio" name="is_recurring" value="Mensal"><label for="rad2">Mensal</label></input>
+    </div>
+
+    <p id="id_installments" style="display: none;">
+        <label>{{ form.installments.label_tag }}</label>
+        {{ form.installments.errors }}
+        {{ form.installments}}
+    </p>
+    <button class="submit-button" name="subbtn" type="submit" >
+        proximo
+    </button>
+
+{% endblock %}
