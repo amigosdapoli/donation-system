@@ -1,13 +1,8 @@
 {% extends "donation_wizard/base.html" %}
-{% block title %}Index{% endblock %}
-{% block head %}
-    <style type="text/css">
-        .important { color: #336699; }
-    </style>
-{% endblock %}
-    {{ form.management_form }}
+{% block title %}Doação - {% endblock %}
 {% block content %}
-    {{ form.management_form }}
+
+    {{ wizard.management_form }}
 
     <h3 class="panel-title">Escolha o valor e a frequência de sua doação</h3>
 
