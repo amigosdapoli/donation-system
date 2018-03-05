@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Doação Amigos da Poli</title>
+    <title>{% block title %}{% endblock %}Doação Amigos da Poli</title>
     {% recaptcha_init %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">{% load static %}
@@ -36,26 +36,41 @@
     </div>
 
     <form method="POST" class="donation-form">
+        {% csrf_token %}
         
         Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}
+        {% if form.errors %}
+        <div class="alert">
+            <h4>Por favor, corrija os seguintes errors:</h4>
+
+            <ul class="error-list">
+            {% for field in form %}
+              {% if field.errors %}
+                {% for error in field.errors %}
+                  <li><a href="#id_{{ field.name }}" class="error">{{ field.label }}: {{ error|escape }}</a></li>
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+
+
+        {% block content %}
 
 
         {% if wizard.form.forms %}
             {{ wizard.form.management_form }}
             {% for form in wizard.form.forms %}
-                {{ form }}
+                
             {% endfor %}
         {% else %}
-            {{ form }}
+            
         {% endif %}
 
+        {% endblock %}
 
-            {% csrf_token %}
-        <button class="submit-button" name="subbtn" onclick="ga('send', {hitType: 'event',eventCategory: 'doacao',eventAction: 'submit_donation',eventLabel: 'website'});" type="submit" >
-            Doar
-        </button>
-      </div>
-    </div>
     </form>
     <footer>
         
