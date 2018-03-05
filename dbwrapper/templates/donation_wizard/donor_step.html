@@ -1,49 +1,44 @@
 {% extends "donation_wizard/base.html" %}
-{% block title %}Index{% endblock %}
-{% block head %}
-    <style type="text/css">
-        .important { color: #336699; }
-    </style>
-{% endblock %}
+{% block title %}Informações pessoais - {% endblock %}
 {% block content %}
-{# super() }
-{{ wizard.management_form }}
+    {{ wizard.management_form }}
+
     <h3 class="panel-title">Informações pessoais</h3>
 
     <p>
-        <label>{{ wizard.form.name.label_tag }}</label>
-        {{ wizard.form.name.errors }}
-        {{ wizard.form.name }}
+        <label>{{ form.name.label_tag }}</label>
+        {{ form.name.errors }}
+        {{ form.name }}
     </p>
     <p>
-        <label>{{ wizard.form.surname.label_tag }}</label>
-        {{ wizard.form.surname.errors }}
-        {{ wizard.form.surname }}
+        <label>{{ form.surname.label_tag }}</label>
+        {{ form.surname.errors }}
+        {{ form.surname }}
     </p>
     <p>
-        <label>{{ wizard.form.tax_id_no_pk_validation.label_tag }}</label>
-        {{ wizard.form.tax_id_no_pk_validation.errors }}
-        {{ wizard.form.tax_id_no_pk_validation }}
+        <label>{{ form.tax_id_no_pk_validation.label_tag }}</label>
+        {{ form.tax_id_no_pk_validation.errors }}
+        {{ form.tax_id_no_pk_validation }}
     </p>
     <p>
-        {{ wizard.form.email.errors }}
-        <label>{{ wizard.form.email.label_tag }}</label>
-        {{ wizard.form.email }}
+        {{ form.email.errors }}
+        <label>{{ form.email.label_tag }}</label>
+        {{ form.email }}
     </p>
     <p>
-        <label>{{ wizard.form.phone_number.label_tag }}</label>
-        {{ wizard.form.phone_number.errors }}
-        {{ wizard.form.phone_number }}
+        <label>{{ form.phone_number.label_tag }}</label>
+        {{ form.phone_number.errors }}
+        {{ form.phone_number }}
     </p>
     <p>
-        <label>{{ wizard.form.course_taken.label_tag }}</label>
-        {{ wizard.form.course_taken.errors }}
-        {{ wizard.form.course_taken }}
+        <label>{{ form.course_taken.label_tag }}</label>
+        {{ form.course_taken.errors }}
+        {{ form.course_taken }}
     </p>
     <p id="id_course_year" style="display: none;">
-        <label>{{ wizard.form.course_year.label_tag }}</label>
-        {{ wizard.form.course_year.errors }}
-        {{ wizard.form.course_year }}
+        <label>{{ form.course_year.label_tag }}</label>
+        {{ form.course_year.errors }}
+        {{ form.course_year }}
     </p>
 
     <label>Deseja permanecer anônimo?</label>
