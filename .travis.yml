@@ -7,7 +7,6 @@ env:
     - DJANGO=1.11.3
     - DISPLAY=:99.0
     - MOZ_HEADLESS=1
-    - CC_TEST_REPORTER_ID=7258bc8fa5569217ee14f1caa8fd0f39ac04feeb2cfd92e2f300a509406e4596
 
 language: python
 python:
