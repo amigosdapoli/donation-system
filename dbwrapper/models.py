@@ -67,6 +67,7 @@ class Donation(models.Model):
     campaign_name = models.CharField(max_length=40, default=None, blank=True, null=True)
     campaign_group = models.CharField(max_length=40, default=None, blank=True, null=True)
     is_fraud = models.BooleanField(default=False)
+    visitor_id = models.CharField(max_length=40, default=None, blank=True, null=True) 
 
 
     def save(self, *args, **kwargs):

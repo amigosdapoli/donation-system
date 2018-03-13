@@ -7,6 +7,8 @@ from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from dbwrapper.models import EmailBlacklist
 
+from datetime import date
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -62,9 +64,39 @@ class PaymentGateway:
 
 
 class DonationProcess:
-    def __init__(self, payment_data):
-        self.payment_data = payment_data
+    def __init__(self, donation, donor, payment):
+        self.donation = donation
+        self.donor = donor
+        self.payment = payment
+
+        self.payment_data = self.get_payment_data()
         self.gateway = PaymentGateway(self.payment_data)
+
+    def get_payment_data(self):
+        payment_data = {
+            'reference_num': self.donation.donation_id,
+            'billing_name': self.payment.name_on_card,
+            'billing_phone': self.donor.phone_number,
+            'billing_email': self.donor.email,
+            'card_number': self.payment.card_number,
+            'card_expiration_month': self.payment.expiry_date_month,
+            'card_expiration_year': self.payment.expiry_date_year,
+            'card_cvv': self.payment.card_code,
+            'charge_total': self.donation.donation_value,}
+
+        if self.donation.is_recurring:
+            payment_data['currency_code'] = u'BRL'
+            payment_data['recurring_action'] = u'new'
+            payment_data['recurring_start'] = date.today().strftime('%Y-%m-%d')
+            payment_data['recurring_frequency'] = u'1'
+            payment_data['recurring_period'] =  u'monthly'
+            payment_data['recurring_installments'] = self.donation.installments
+            payment_data['recurring_failure_threshold'] = u'2'
+
+        if self.donor.phone_number is None:
+            payment_data.pop('billing_phone', None)
+
+        return payment_data
 
     def register_donation(self, is_recurring):
         response = self.gateway.donate(is_recurring)
