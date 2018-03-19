@@ -1,0 +1,53 @@
+{% extends "donation_wizard/base.html" %}
+{% block title %}Informações pessoais - {% endblock %}
+{% block content %}
+    {{ wizard.management_form }}
+
+    <h3 class="panel-title">Informações pessoais</h3>
+
+    <p>
+        <label>{{ form.name.label_tag }}</label>
+        {{ form.name.errors }}
+        {{ form.name }}
+    </p>
+    <p>
+        <label>{{ form.surname.label_tag }}</label>
+        {{ form.surname.errors }}
+        {{ form.surname }}
+    </p>
+    <p>
+        <label>{{ form.tax_id_no_pk_validation.label_tag }}</label>
+        {{ form.tax_id_no_pk_validation.errors }}
+        {{ form.tax_id_no_pk_validation }}
+    </p>
+    <p>
+        {{ form.email.errors }}
+        <label>{{ form.email.label_tag }}</label>
+        {{ form.email }}
+    </p>
+    <p>
+        <label>{{ form.phone_number.label_tag }}</label>
+        {{ form.phone_number.errors }}
+        {{ form.phone_number }}
+    </p>
+    <p>
+        <label>{{ form.course_taken.label_tag }}</label>
+        {{ form.course_taken.errors }}
+        {{ form.course_taken }}
+    </p>
+    <p id="id_course_year" style="display: none;">
+        <label>{{ form.course_year.label_tag }}</label>
+        {{ form.course_year.errors }}
+        {{ form.course_year }}
+    </p>
+
+    <label>Deseja permanecer anônimo?</label>
+    <div class="radio-wrapper">
+        <input id="rad3" type="radio" name="is_anonymous" value="Sim"><label for="rad3">Sim</label></input>
+        <input id="rad4" type="radio" name="is_anonymous" value="Não" checked="checked"><label for="rad4">Não</label></input>
+    </div>
+
+    <button class="submit-button" name="subbtn" type="submit" >
+        proximo
+    </button>
+{% endblock %}

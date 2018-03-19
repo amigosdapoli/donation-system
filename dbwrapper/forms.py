@@ -48,6 +48,7 @@ class FormDonation(forms.ModelForm):
         initial=INSTALLMENT_CHOICES[1][1])
     campaign_name = forms.CharField(
         widget=forms.HiddenInput(),
+        required = False
     )
 
     class Meta:

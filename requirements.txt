@@ -22,3 +22,4 @@ selenium==3.9.0
 six==1.11.0
 tornado==4.5.2
 gunicorn==19.7.1
+django-formtools==2.1

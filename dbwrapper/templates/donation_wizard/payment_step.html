@@ -1,0 +1,20 @@
+{% extends "donation_wizard/base.html" %}
+{% block title %}Pagamento - {% endblock %}
+{% block content %}
+    {{ wizard.management_form }}
+
+    <h3 class="panel-title">Pagamentos</h3>
+
+    {% for field in form %}
+        <p>
+            <label>{{ field.label_tag }}</label>
+            {{ field.errors }}
+            {{ field }}
+        </p>
+    {% endfor %}
+
+    <button class="submit-button" name="subbtn" onclick="ga('send', {hitType: 'event',eventCategory: 'doacao',eventAction: 'submit_donation',eventLabel: 'website'});" type="submit" >
+        Doar
+    </button>
+
+{% endblock %}

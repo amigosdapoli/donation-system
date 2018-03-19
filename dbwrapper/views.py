@@ -7,6 +7,8 @@ from django.db.models import Count, Min, Sum, Avg
 from dbwrapper.forms import FormDonor, FormDonation, FormPayment
 from .models import Donor, Donation, PaymentTransaction
 from dbwrapper.actions import DonationProcess
+from formtools.wizard.views import SessionWizardView
+
 
 from datetime import date
 import logging
@@ -211,3 +213,26 @@ class StatisticsView(View):
 
 
         return render(request, 'dbwrapper/statistics.html', template_data)
+
+
+class DonationWizard(SessionWizardView):
+
+    TEMPLATES = {
+        'donation': 'donation_wizard/donation_step.html',
+        'donor': 'donation_wizard/donor_step.html',
+        'payment': 'donation_wizard/payment_step.html',
+    }
+
+    form_list = [
+        ('donation', FormDonation), 
+        ('donor', FormDonor), 
+        ('payment', FormPayment)
+    ]
+
+    def get_template_names(self):
+        return [self.TEMPLATES[self.steps.current]]
+
+    def done(self, form_list, **kwargs):
+        return render(self.request, 'donation_wizard/done.html', {
+            'form_data': [form.cleaned_data for form in form_list],
+        })
