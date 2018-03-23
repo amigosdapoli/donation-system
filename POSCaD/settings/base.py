@@ -157,6 +157,10 @@ MERCHANT_ID = os.getenv("MERCHANT_ID", "")
 MERCHANT_KEY = os.getenv("MERCHANT_KEY", "")
 GATEWAY_SANDBOX = bool(os.getenv("GATEWAY_SANDBOX", "") == "True")
 
+# Antifraud settings
+KONDUTO_PUBLIC_KEY = os.getenv("KONDUTO_PUBLIC_KEY", "")
+KONDUTO_PRIVATE_KEY = os.getenv("KONDUTO_PRIVATE_KEY", "")
+
 # Logging settings
 LOG_PATH = os.getenv("LOG_PATH", "")
 LOGGING = {
