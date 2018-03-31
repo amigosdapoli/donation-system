@@ -23,11 +23,12 @@ The goal of this project is to help other endowment funds and non profits in gen
 ```
 # Install Postgres
 sudo apt-get update
-sudo apt-get install python-dev libxml2-dev libxslt1-dev
+sudo apt-get install python-dev libxml2-dev libxslt1-dev build-essential libssl-dev libffi-dev zlib1g-dev
 sudo apt-get install postgresql postgresql-contrib 
+sudo apt-get install python-pip
 
 # Set up database
-bash scripts/etup_database_linux.sh
+bash scripts/setup_database_linux.sh
 ```
 
 ### If in Mac
