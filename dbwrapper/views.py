@@ -61,8 +61,9 @@ class DonationFormView(View):
                     donor.is_anonymous = True
                 else:
                     donor.is_anonymous = False
-                donor.save()
-                logger.debug("Donor created: {}".format(donor))
+            
+            donor.save()
+            logger.info("Donor created: {}".format(donor.donor_id))
 
             # Creates a new donation
             donation = donation_form.save(commit=False)
@@ -74,6 +75,7 @@ class DonationFormView(View):
                 donation.installments = donation_form.cleaned_data['installments']
             else:
                 donation.is_recurring = False
+                donation.installments = 1
             donation.campaign_name = donation_form.cleaned_data['campaign_name']
             donation.campaign_group = donation_form.cleaned_data['campaign_group']
             donation.save()
@@ -85,11 +87,9 @@ class DonationFormView(View):
             logger.info("Donation value: {}".format(donation.donation_value))
 
             dp = DonationProcess(donation, donor, payment)
-            is_fraud = dp.fraud_check()
-            if is_fraud:
-                logger.info("Is donor blacklisted?: {}".format(is_fraud))
-                donation.is_fraud = True
-                donation.save()
+            dp.fraud_check()
+            if donation.is_fraud:
+                logger.info("Donor is blacklisted")                
                 payment_form.add_error(None,
                                        "Erro nas informações de cartão de crédito enviadas.")
             else:
@@ -103,11 +103,8 @@ class DonationFormView(View):
                         donation.nsu_id = response['transaction_id']
                         donation.save()
 
-                        template_data = {'first_name': donor.name,
-                             'value': donation.donation_value,
-                             'is_recurring': donation.is_recurring}
-                        logger.info("Preparing to send e-mail receipt with {}".format(template_data))
-                        dp.send_email_receipt(donor.email, template_data)
+                        logger.info("Preparing to send e-mail receipt...")
+                        dp.send_email_receipt(donor, donation)
 
                         return render(request, 'dbwrapper/successful_donation.html')
                     else:
