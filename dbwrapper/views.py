@@ -70,6 +70,7 @@ class DonationFormView(View):
             donation.donor = donor
             donation.donor_tax_id = donor.tax_id
             donation.donor_ip_address = request.META['REMOTE_ADDR']
+            donation.visitor_id = visitor_id
             if request.POST.get('is_recurring') == "Mensal":
                 donation.is_recurring = True
                 donation.installments = donation_form.cleaned_data['installments']
