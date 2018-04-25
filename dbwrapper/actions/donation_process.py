@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import logging
 from konduto import Konduto
-from konduto.models import Order, Customer
+from konduto.models import Order, Customer, Payment
 from konduto.utils import RECOMMENDATION_DECLINE    
 from maxipago import Maxipago
 from maxipago.utils import payment_processors
@@ -33,25 +33,36 @@ class AntiFraudService:
                 "vip": False}
         return Customer(**customer_json)
 
-    def get_order(self, donation, customer):
-        unique_id = str(randint(1, 100000))
+    def get_order(self, donation, customer, payment):
         order_json = {
-            "id": unique_id, # str(donation.donation_id),
+            "id": str(donation.donation_id), # for tests str(randint(1,10000)), 
             "visitor": donation.visitor_id,
             "total_amount": float(donation.donation_value),
             "currency": "BRL",
             "installments": int(donation.installments),
             "ip": donation.donor_ip_address,
-            "customer": customer
+            "customer": self.get_customer(customer),
+            "payment": self.get_payment(payment)
             }
 
         order = Order(**order_json)
         return order
 
-    def analyze_order(self, donor, donation):
+    def get_payment(self, payment):
+        payment_json = {
+            "type": "credit", 
+            "bin": payment.card_number[:6],
+            "last4": payment.card_number[-4:],
+            "expiration_date": "{MM}20{YY}".format(
+                MM=payment.expiry_date_month,
+                YY=payment.expiry_date_year),
+            "status": "pending"}
+        payment = Payment(**payment_json)
+        return payment
+
+    def analyze_order(self, donor, donation, payment):
         k = Konduto(self.KONDUTO_PUBLIC_KEY, self.KONDUTO_PRIVATE_KEY)
-        customer = self.get_customer(donor)
-        order = self.get_order(donation, customer)
+        order = self.get_order(donation, donor, payment)
         print(order.to_json())
         resp = k.analyze(order)
         return resp
@@ -157,7 +168,7 @@ class DonationProcess:
         return None
 
     def is_fraud_external_service(self):
-        resp_af = self.antifraud_service.analyze_order(self.donor, self.donation)
+        resp_af = self.antifraud_service.analyze_order(self.donor, self.donation, self.payment)
         logger.info("Value (R$): {} Recommendation: {}".format(
             self.donation.donation_value, resp_af.recommendation))
         if resp_af.recommendation == RECOMMENDATION_DECLINE:

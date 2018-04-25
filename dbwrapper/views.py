@@ -109,7 +109,7 @@ class DonationFormView(View):
 
                         return render(request, 'dbwrapper/successful_donation.html')
                     else:
-                        logger.info("Else")
+                        logger.info("Transaction not captured by the payment gateway")
                         payment_form.add_error(None,
                                                response['error_msg'])
                         donation.was_captured = response['was_captured']
