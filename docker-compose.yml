@@ -1,0 +1,27 @@
+version: '2.1'
+
+services:
+  postgres:
+    hostname: postgres
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/docker-healthcheck"]
+      interval: 1s
+      retries: 20
+    image: healthcheck/postgres
+    env_file: .env
+    volumes:
+      - ./scripts:/usr/local/bin/scripts
+
+  django:
+    build: .
+    env_file: .env
+    working_dir: /webapps
+    volumes:
+      - .:/webapps
+    ports:
+      - "8000:8000"
+      - "8082:8082"
+    depends_on:
+       postgres:
+         condition: service_healthy
+    command: /usr/local/bin/scripts/start.sh
