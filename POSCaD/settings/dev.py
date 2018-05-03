@@ -8,7 +8,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
 	'NAME': 'admin',
         'USER': 'admin',
-        'HOST': 'postgres',
+        'HOST': 'postgresql',
         'PORT': '',
     }
 }
+
+if 'TRAVIS' in os.environ:
+    DATABASES['default']['HOST'] = 'localhost'

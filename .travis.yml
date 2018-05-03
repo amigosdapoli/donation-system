@@ -27,6 +27,10 @@ install:
   - pip install psycopg2 --quiet
 
 before_script:
+  - psql -U postgres -c "CREATE USER admin WITH PASSWORD 'admin' ;"
+  - psql -U postgres -c "ALTER USER admin CREATEDB;"
+  - psql -c 'create database admin;' -U postgres
+  - psql -U postgres -c "CREATE DATABASE poscad;"
   - bash scripts/setup_database_linux.sh
   - bash scripts/install_geckodriver.sh
   - bash scripts/prepare_codeclimate_testcoverage.sh
