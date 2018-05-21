@@ -29,7 +29,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '.compute-1.amazonaws.com', # allows viewing of instances directly
     '.elasticbeanstalk.com',
-    'doe.amigosdapoli.com.br'
+    '.amigosdapoli.com.br'
 ]
 
 
@@ -138,7 +138,7 @@ USE_THOUSAND_SEPARATOR = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = 'static/'
+STATIC_ROOT = 'dbwrapper/static/'
 
 # SMTP Settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

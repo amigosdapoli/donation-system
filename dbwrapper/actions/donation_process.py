@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 import logging
 from konduto import Konduto
 from konduto.models import Order, Customer, Payment
@@ -162,7 +164,7 @@ class DonationProcess:
     def is_blacklisted(self):
         qs = EmailBlacklist.objects.all()
         for item in qs:
-            if item.email_pattern in self.payment_data['billing_email']:
+            if item.email_pattern and (item.email_pattern in self.payment_data['billing_email']):
                 self.donation.is_fraud = True
                 self.donation.save()
         return None
