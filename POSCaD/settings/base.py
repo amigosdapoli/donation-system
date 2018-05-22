@@ -29,7 +29,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '.compute-1.amazonaws.com', # allows viewing of instances directly
     '.elasticbeanstalk.com',
-    'doe.amigosdapoli.com.br'
+    '.amigosdapoli.com.br'
 ]
 
 
@@ -138,7 +138,7 @@ USE_THOUSAND_SEPARATOR = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = 'static/'
+STATIC_ROOT = 'dbwrapper/static/'
 
 # SMTP Settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -157,6 +157,10 @@ MERCHANT_ID = os.getenv("MERCHANT_ID", "")
 MERCHANT_KEY = os.getenv("MERCHANT_KEY", "")
 GATEWAY_SANDBOX = bool(os.getenv("GATEWAY_SANDBOX", "") == "True")
 
+# Antifraud settings
+KONDUTO_PUBLIC_KEY = os.getenv("KONDUTO_PUBLIC_KEY", "")
+KONDUTO_PRIVATE_KEY = os.getenv("KONDUTO_PRIVATE_KEY", "")
+
 # Logging settings
 LOG_PATH = os.getenv("LOG_PATH", "")
 LOGGING = {
@@ -167,7 +171,7 @@ LOGGING = {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
         },
         'simple': {
-            'format': '%(levelname)s %(message)s'
+            'format': '%(levelname)s %(module)s %(message)s'
         },
     },
     'handlers': {
@@ -179,6 +183,7 @@ LOGGING = {
         },
         'console': {
             'class': 'logging.StreamHandler',
+            'formatter': 'simple'
         },
     },
     'loggers': {

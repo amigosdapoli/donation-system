@@ -35,6 +35,15 @@ class Donor(models.Model):
     course_taken = models.CharField(max_length=30, choices=COURSE_CHOICES, default=None, null=True, blank=True)
     course_year = models.CharField(max_length=4, default=None, null=True, choices=YEAR_CHOICES, blank=True)
     is_anonymous = models.BooleanField(default=False)
+    created_at = models.DateTimeField(default=None, null=True, blank=True)
+    updated_at = models.DateTimeField(default=None, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        if not self.donor_id:
+            self.created_at = timezone.now()
+        self.updated_at = timezone.now()
+        return super(Donor, self).save(*args, **kwargs)
 
 REFERRAL_CHOICES = (
     (None, 'Escolha...'),
@@ -67,6 +76,7 @@ class Donation(models.Model):
     campaign_name = models.CharField(max_length=40, default=None, blank=True, null=True)
     campaign_group = models.CharField(max_length=40, default=None, blank=True, null=True)
     is_fraud = models.BooleanField(default=False)
+    visitor_id = models.CharField(max_length=40, default=None, blank=True, null=True) 
 
 
     def save(self, *args, **kwargs):

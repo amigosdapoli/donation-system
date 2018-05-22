@@ -1,5 +1,10 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 import logging
+from konduto import Konduto
+from konduto.models import Order, Customer, Payment
+from konduto.utils import RECOMMENDATION_DECLINE    
 from maxipago import Maxipago
 from maxipago.utils import payment_processors
 from django.template.loader import get_template
@@ -7,8 +12,62 @@ from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from dbwrapper.models import EmailBlacklist
 
+from datetime import date
+from random import randint
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+
+class AntiFraudService:
+    def __init__(self):
+        self.KONDUTO_PUBLIC_KEY = settings.KONDUTO_PUBLIC_KEY
+        self.KONDUTO_PRIVATE_KEY = settings.KONDUTO_PRIVATE_KEY
+
+    def get_customer(self, donor):
+        customer_json = {
+                "id": str(donor.donor_id),
+                "name": "{} {}".format(donor.name, donor.surname),
+                "tax_id": donor.tax_id,
+                "phone1": str(donor.phone_number),
+                "email": donor.email,
+                "created_at": donor.created_at.strftime("%Y-%m-%d"),
+                "vip": False}
+        return Customer(**customer_json)
+
+    def get_order(self, donation, customer, payment):
+        order_json = {
+            "id": str(donation.donation_id), # for tests str(randint(1,10000)), 
+            "visitor": donation.visitor_id,
+            "total_amount": float(donation.donation_value),
+            "currency": "BRL",
+            "installments": int(donation.installments),
+            "ip": donation.donor_ip_address,
+            "customer": self.get_customer(customer),
+            "payment": self.get_payment(payment)
+            }
+
+        order = Order(**order_json)
+        return order
+
+    def get_payment(self, payment):
+        payment_json = {
+            "type": "credit", 
+            "bin": payment.card_number[:6],
+            "last4": payment.card_number[-4:],
+            "expiration_date": "{MM}20{YY}".format(
+                MM=payment.expiry_date_month,
+                YY=payment.expiry_date_year),
+            "status": "pending"}
+        payment = Payment(**payment_json)
+        return payment
+
+    def analyze_order(self, donor, donation, payment):
+        k = Konduto(self.KONDUTO_PUBLIC_KEY, self.KONDUTO_PRIVATE_KEY)
+        order = self.get_order(donation, donor, payment)
+        print(order.to_json())
+        resp = k.analyze(order)
+        return resp
 
 class PaymentGateway:
     def __init__(self, data):
@@ -28,7 +87,8 @@ class PaymentGateway:
         data['processor_id'] = self.payment_processor
 
     def __get_error_msg(self, error_code):
-        standard_error = "Infelizmente, não conseguimos processar a sua doação. Nossa equipe já foi avisada. Por favor, tente novamente mais tarde."
+        standard_error = """Infelizmente, não conseguimos processar a sua doação. """\
+            """Nossa equipe já foi avisada. Por favor, tente novamente mais tarde."""
         error_msgs = {
             "1": "Transação negada.",
             "2": "Transação negada por duplicidade ou fraude.",
@@ -62,22 +122,81 @@ class PaymentGateway:
 
 
 class DonationProcess:
-    def __init__(self, payment_data):
-        self.payment_data = payment_data
+    def __init__(self, donation, donor, payment):
+        self.donation = donation
+        self.donor = donor
+        self.payment = payment
+
+        self.payment_data = self.get_payment_data()
         self.gateway = PaymentGateway(self.payment_data)
+        self.antifraud_service = AntiFraudService()
+
+    def get_payment_data(self):
+        payment_data = {
+            'reference_num': self.donation.donation_id,
+            'billing_name': self.payment.name_on_card,
+            'billing_phone': self.donor.phone_number,
+            'billing_email': self.donor.email,
+            'card_number': self.payment.card_number,
+            'card_expiration_month': self.payment.expiry_date_month,
+            'card_expiration_year': self.payment.expiry_date_year,
+            'card_cvv': self.payment.card_code,
+            'charge_total': self.donation.donation_value,}
+
+        if self.donation.is_recurring:
+            payment_data['currency_code'] = u'BRL'
+            payment_data['recurring_action'] = u'new'
+            payment_data['recurring_start'] = date.today().strftime('%Y-%m-%d')
+            payment_data['recurring_frequency'] = u'1'
+            payment_data['recurring_period'] =  u'monthly'
+            payment_data['recurring_installments'] = self.donation.installments
+            payment_data['recurring_failure_threshold'] = u'2'
+
+        if self.donor.phone_number is None:
+            payment_data.pop('billing_phone', None)
+
+        return payment_data
 
     def register_donation(self, is_recurring):
         response = self.gateway.donate(is_recurring)
         return response
 
-    def fraud_check(self):
+    def is_blacklisted(self):
         qs = EmailBlacklist.objects.all()
         for item in qs:
-            if item.email_pattern in self.payment_data['billing_email']:
-                return True
-        return False
+            if item.email_pattern and (item.email_pattern in self.payment_data['billing_email']):
+                self.donation.is_fraud = True
+                self.donation.save()
+        return None
 
-    def send_email_receipt(self, to, template_data):
+    def is_fraud_external_service(self):
+        resp_af = self.antifraud_service.analyze_order(self.donor, self.donation, self.payment)
+        logger.info("Value (R$): {} Recommendation: {}".format(
+            self.donation.donation_value, resp_af.recommendation))
+        if resp_af.recommendation == RECOMMENDATION_DECLINE:
+            self.donation.is_fraud = True
+        return None
+
+    def fraud_check(self):
+        """
+        Checks frauds using 2 methods.
+        - e-mail blacklist
+        - konduto antifraud service
+
+        Marks donation as fraud
+
+        Returns None
+        """
+        self.is_blacklisted()
+        self.is_fraud_external_service()
+        return None
+
+    def send_email_receipt(self, donor, donation):  
+        template_data = {'first_name': donor.name,
+                             'value': donation.donation_value,
+                             'is_recurring': donation.is_recurring}
+        to = donor.email
+
         plaintext = get_template('dbwrapper/successful_donation_email.txt')
         html_template = get_template('dbwrapper/successful_donation_email.html')
 
