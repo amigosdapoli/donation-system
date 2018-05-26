@@ -105,7 +105,7 @@ class DonationFormView(View):
                         donation.save()
 
                         logger.info("Preparing to send e-mail receipt...")
-                        dp.send_email_receipt(donor, donation)
+                        dp.notify_donation(donor, donation)
 
                         return render(request, 'dbwrapper/successful_donation.html')
                     else:
