@@ -3,22 +3,29 @@ from dbwrapper.models import EmailBlacklist
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.firefox.options import Options
-import time
-import os
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+import time, os, socket
+from django.test import override_settings, tag
 
 MAX_WAIT = 10
 
-
-class NewDonorTest(LiveServerTestCase):
+@tag('selenium')
+@override_settings(ALLOWED_HOSTS=['django', 'testserver'])
+class NewDonorTest(StaticLiveServerTestCase):
     RIGHT_CC_NUMBER = "4111111111111111"
     MISSING_ONE_CC_NUMBER = "411111111111111"
     WRONG_CC_NUMBER = "4111111111111112"
 
+    host = 'django'
+
     def setUp(self):
-        options = Options()
-        #options.add_argument('-headless')
-        self.browser = webdriver.Firefox(executable_path='/usr/local/bin/geckodriver', firefox_options=options)
+        self.browser = webdriver.Remote(
+            command_executor='http://selenium:4444/wd/hub',
+            desired_capabilities=DesiredCapabilities.CHROME
+        )
+
         os.environ['RECAPTCHA_DISABLE'] = 'True'
 
     def tearDown(self):
@@ -62,9 +69,22 @@ class NewDonorTest(LiveServerTestCase):
         email_input_box = self.browser.find_element_by_id("id_email")
 
         # ...And inputs hers
-        name_input_box.send_keys("Maria")
+        name_input_box.send_keys("Maria2")
         surname_input_box.send_keys("Silva")
-        CPNJ_input_box.send_keys("128.164.150-23")
+        CPNJ_input_box.send_keys("1")
+        CPNJ_input_box.send_keys("2")
+        CPNJ_input_box.send_keys("3")
+        CPNJ_input_box.send_keys(".")
+        CPNJ_input_box.send_keys("4")
+        CPNJ_input_box.send_keys("5")
+        CPNJ_input_box.send_keys("6")
+        CPNJ_input_box.send_keys(".")
+        CPNJ_input_box.send_keys("7")
+        CPNJ_input_box.send_keys("9")
+        CPNJ_input_box.send_keys("8")
+        CPNJ_input_box.send_keys("-")
+        CPNJ_input_box.send_keys("9")
+        CPNJ_input_box.send_keys("1")
         phone_input_box.send_keys("11998765432")
         email_input_box.send_keys(email)
 
@@ -175,4 +195,41 @@ class NewDonorTest(LiveServerTestCase):
         self.wait_for(lambda: self.assertIn('Erro nas informações de cartão de crédito enviadas.', self.browser.page_source))
 
 
+    def _create_user(self):
+        self.username = "test_admin"
+        self.password = User.objects.make_random_password()
+        user, created = User.objects.get_or_create(username=self.username)
+        user.set_password(self.password)
+        user.is_staff = True
+        user.is_superuser = True
+        user.is_active = True
+        user.save()
+        self.user = user
 
+    def test_admin_pages(self):
+        self._create_user()
+        client = Client()
+        client.login(username=self.username, password=self.password)
+        admin_pages = [
+            "/admin/",
+            # put all the admin pages for your models in here.
+            "/admin/auth/",
+            "/admin/auth/group/",
+            "/admin/auth/group/add/",
+            "/admin/auth/user/",
+            "/admin/auth/user/add/",
+            "/admin/password_change/",
+            "/admin/dbwrapper/donation/",
+            "/admin/dbwrapper/donor/",
+        ]
+        for page in admin_pages:
+            resp = client.get(page)
+            print(page)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(b'<!DOCTYPE html', resp.content)
+
+    def test_userc_can_follow_statistics(self):
+        # Donor has there is a campaign and wants to follow progress
+        self.browser.get(self.live_server_url + "/statistics")
+
+        self.assertIn('Resultados consolidados', self.browser.page_source)

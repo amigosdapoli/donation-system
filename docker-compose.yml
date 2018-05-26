@@ -1,6 +1,12 @@
 version: '2.1'
 
 services:
+  selenium:
+    image: selenium/standalone-chrome-debug:3.7.1
+    ports:
+      - 4444:4444
+      - 5900:5900
+
   postgres:
     hostname: postgres
     healthcheck:
@@ -18,6 +24,8 @@ services:
     working_dir: /webapps
     volumes:
       - .:/webapps
+    links:
+      - selenium
     ports:
       - "8000:8000"
       - "8082:8082"
