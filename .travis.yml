@@ -1,7 +1,9 @@
 dist: trusty
 sudo: required
 group: deprecated-2017Q4
-
+language: python
+python:
+  - 3.5.2
 services:
   - docker
 env:
@@ -15,10 +17,13 @@ env:
     - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
     - chmod +x docker-compose
     - sudo mv docker-compose /usr/local/bin
+    - pip install coverage=4.4.2 --quiet
 
 script:
-  - docker-compose up -d && docker-compose exec django python manage.py test
-  - coverage run --source 'POSCaD,dbwrapper' --omit 'venv/*' manage.py test
+  - ./scripts/prepare_codeclimate_testcoverage.sh
+  - docker-compose up -d
+  - docker-compose exec django python manage.py test
+  - coverage run --source 'POSCaD,dbwrapper'
   - coverage xml
 
 after_script:
