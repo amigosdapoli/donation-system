@@ -14,16 +14,24 @@ services:
       interval: 1s
       retries: 20
     image: healthcheck/postgres
-    env_file: .env
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRE_DB=poscad
     volumes:
       - ./scripts:/usr/local/bin/scripts
 
   django:
     build: .
-    env_file: .env
+    environment:
+      - GATEWAY_SANDBOX=${GATEWAY_SANDBOX}
+      - MERCHANT_ID=${MERCHANT_ID}
+      - MERCHANT_KEY=${MERCHANT_KEY}
+      - SLACK_TOKEN=
+      - SLACK_CHANNEL=
     working_dir: /webapps
     volumes:
       - .:/webapps
+      - ./scripts:/usr/local/bin/scripts
     links:
       - selenium
     ports:
