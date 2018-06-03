@@ -19,6 +19,7 @@ The goal of this project is to help other endowment funds and non profits in gen
 
 ## Requirements
 
+<<<<<<< HEAD
 ### If in Debian/Ubuntu
 ```
 # Install Postgres
@@ -30,49 +31,28 @@ sudo apt-get install python-pip
 # Set up database
 bash scripts/setup_database_linux.sh
 ```
+=======
+# Docker and docker compose
+Install docker following the instructions for your plataform: https://docs.docker.com/install/
+Don't forget the extra steps, so you don't have to root all you commands: https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user
+Also, install docker compose: https://docs.docker.com/compose/install/
+>>>>>>> 1921843... development: add docker image for faster start
 
-### If in Mac
+Now, configure you stuff in the env file (`.env`)
 ```
-# Install Postgres
-brew update
-brew install postgresql
-
-# Start the postgres service
-pg_ctl -D /usr/local/var/postgres start && brew services start postgresql
-
-# Set up database
-psql postgres
-=>CREATE DATABASE poscad;
-=>CREATE USER admin WITH PASSWORD 'admin' ;
-=>ALTER ROLE admin SET client_encoding TO 'utf8';
-=>ALTER ROLE admin SET default_transaction_isolation TO 'read committed';
-=>ALTER ROLE admin SET timezone TO 'UTC-3';
-=>GRANT ALL PRIVILEGES ON DATABASE poscad TO admin;
+GATEWAY_SANDBOX=<boolean>
+MERCHANT_ID=<id>
+MERCHANT_KEY=<key>
 ```
 
-### Start
-```bash
-# Clone repo
-git clone https://github.com/amigosdapoli/donation-system.git
-cd donation-system/
+If you have to, you may also change some option for the postgres service: https://hub.docker.com/_/postgres/
 
-# Install requirements 
-virtualenv -p python3 venv
-source venv/bin/activate
-pip install -r requirements.txt
+Now, run:
 ```
-
-## Continue
+docker-compose up -d
 ```
-# Run start database
-python manage.py makemigrations
-python manage.py migrate
-
-#Run application
-python manage.py runserver
-
-```
-TODO using docker? Vagrant?
+The first time, since the image isn't in the docker hub, it'll take some time.
+The server will the be accessible in the URL `localhost:8000`
 
 # Payment Gateways
 Payment gateways will follow a pattern so we can add different services if needed.

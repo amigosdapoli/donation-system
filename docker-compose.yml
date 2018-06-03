@@ -1,0 +1,43 @@
+version: '2.1'
+
+services:
+  selenium:
+    image: selenium/standalone-chrome-debug:3.7.1
+    ports:
+      - 4444:4444
+      - 5900:5900
+
+  postgres:
+    hostname: postgres
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/docker-healthcheck"]
+      interval: 1s
+      retries: 20
+    image: healthcheck/postgres
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRE_DB=poscad
+    volumes:
+      - ./scripts:/usr/local/bin/scripts
+
+  django:
+    build: .
+    environment:
+      - GATEWAY_SANDBOX=${GATEWAY_SANDBOX}
+      - MERCHANT_ID=${MERCHANT_ID}
+      - MERCHANT_KEY=${MERCHANT_KEY}
+      - SLACK_TOKEN=
+      - SLACK_CHANNEL=
+    working_dir: /webapps
+    volumes:
+      - .:/webapps
+      - ./scripts:/usr/local/bin/scripts
+    links:
+      - selenium
+    ports:
+      - "8000:8000"
+      - "8082:8082"
+    depends_on:
+       postgres:
+         condition: service_healthy
+    command: /usr/local/bin/scripts/start.sh

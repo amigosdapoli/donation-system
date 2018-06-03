@@ -6,10 +6,12 @@ DEBUG = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-	'NAME': 'poscad',
+	'NAME': 'admin',
         'USER': 'admin',
-        'PASSWORD': 'admin',
-        'HOST': 'localhost',
+        'HOST': 'postgres',
         'PORT': '',
     }
 }
+
+if 'TRAVIS' in os.environ:
+    DATABASES['default']['HOST'] = 'localhost'
