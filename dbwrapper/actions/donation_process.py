@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import os
+
 from konduto import Konduto
 from konduto.models import Order, Customer, Payment
 from konduto.utils import RECOMMENDATION_DECLINE    
@@ -191,7 +193,25 @@ class DonationProcess:
         self.is_fraud_external_service()
         return None
 
-    def send_email_receipt(self, donor, donation):  
+    def notify_donation(self, donor, donation):
+        self.__send_email_receipt(donor, donation)
+        self.__notify_slack(donor, donation)
+
+    def __notify_slack(self, donor, donation):
+        slack_token = os.environ["SLACK_TOKEN"]
+        slack_channel = os.environ["SLACK_CHANNEL"]
+
+        requests.post(
+            'https://slack.com/api/chat.postMessage',
+            data = {
+                'token': slack_token,
+                'channel': slack_channel,
+                'text': "Ocorreu uma doação de {0} reais!"
+                    .format(donation.donation_value) 
+            }
+        )
+
+    def __send_email_receipt(self, donor, donation):  
         template_data = {'first_name': donor.name,
                              'value': donation.donation_value,
                              'is_recurring': donation.is_recurring}
