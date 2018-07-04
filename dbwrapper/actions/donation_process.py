@@ -3,6 +3,7 @@
 
 import logging
 import os
+import requests
 
 from konduto import Konduto
 from konduto.models import Order, Customer, Payment
@@ -131,6 +132,7 @@ class DonationProcess:
 
         self.payment_data = self.get_payment_data()
         self.gateway = PaymentGateway(self.payment_data)
+        self.antifraud_is_on = settings.ANTIFRAUD_ON
         self.antifraud_service = AntiFraudService()
 
     def get_payment_data(self):
@@ -190,7 +192,8 @@ class DonationProcess:
         Returns None
         """
         self.is_blacklisted()
-        self.is_fraud_external_service()
+        if self.antifraud_is_on:
+            self.is_fraud_external_service()
         return None
 
     def notify_donation(self, donor, donation):

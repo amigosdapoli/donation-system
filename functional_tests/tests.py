@@ -160,19 +160,19 @@ class NewDonorTest(LiveServerTestCase):
 
         self.wait_for(lambda: self.assertIn('Erro nas informações de cartão de crédito enviadas.', self.browser.page_source))
 
-    def test_fraudster_get_caught_by_antifraud(self):
-        self.browser.get(self.live_server_url)
+    # def test_fraudster_get_caught_by_antifraud(self):
+    #     self.browser.get(self.live_server_url)
 
-        # Fraudster fills in information
-        self.fill_in_donation_fields_right(donation_value='100.61') # .61 will decline
-        self.fill_in_personal_fields_right()
-        self.fill_in_cc_fields(self.RIGHT_CC_NUMBER)
+    #     # Fraudster fills in information
+    #     self.fill_in_donation_fields_right(donation_value='100.61') # .61 will decline
+    #     self.fill_in_personal_fields_right()
+    #     self.fill_in_cc_fields(self.RIGHT_CC_NUMBER)
 
-        # Submit
-        submit = self.browser.find_element_by_name("subbtn")
-        submit.send_keys(Keys.ENTER)
+    #     # Submit
+    #     submit = self.browser.find_element_by_name("subbtn")
+    #     submit.send_keys(Keys.ENTER)
 
-        self.wait_for(lambda: self.assertIn('Erro nas informações de cartão de crédito enviadas.', self.browser.page_source))
+    #     self.wait_for(lambda: self.assertIn('Erro nas informações de cartão de crédito enviadas.', self.browser.page_source))
 
 
 
