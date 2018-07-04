@@ -158,8 +158,13 @@ MERCHANT_KEY = os.getenv("MERCHANT_KEY", "")
 GATEWAY_SANDBOX = bool(os.getenv("GATEWAY_SANDBOX", "") == "True")
 
 # Antifraud settings
+ANTIFRAUD_ON = bool(os.getenv("ANTIFRAUD_ON", "") == "True")
 KONDUTO_PUBLIC_KEY = os.getenv("KONDUTO_PUBLIC_KEY", "")
 KONDUTO_PRIVATE_KEY = os.getenv("KONDUTO_PRIVATE_KEY", "")
+
+# Slack notification
+SLACK_TOKEN = os.getenv("SLACK_TOKEN","")
+SLACK_CHANNEL = os.getenv("SLACK_CHANNEL","")
 
 # Logging settings
 LOG_PATH = os.getenv("LOG_PATH", "")
